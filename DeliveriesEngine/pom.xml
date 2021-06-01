@@ -14,7 +14,7 @@
     <name>deliveries_engine</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -53,6 +53,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>deliveries-engine-1.0</finalName>
     </build>
 
 </project>
