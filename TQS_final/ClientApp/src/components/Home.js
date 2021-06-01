@@ -1,26 +1,133 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Dropdown from 'react-bootstrap/Dropdown';
 
-export class Home extends Component {
-  static displayName = Home.name;
+const styles = theme => ({
+    root: {
+        minWidth: 275,
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 10,
+        marginBottom: 15,
+        paddingBottom: 20
+    },
+    title: {
+        textAlign: 'center',
+        fontSize: 30,
+        color: "#536732",
+        fontWeight: "bold",
+    },
+    pos: {
+        marginBottom: 12,
+    },
+    form: {
+        marginTop: 30,
+    }
 
-  render () {
-    return (
-      <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-        <ul>
-          <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-          <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-          <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-        </ul>
-        <p>To help you get started, we have also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-      </div>
-    );
-  }
+});
+
+class Home extends Component {
+    static displayName = Home.name;
+
+    render() {
+        const { classes } = this.props;
+        return (
+          <div>
+                <h1>Welcome to <span style={{ color: "#536732" }}>biodrop</span></h1>
+                <h4>Get your groceries deliver to you fresh!</h4>
+                <hr />
+                <Row style={{ backgroundColor: "#ABA243" }}>   
+                    <Col>
+                        <Card className={classes.root} variant="outlined">
+                            <CardContent>
+                                <Typography variant="h3" className={classes.title} gutterBottom>
+                                    Register
+                                </Typography>
+                                <Form className={classes.form}>
+                                    <Form.Group className="mb-3" controlId="formEmail">
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control type="email" />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formPassword">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control type="password" />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formNome">
+                                        <Form.Label>First name</Form.Label>
+                                        <Form.Control type="text" rows={1} />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formApelido">
+                                        <Form.Label>Last name</Form.Label>
+                                        <Form.Control type="text" rows={1} />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formTelefone">
+                                        <Form.Label>Cellphone number</Form.Label>
+                                        <Form.Control type="number" />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formTelefone">
+                                        <Dropdown >
+                                            <Dropdown.Toggle variant="Light" id="dropdown-basic">
+                                                Sex
+                                            </Dropdown.Toggle>
+
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item>Male</Dropdown.Item>
+                                                <Dropdown.Item>Female</Dropdown.Item>
+                                                <Dropdown.Item>Other</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formConta">
+                                        <Form.Label>Account type:</Form.Label>
+                                        <Row>   
+                                            <Col>
+                                            <Form.Check
+                                                type={'radio'}
+                                                id={'inline-radio-1'}
+                                                label={'Client'}
+                                                />
+                                            </Col>
+                                            <Col>
+                                            <Form.Check
+                                                type={'radio'}
+                                                id={'inline-radio-2'}
+                                                label={'Driver'}
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
+                                </Form>
+                            </CardContent>
+                        </Card>
+                    </Col>
+                    <Col> 
+                        <Card className={classes.root} variant="outlined">
+                            <CardContent>
+                                <Typography variant="h3" className={classes.title} color="textSecondary" gutterBottom>
+                                    Login
+                                </Typography>
+                                <Form className={classes.form}>
+                                    <Form.Group className="mb-3" controlId="formEmail">
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control type="email" />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formPassword">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control type="password" />
+                                    </Form.Group>
+                                </Form>
+                            </CardContent>
+                        </Card>
+                    </Col>
+                    </Row>    
+          </div>
+        );
+    }
 }
+export default withStyles(styles)(Home);
