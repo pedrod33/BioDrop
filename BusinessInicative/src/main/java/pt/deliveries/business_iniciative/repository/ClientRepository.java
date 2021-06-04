@@ -7,4 +7,10 @@ import pt.deliveries.business_iniciative.model.Client;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
+    Client findById(long id);
+
+    Client findByEmail(String email);
+
+    Client findByPhoneNumber(String phoneNumber);
+
 }
