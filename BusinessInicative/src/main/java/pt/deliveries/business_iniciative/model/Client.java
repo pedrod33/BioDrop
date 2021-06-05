@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(nullable = false)
@@ -31,6 +31,15 @@ public class Client {
 
     public Client(Long id, String name, String email, String password, String address, String gender, String phoneNumber) {
         this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Client(String name, String email, String password, String address, String gender, String phoneNumber) {
         this.name = name;
         this.email = email;
         this.password = password;

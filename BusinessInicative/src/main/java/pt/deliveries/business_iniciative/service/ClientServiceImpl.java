@@ -28,15 +28,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Boolean exists(Client client) {
+    public Boolean verifyRegister(Client client) {
+        logger.log(Level.INFO, "Checking if clients email and phone number exists ...");
 
-        if (clientRepository.findByEmail(client.getEmail()) != null) {
-            return true;
-        } else if (clientRepository.findByPhoneNumber(client.getPhoneNumber()) != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return clientRepository.findByEmail(client.getEmail()) == null && clientRepository.findByPhoneNumber(client.getPhoneNumber()) == null;
     }
 
     @Override
@@ -52,7 +47,7 @@ public class ClientServiceImpl implements ClientService {
         Client loggedClient = clientRepository.findByEmail(client.getEmail());
 
         if (loggedClient != null)
-            if ( loggedClient.getEmail().equals(client.getEmail()) && loggedClient.getPassword().equals(client.getPassword()))
+            if ( loggedClient.getPassword().equals(client.getPassword()))
                 return loggedClient;
             else
                 return null;

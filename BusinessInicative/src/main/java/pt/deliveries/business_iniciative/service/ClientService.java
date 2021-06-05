@@ -7,7 +7,7 @@ import java.util.List;
 public interface ClientService {
     List<Client> findAll();
 
-    Boolean exists(Client client);
+    Boolean verifyRegister(Client client);
 
     Client save(Client client);
 
