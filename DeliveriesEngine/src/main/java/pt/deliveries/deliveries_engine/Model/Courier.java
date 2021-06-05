@@ -3,11 +3,16 @@ package pt.deliveries.deliveries_engine.Model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "courier")
 public class Courier {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id", nullable = false)
     private Supervisor supervisor;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="vehicle_id", referencedColumnName = "id")
+    private Vehicle vehicle;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,7 +21,7 @@ public class Courier {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -25,8 +30,13 @@ public class Courier {
     @Column(nullable = false)
     private String gender;
 
-    public Courier( String name, String email, String password, String gender, Long phoneNumber, Supervisor supervisor) {
+    @Column(unique = true, nullable = false)
+    private Long phoneNumber;
+
+
+    public Courier( String name, String email, String password, String gender, Long phoneNumber, Supervisor supervisor, Vehicle vehicle) {
         this.supervisor = supervisor;
+        this.vehicle = vehicle;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -34,12 +44,7 @@ public class Courier {
         this.phoneNumber = phoneNumber;
     }
 
-    @Column(nullable = false)
-    private Long phoneNumber;
-
-    public Courier() {
-
-    }
+    public Courier() {}
 
     public Long getId() {
         return id;
@@ -87,5 +92,19 @@ public class Courier {
 
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Courier{" +
+                "supervisor=" + supervisor +
+                ", vehicle=" + vehicle +
+                ", id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", gender='" + gender + '\'' +
+                ", phoneNumber=" + phoneNumber +
+                '}';
     }
 }
