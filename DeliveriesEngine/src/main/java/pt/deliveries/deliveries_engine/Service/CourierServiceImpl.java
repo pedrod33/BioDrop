@@ -17,6 +17,7 @@ public class CourierServiceImpl implements CourierService{
     private CourierRepository courierRepository;
 
     private Logger logger = Logger.getLogger(CourierServiceImpl.class.getName());
+
     public Courier save(Courier courier){
         return courierRepository.save(courier);
     }

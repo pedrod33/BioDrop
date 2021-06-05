@@ -10,12 +10,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
-import pt.deliveries.deliveries_engine.Service.CourierService;
+import pt.deliveries.deliveries_engine.Service.CourierServiceImpl;
 import pt.deliveries.deliveries_engine.controller.CourierController;
 import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.utils.JsonUtil;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.hamcrest.Matchers.is;
@@ -34,7 +33,7 @@ class CourierControllerTest {
     MockMvc mvc;
 
     @MockBean
-    CourierService service;
+    CourierServiceImpl service;
 
     @BeforeEach
     void setUp(){
