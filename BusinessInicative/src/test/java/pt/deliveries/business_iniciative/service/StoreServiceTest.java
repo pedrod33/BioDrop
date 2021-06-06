@@ -6,10 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pt.deliveries.business_iniciative.model.Client;
 import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
-import pt.deliveries.business_iniciative.repository.ClientRepository;
 import pt.deliveries.business_iniciative.repository.StoreRepository;
 
 import java.util.*;

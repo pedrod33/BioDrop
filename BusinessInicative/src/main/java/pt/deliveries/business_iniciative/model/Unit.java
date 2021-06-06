@@ -1,8 +1,5 @@
 package pt.deliveries.business_iniciative.model;
 
-import javax.persistence.*;
-import java.util.List;
-
 //@Entity
 public class Unit {
 

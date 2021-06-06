@@ -1,6 +1,5 @@
 package pt.deliveries.business_iniciative.controller;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +12,7 @@ import pt.deliveries.business_iniciative.contoller.ClientRestController;
 import pt.deliveries.business_iniciative.model.Client;
 import pt.deliveries.business_iniciative.service.ClientServiceImpl;
 
-import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -64,7 +59,15 @@ class ClientRestController_WithMockServiceTest {
 
         mvc.perform(post("/businesses-api/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(badClient)))
                 .andExpect(status().isImUsed())
-                .andExpect(content().string("Email ou numero de telefone ja se encontram em uso."));
+                .andExpect(content().json("{\n" +
+                        "    \"id\": null,\n" +
+                        "    \"name\": \"cunha\",\n" +
+                        "    \"email\": \"cunha@ua.pt\",\n" +
+                        "    \"password\": \"1234\",\n" +
+                        "    \"address\": \"address\",\n" +
+                        "    \"gender\": \"M\",\n" +
+                        "    \"phoneNumber\": \"96000000\"\n" +
+                        "}"));
 
         verify(service, times(1)).verifyRegister(Mockito.any());
     }
@@ -95,16 +98,13 @@ class ClientRestController_WithMockServiceTest {
 
     @Test
     void whenInvalidLoginEmail_thenStatus403( ) throws Exception {
-
-        Client badClient = new Client(null, null, "----@ua.pt", "1234", null, null, null);
+        String body = "{\"email\":\"----@ua.pt\", \"password\": \"1234\"}";
 
         when( service.verifyLogin( Mockito.any()) ).thenReturn(null);
 
-        String body = "{\"email\":\"----@ua.pt\", \"password\": \"1234\"}";
-
         mvc.perform(post("/businesses-api/login").contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isForbidden())
-                .andExpect(content().string("Email ou password incorretos"));
+                .andExpect(jsonPath("$").doesNotExist());
 
         verify(service, times(1)).verifyLogin(Mockito.any());
     }
@@ -118,7 +118,7 @@ class ClientRestController_WithMockServiceTest {
 
         mvc.perform(post("/businesses-api/login").contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isForbidden())
-                .andExpect(content().string("Email ou password incorretos"));
+                .andExpect(jsonPath("$").doesNotExist());
 
         verify(service, times(1)).verifyLogin(Mockito.any());
     }
@@ -131,7 +131,7 @@ class ClientRestController_WithMockServiceTest {
 
         mvc.perform(post("/businesses-api/login").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(badClient)))
                 .andExpect(status().isForbidden())
-                .andExpect(content().string("Email ou password incorretos"));
+                .andExpect(jsonPath("$").doesNotExist());
 
         verify(service, times(1)).verifyLogin(Mockito.any());
     }

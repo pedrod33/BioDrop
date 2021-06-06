@@ -2,9 +2,9 @@ package pt.deliveries.business_iniciative.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pt.deliveries.business_iniciative.model.Client;
 import pt.deliveries.business_iniciative.repository.ClientRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.logging.Level;

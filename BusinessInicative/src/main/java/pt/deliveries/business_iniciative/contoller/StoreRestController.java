@@ -8,8 +8,8 @@ import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
 import pt.deliveries.business_iniciative.service.StoreServiceImpl;
 
-import java.util.*;
-import java.util.logging.Level;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 @RestController
@@ -53,7 +53,7 @@ public class StoreRestController {
     @PostMapping("/saveStore")
     public ResponseEntity<Store> saveStore(@RequestBody Store store) {
         HttpStatus status = HttpStatus.CREATED;
-        Store saved = service.save(store);
+        Store saved = service.saveStore(store);
 
         return new ResponseEntity<>(saved, status);
     }

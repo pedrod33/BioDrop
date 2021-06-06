@@ -7,7 +7,9 @@ import pt.deliveries.business_iniciative.model.Store;
 import pt.deliveries.business_iniciative.repository.ProductRepository;
 import pt.deliveries.business_iniciative.repository.StoreRepository;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -66,7 +68,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store save(Store store) {
+    public Store saveStore(Store store) {
         logger.log(Level.INFO, "Saving new store ...");
         return repository.save(store);
     }

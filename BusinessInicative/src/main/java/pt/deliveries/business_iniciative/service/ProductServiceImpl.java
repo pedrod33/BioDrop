@@ -2,7 +2,6 @@ package pt.deliveries.business_iniciative.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pt.deliveries.business_iniciative.contoller.StoreRestController;
 import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
 import pt.deliveries.business_iniciative.repository.ProductRepository;
@@ -32,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public Store save(Product product, Long store_id) {
+    public Store saveProd(Product product, Long store_id) {
         Store store_found = findStoreById(store_id);
 
         if( store_found != null ) {

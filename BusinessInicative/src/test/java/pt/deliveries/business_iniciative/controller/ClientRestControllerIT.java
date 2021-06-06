@@ -4,10 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,17 +21,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = BusinessIniciativeApplication.class)
-//@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = BusinessIniciativeApplication.class)
+@AutoConfigureMockMvc
 
-//@TestPropertySource(locations = "classpath:application-integrationtest.properties")
+@TestPropertySource(locations = "classpath:application-integrationtest.properties")
 public class ClientRestControllerIT {
 
     @Autowired
@@ -70,10 +66,28 @@ public class ClientRestControllerIT {
 
         mvc.perform(post("/businesses-api/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(invalidClient)))
                 .andExpect(status().isImUsed())
-                .andExpect(content().string("Email ou numero de telefone ja se encontram em uso."));
+                .andExpect(content().json("{\n" +
+                        "    \"id\": null,\n" +
+                        "    \"name\": \"cunha\",\n" +
+                        "    \"email\": \"cunha@ua.pt\",\n" +
+                        "    \"password\": \"1234\",\n" +
+                        "    \"address\": \"address\",\n" +
+                        "    \"gender\": \"M\",\n" +
+                        "    \"phoneNumber\": \"1111111\"\n" +
+                        "}"));
+
+
         mvc.perform(post("/businesses-api/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(invalidClient2)))
                 .andExpect(status().isImUsed())
-                .andExpect(content().string("Email ou numero de telefone ja se encontram em uso."));
+                .andExpect(content().json("{\n" +
+                        "    \"id\": null,\n" +
+                        "    \"name\": \"cunha\",\n" +
+                        "    \"email\": \"john@ua.pt\",\n" +
+                        "    \"password\": \"1234\",\n" +
+                        "    \"address\": \"address\",\n" +
+                        "    \"gender\": \"M\",\n" +
+                        "    \"phoneNumber\": \"96000000\"\n" +
+                        "}"));
 
         List<Client> found = repository.findAll();
         assertThat(found).extracting(Client::getName).containsOnly("cunha");

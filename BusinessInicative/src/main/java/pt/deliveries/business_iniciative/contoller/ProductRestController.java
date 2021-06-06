@@ -30,9 +30,9 @@ public class ProductRestController {
 
 
     @PostMapping("/saveProduct")
-    public ResponseEntity saveProductInStore(@RequestBody Product product, @RequestParam(value = "store_id", required = true) Long storeId) {
+    public ResponseEntity<Store> saveProductInStore(@RequestBody Product product, @RequestParam Long storeId) {
         HttpStatus status;
-        Store saved = service.save(product, storeId);
+        Store saved = service.saveProd(product, storeId);
 
         if (saved != null) {
             logger.log(Level.INFO, "Store with id {0} was saved", storeId);
@@ -40,7 +40,7 @@ public class ProductRestController {
             return new ResponseEntity<>(saved, status);
         } else {
             status = HttpStatus.NOT_FOUND;
-            return new ResponseEntity<>("Loja nao encontrada para o id fornecido", status);
+            return new ResponseEntity<>(null, status);
         }
     }
 }

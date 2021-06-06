@@ -4,7 +4,6 @@ import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface StoreService {
@@ -19,5 +18,5 @@ public interface StoreService {
 
     Store findByLatAndLng(double lat, double lng);
 
-    Store save(Store store);
+    Store saveStore(Store store);
 }

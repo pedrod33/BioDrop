@@ -13,6 +13,6 @@ public interface ProductService {
 
     Store findStoreById(Long id);
 
-    Store save(Product product, Long store_id);
+    Store saveProd(Product product, Long store_id);
 
 }

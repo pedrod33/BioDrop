@@ -1,12 +1,9 @@
 package pt.deliveries.business_iniciative.model;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
@@ -104,5 +101,17 @@ public class Product {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", origin='" + origin + '\'' +
+                ", price=" + price +
+                ", imgPath='" + imgPath + '\'' +
+                ", weight=" + weight +
+                '}';
     }
 }

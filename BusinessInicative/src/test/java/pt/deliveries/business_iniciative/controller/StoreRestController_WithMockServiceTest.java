@@ -8,12 +8,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pt.deliveries.business_iniciative.JsonUtil;
-import pt.deliveries.business_iniciative.contoller.ClientRestController;
 import pt.deliveries.business_iniciative.contoller.StoreRestController;
-import pt.deliveries.business_iniciative.model.Client;
 import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
-import pt.deliveries.business_iniciative.service.ClientServiceImpl;
 import pt.deliveries.business_iniciative.service.StoreServiceImpl;
 
 import java.util.ArrayList;
@@ -200,22 +197,22 @@ public class StoreRestController_WithMockServiceTest {
     /* TODO: Teste errado? no response?
     @Test
     void whenPostValidStore_thenReturnStore() throws Exception {
-        Store store = new Store(1L, "store1", "address", null, 10, 11);
+        Store store = new Store("store1", "address", null, 10, 11);
 
-        when( service.save( store )).thenReturn( store );
+        when( service.saveStore( store )).thenReturn( store );
 
         mvc.perform(post("/businesses-api/saveStore").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(store)))
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{\n" +
                         "    \"id\": 1,\n" +
-                        "    \"name\": \"store 1\",\n" +
-                        "    \"address\": \"store 1 address\",\n" +
+                        "    \"name\": \"store1\",\n" +
+                        "    \"address\": \"address\",\n" +
                         "    \"products\": null,\n" +
-                        "    \"latitude\": 1000.0,\n" +
-                        "    \"longitude\": 1111.0\n" +
+                        "    \"latitude\": 10.0,\n" +
+                        "    \"longitude\": 1.0\n" +
                         "}"));
 
-        verify(service, times(1)).save( Mockito.any() );
-    }
-     */
+        verify(service, times(1)).saveStore( Mockito.any() );
+    }*/
+
 }
