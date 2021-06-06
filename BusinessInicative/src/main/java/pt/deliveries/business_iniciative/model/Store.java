@@ -1,9 +1,16 @@
 package pt.deliveries.business_iniciative.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Store {
 
     @Id
@@ -16,8 +23,9 @@ public class Store {
     @Column(nullable = false, unique = true)
     private String address;
 
-    @OneToMany(mappedBy = "store")
-    private List<Product> products;
+    @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
+    @JoinColumn(name = "store_id")
+    private Set<Product> products = new HashSet<>();
 
     @Column(nullable = false)
     private double latitude;
@@ -28,8 +36,16 @@ public class Store {
 
     public Store() { }
 
-    public Store(String name, String address, List<Product> products, double latitude, double longitude) {
+    public Store(Long id,  String name, String address, Set<Product> products, double latitude, double longitude) {
         this.id = id;
+        this.name = name;
+        this.address = address;
+        this.products = products;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public Store(String name, String address, Set<Product> products, double latitude, double longitude) {
         this.name = name;
         this.address = address;
         this.products = products;
@@ -61,11 +77,11 @@ public class Store {
         this.address = address;
     }
 
-    public List<Product> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
     }
 

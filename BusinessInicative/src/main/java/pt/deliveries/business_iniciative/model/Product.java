@@ -2,7 +2,14 @@ package pt.deliveries.business_iniciative.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Product {
 
     @Id
@@ -18,14 +25,38 @@ public class Product {
     @Column(nullable = false)
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name="store_id")
-    private Store store;
+    @Column
+    private String imgPath;
 
-    @ManyToOne
-    @JoinColumn(name="unit_id")
-    private Unit unit;
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name = "store_id", referencedColumnName = "id", nullable = false)
+    //private Store store;
 
+    //@ManyToOne
+    //@JoinColumn(name="unit_id")
+    //private Unit unit;
+
+    @Column(nullable = false)
+    private double weight;
+
+    public Product() { }
+
+    public Product(Long id, String name, String origin, double price, String imgPath, double weight) {
+        this.id = id;
+        this.name = name;
+        this.origin = origin;
+        this.price = price;
+        this.imgPath = imgPath;
+        this.weight = weight;
+    }
+
+    public Product(String name, String origin, double price, String imgPath, double weight) {
+        this.name = name;
+        this.origin = origin;
+        this.price = price;
+        this.imgPath = imgPath;
+        this.weight = weight;
+    }
 
     public Long getId() {
         return id;
@@ -59,19 +90,19 @@ public class Product {
         this.price = price;
     }
 
-    public Store getStore() {
-        return store;
+    public String getImgPath() {
+        return imgPath;
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 
-    public Unit getUnit() {
-        return unit;
+    public double getWeight() {
+        return weight;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }

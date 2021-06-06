@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
 import pt.deliveries.business_iniciative.service.StoreServiceImpl;
 
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,21 +23,25 @@ public class StoreRestController {
             = Logger.getLogger(
             StoreRestController.class.getName());
 
+
     @GetMapping("/stores")
     public List<Store> findAllStores() {
         return service.findAllStores();
     }
 
-    @GetMapping("/store")
-    public Store findStore(@RequestParam(value = "name", required = false) String name,
-                           @RequestParam(value = "address", required = false) String address) {
+    @GetMapping("/productsIn")
+    public Set<Product> findAllProductsInStore(@RequestParam Long storeId) {
+        return service.findAllProductsInStore(storeId);
+    }
 
-        if (name != null)
-            return service.findByName(name);
-        else if (address != null)
-            return service.findByAddress(address);
-        else
-            return null;
+    @GetMapping("/store-name")
+    public List<Store> findStoreByName(@RequestParam String name) {
+         return service.findByName(name);
+    }
+
+    @GetMapping("/store-address")
+    public List<Store> findStoreByAddress(@RequestParam String address) {
+        return service.findByAddress(address);
     }
 
     @GetMapping("/store-coords")
@@ -45,11 +50,12 @@ public class StoreRestController {
     }
 
 
-    @PostMapping(value = "/saveStore")
+    @PostMapping("/saveStore")
     public ResponseEntity<Store> saveStore(@RequestBody Store store) {
-            HttpStatus status = HttpStatus.CREATED;
-            Store saved = service.save(store);
-            return new ResponseEntity<>(saved, status);
+        HttpStatus status = HttpStatus.CREATED;
+        Store saved = service.save(store);
+
+        return new ResponseEntity<>(saved, status);
     }
 
 }

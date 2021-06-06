@@ -112,8 +112,6 @@ class ClientRestController_WithMockServiceTest {
     @Test
     void whenInvalidLoginPassword_thenStatus403( ) throws Exception {
 
-        Client badClient = new Client(null, null, "cunha@ua.pt", "----", null, null, null);
-
         when( service.verifyLogin( Mockito.any()) ).thenReturn(null);
 
         String body = "{\"email\":\"cunha@ua.pt\", \"password\": \"----\"}";

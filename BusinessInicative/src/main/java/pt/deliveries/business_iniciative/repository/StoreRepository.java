@@ -4,14 +4,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pt.deliveries.business_iniciative.model.Store;
 
+import java.util.List;
+
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-    Store findById(long id);
+    List<Store> findByName(String name);
 
-    Store findByName(String name);
-
-    Store findByAddress(String address);
+    List<Store> findByAddress(String address);
 
     Store findByLatitudeAndLongitude(double lat, double lng);
 }

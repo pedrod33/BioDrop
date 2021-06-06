@@ -30,10 +30,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = BusinessIniciativeApplication.class)
-@AutoConfigureMockMvc
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = BusinessIniciativeApplication.class)
+//@AutoConfigureMockMvc
 
-@TestPropertySource(locations = "classpath:application-integrationtest.properties")
+//@TestPropertySource(locations = "classpath:application-integrationtest.properties")
 public class ClientRestControllerIT {
 
     @Autowired

@@ -3,9 +3,10 @@ package pt.deliveries.business_iniciative.model;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+//@Entity
 public class Unit {
 
+    /*
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -40,4 +41,6 @@ public class Unit {
     public void setProducts(List<Product> products) {
         this.products = products;
     }
+
+     */
 }

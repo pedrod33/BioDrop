@@ -1,5 +1,8 @@
 package pt.deliveries.business_iniciative.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
@@ -47,7 +50,6 @@ public class Client {
         this.gender = gender;
         this.phoneNumber = phoneNumber;
     }
-
 
     public Long getId() {
         return id;
