@@ -173,23 +173,7 @@ public class StoreServiceTest {
     }
 
     @Test
-    public void given3ProductsInOneStore_whenFindAllProductsInStore_withInvalidId_thenReturnAllProductsInStore() {
-        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
-        Product prod2 = new Product("prod2", "origin2", 10, "path", 100 );
-        Product prod3 = new Product("prod3", "origin3", 10, "path", 100 );
-        prod1.setId(1L); prod2.setId(2L); prod3.setId(3L);
-
-        Set<Product> productsInStore = new HashSet<>();
-        productsInStore.add(prod1); productsInStore.add(prod2); productsInStore.add(prod3);
-
-        Address address1 = new Address("city1", "address1", 10, 11);
-        address1.setId(1L);
-
-        Store store1 = new Store("store1", null, null);
-        store1.setId(1L);
-        store1.setAddress(address1);
-        store1.setProducts(productsInStore);
-
+    public void whenFindAllProductsInStore_withInvalidId_thenReturnAllProductsInStore() {
 
         when(repository.findById(0L)).thenReturn(Optional.empty());
 
