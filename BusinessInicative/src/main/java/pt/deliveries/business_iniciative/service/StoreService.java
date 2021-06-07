@@ -12,6 +12,8 @@ public interface StoreService {
 
     Set<Product> findAllProductsInStore(Long storeId);
 
+    Store findById(Long id);
+
     List<Store> findByName(String name);
 
     List<Store> findByAddress(String address);

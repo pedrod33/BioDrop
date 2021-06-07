@@ -50,6 +50,12 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public Store findById(Long id) {
+        logger.log(Level.INFO, "Finding store by id ...");
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
     public List<Store> findByName(String name) {
         logger.log(Level.INFO, "Finding store by name ...");
         return repository.findByName(name);

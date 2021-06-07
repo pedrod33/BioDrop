@@ -11,8 +11,6 @@ public interface ProductService {
 
     Product findById(Long id);
 
-    Store findStoreById(Long id);
-
     Store saveProd(Product product, Long store_id);
 
 }
