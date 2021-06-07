@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+    database:
+        image: mysql
+        container_name: databaseBI
+        restart: always
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_DATABASE: business-mysql
+            MYSQL_USER: tqs
+            MYSQL_PASSWORD: password
+            # Password for root access
+            MYSQL_ROOT_PASSWORD: password
+        expose:
+            - 3306
+        volumes:
+            - my-db:/var/lib/mysql
+
+    app:
+        build: .
+        container_name: BusinessInicative
+        restart: always
+        ports: 
+            - 8080:8090
+            - 9009:9009
+        volumes: 
+            - .:/app
+        links: 
+            - database
+        depends_on:
+            - database
+
+volumes:
+    my-db:
