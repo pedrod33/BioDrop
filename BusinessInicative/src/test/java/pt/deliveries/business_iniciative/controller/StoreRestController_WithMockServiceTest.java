@@ -199,7 +199,7 @@ public class StoreRestController_WithMockServiceTest {
     void whenPostValidStore_thenReturnStore() throws Exception {
         Store store = new Store("store1", "address", null, 10, 11);
 
-        when( service.saveStore( store )).thenReturn( store );
+        when( service.saveStore(store) ).thenReturn( store );
 
         mvc.perform(post("/businesses-api/saveStore").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(store)))
                 .andExpect(status().isCreated())

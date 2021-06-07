@@ -19,8 +19,6 @@ public class StoreServiceImpl implements StoreService {
     @Autowired
     private StoreRepository repository;
 
-    @Autowired
-    private ProductRepository prodRepository;
 
     private static final Logger logger
             = Logger.getLogger(
