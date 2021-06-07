@@ -8,13 +8,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './custom.css'
 
+import Album from './components/storelist';
+import Admin from './components/Admin/Admin';
+
+
 class App extends Component {
   static displayName = App.name;
 
   render () {
     return (
       <Layout>
-        <Route exact path='/' component={Home} />
+            <Route exact path='/' component={Home} />
+            <Route exact path='/stores' component={Album} />
+            <Route exact path='/Admin' component={Admin} />
       </Layout>
     );
   }
