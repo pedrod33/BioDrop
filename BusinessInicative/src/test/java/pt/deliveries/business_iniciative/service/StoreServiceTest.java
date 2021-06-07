@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.business_iniciative.model.Address;
 import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
 import pt.deliveries.business_iniciative.repository.StoreRepository;
@@ -26,10 +27,24 @@ public class StoreServiceTest {
 
     @BeforeEach
     public void setUp() {
+        Address address1 = new Address("city1", "address1", 10, 11);
+        Address address2 = new Address("city2", "address2", 10, 11);
+        Address address3 = new Address("city3", "address3", 10, 11);
+        address1.setId(1L);
+        address2.setId(2L);
+        address3.setId(3L);
+
         Set<Product> products = new HashSet<>();
-        Store store1 = new Store("store1", "address1", products, 100, 101);
-        Store store2 = new Store("store2", "address2", products, 200, 201);
-        Store store3 = new Store("store3", "address3", products, 300, 301);
+        Store store1 = new Store("store1", null, products);
+        Store store2 = new Store("store2", null, products);
+        Store store3 = new Store("store3", null, products);
+        store1.setId(1L);
+        store2.setId(2L);
+        store3.setId(3L);
+        store1.setAddress(address1);
+        store2.setAddress(address2);
+        store3.setAddress(address3);
+
 
 
         List<Store> allStores = Arrays.asList(store1, store2, store3);
@@ -37,18 +52,29 @@ public class StoreServiceTest {
         when(repository.findAll()).thenReturn(allStores);
         when(repository.findByName(store1.getName())).thenReturn(Collections.singletonList(store1));
         when(repository.findByName("wrong_name")).thenReturn(null);
-        when(repository.findByAddress(store1.getAddress())).thenReturn(Collections.singletonList(store1));
-        when(repository.findByAddress("wrong_name")).thenReturn(null);
-        when(repository.findByLatitudeAndLongitude(store1.getLatitude(), store1.getLongitude())).thenReturn(store1);
-        when(repository.findByLatitudeAndLongitude(0, 0)).thenReturn(null);
+        when(repository.findByAddress_Address(store1.getAddress().getAddress())).thenReturn(Collections.singletonList(store1));
+        when(repository.findByAddress_Address("wrong_name")).thenReturn(null);
+        when(repository.findByAddress_LatitudeAndAddress_Longitude(store1.getAddress().getLatitude(), store1.getAddress().getLongitude())).thenReturn(store1);
+        when(repository.findByAddress_LatitudeAndAddress_Longitude(0, 0)).thenReturn(null);
     }
 
     @Test
     public void given3Stores_whenFindAllStores_thenReturnAllStores() {
+        Address address1 = new Address("city1", "address1", 10, 11);
+        Address address2 = new Address("city2", "address2", 10, 11);
+        Address address3 = new Address("city3", "address3", 10, 11);
+        address1.setId(1L);
+        address2.setId(2L);
+        address3.setId(3L);
+
+
         Set<Product> products = new HashSet<>();
-        Store store1 = new Store("store1", "address1", products, 100, 101);
-        Store store2 = new Store("store2", "address2", products, 200, 201);
-        Store store3 = new Store("store3", "address3", products, 300, 301);
+        Store store1 = new Store("store1", null, products);
+        Store store2 = new Store("store2", null, products);
+        Store store3 = new Store("store3", null, products);
+        store1.setAddress(address1);
+        store2.setAddress(address2);
+        store3.setAddress(address3);
 
         List<Store> allStores = service.findAllStores();
 
@@ -79,7 +105,7 @@ public class StoreServiceTest {
         String address = "address1";
         List<Store> found = service.findByAddress(address);
 
-        assertThat(found.get(0).getAddress()).isEqualTo(address);
+        assertThat(found.get(0).getAddress().getAddress()).isEqualTo(address);
         verifyFindByAddressIsCalledOnce(address);
     }
 
@@ -94,12 +120,12 @@ public class StoreServiceTest {
 
     @Test
     public void whenValidCoords_thenStoreShouldBeFound() {
-        double lat = 100;
-        double lng = 101;
+        double lat = 10;
+        double lng = 11;
         Store found = service.findByLatAndLng(lat, lng);
 
-        assertThat(found.getLatitude()).isEqualTo(lat);
-        assertThat(found.getLongitude()).isEqualTo(lng);
+        assertThat(found.getAddress().getLatitude()).isEqualTo(lat);
+        assertThat(found.getAddress().getLongitude()).isEqualTo(lng);
         verifyFindByLatAndLngIsCalledOnce(lat, lng);
     }
 
@@ -113,6 +139,66 @@ public class StoreServiceTest {
         verifyFindByLatAndLngIsCalledOnce(lat, lng);
     }
 
+    @Test
+    public void given3ProductsInOneStore_whenFindAllProductsInStore_withValidId_thenReturnAllProductsInStore() {
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
+        Product prod2 = new Product("prod2", "origin2", 10, "path", 100 );
+        Product prod3 = new Product("prod3", "origin3", 10, "path", 100 );
+        prod1.setId(1L);
+        prod2.setId(2L);
+        prod3.setId(3L);
+
+        Set<Product> productsInStore = new HashSet<>();
+        productsInStore.add(prod1);
+        productsInStore.add(prod2);
+        productsInStore.add(prod3);
+
+        Address address1 = new Address("city1", "address1", 10, 11);
+        address1.setId(1L);
+
+        Store store1 = new Store("store1", null, null);
+        store1.setId(1L);
+        store1.setAddress(address1);
+        store1.setProducts(productsInStore);
+
+
+        when(repository.findById(store1.getId())).thenReturn(Optional.of(store1));
+
+        Store store = repository.findById(store1.getId()).orElse(null);
+
+
+        verifyFindByIdIsCalledOnce(store1.getId());
+        assertThat(store).isNotNull();
+        assertThat(store.getProducts()).hasSize(3).extracting(Product::getName).contains(prod1.getName(), prod2.getName(), prod3.getName());
+    }
+
+    @Test
+    public void given3ProductsInOneStore_whenFindAllProductsInStore_withInvalidId_thenReturnAllProductsInStore() {
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
+        Product prod2 = new Product("prod2", "origin2", 10, "path", 100 );
+        Product prod3 = new Product("prod3", "origin3", 10, "path", 100 );
+        prod1.setId(1L); prod2.setId(2L); prod3.setId(3L);
+
+        Set<Product> productsInStore = new HashSet<>();
+        productsInStore.add(prod1); productsInStore.add(prod2); productsInStore.add(prod3);
+
+        Address address1 = new Address("city1", "address1", 10, 11);
+        address1.setId(1L);
+
+        Store store1 = new Store("store1", null, null);
+        store1.setId(1L);
+        store1.setAddress(address1);
+        store1.setProducts(productsInStore);
+
+
+        when(repository.findById(0L)).thenReturn(Optional.empty());
+
+        Store notFound = repository.findById(0L).orElse(null);
+
+        verifyFindByIdIsCalledOnce(0L);
+        assertThat(notFound).isNull();
+    }
+
 
     private void verifyFindAllIsCalledOnce() {
         verify(repository, times(1)).findAll();
@@ -123,10 +209,15 @@ public class StoreServiceTest {
     }
 
     private void verifyFindByAddressIsCalledOnce(String address) {
-        verify(repository, times(1)).findByAddress(address);
+        verify(repository, times(1)).findByAddress_Address(address);
     }
 
     private void verifyFindByLatAndLngIsCalledOnce(double lat, double lng) {
-        verify(repository, times(1)).findByLatitudeAndLongitude(lat, lng);
+        verify(repository, times(1)).findByAddress_LatitudeAndAddress_Longitude(lat, lng);
     }
+
+    private void verifyFindByIdIsCalledOnce(Long storeId) {
+        verify(repository, times(1)).findById(storeId);
+    }
+
 }

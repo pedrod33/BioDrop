@@ -2,8 +2,10 @@ package pt.deliveries.business_iniciative.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pt.deliveries.business_iniciative.model.Address;
 import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
+import pt.deliveries.business_iniciative.repository.AddressRepository;
 import pt.deliveries.business_iniciative.repository.ProductRepository;
 import pt.deliveries.business_iniciative.repository.StoreRepository;
 
@@ -18,7 +20,6 @@ public class StoreServiceImpl implements StoreService {
 
     @Autowired
     private StoreRepository repository;
-
 
     private static final Logger logger
             = Logger.getLogger(
@@ -62,13 +63,13 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<Store> findByAddress(String address) {
         logger.log(Level.INFO, "Finding store by address ...");
-        return repository.findByAddress(address);
+        return repository.findByAddress_Address(address);
     }
 
     @Override
     public Store findByLatAndLng(double lat, double lng) {
         logger.log(Level.INFO, "Finding store by coordinates ...");
-        return repository.findByLatitudeAndLongitude(lat, lng);
+        return repository.findByAddress_LatitudeAndAddress_Longitude(lat, lng);
     }
 
     @Override

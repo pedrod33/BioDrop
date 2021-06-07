@@ -5,8 +5,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.business_iniciative.model.Address;
 import pt.deliveries.business_iniciative.model.Client;
 import pt.deliveries.business_iniciative.repository.ClientRepository;
+
+import java.util.Collections;
+import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -24,7 +28,11 @@ public class ClientServiceTest {
     // Verify Register
     @Test
     public void whenValidEmailAndPhoneNumber_thenReturnTrue() {
-        Client validClient = new Client(1L, "bob", "bob@ua.pt", "1234", "address", "M", "96000000");
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+        Client validClient = new Client("bob", "bob@ua.pt", "1234", null, "M", "96000000");
+        validClient.setId(1L);
+        validClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
 
         Boolean valid = service.verifyRegister(validClient);
         assertThat(valid).isEqualTo(true);
@@ -34,8 +42,16 @@ public class ClientServiceTest {
 
     @Test
     public void whenValidEmailAndInvalidPhoneNumber_thenReturnFalse() {
-        Client validClient = new Client(1L, "bob", "bob@ua.pt", "1234", "address", "M", "96000000");
-        Client invalidClient = new Client(1L, "bob", "bob@ua.pt", "1234", "address", "M", "---");
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Client validClient = new Client("bob", "bob@ua.pt", "1234", null, "M", "96000000");
+        validClient.setId(1L);
+        validClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
+
+        Client invalidClient = new Client("bob", "bob@ua.pt", "1234", null, "M", "---");
+        invalidClient.setId(2L);
+        invalidClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
 
         when(repository.findByEmail(invalidClient.getEmail())).thenReturn(null);
         when(repository.findByPhoneNumber(invalidClient.getPhoneNumber())).thenReturn(validClient);
@@ -48,8 +64,16 @@ public class ClientServiceTest {
 
     @Test
     public void whenInvalidEmailAndValidPhoneNumber_thenReturnFalse() {
-        Client validClient = new Client(1L, "bob", "bob@ua.pt", "1234", "address", "M", "96000000");
-        Client invalidClient = new Client(1L, "bob", "---", "1234", "address", "M", "96000000");
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Client validClient = new Client("bob", "bob@ua.pt", "1234", null, "M", "96000000");
+        validClient.setId(1L);
+        validClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
+
+        Client invalidClient = new Client("bob", "---", "1234", null, "M", "96000000");
+        invalidClient.setId(2L);
+        invalidClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
 
         when(repository.findByEmail(invalidClient.getEmail())).thenReturn(validClient);
         when(repository.findByPhoneNumber(invalidClient.getPhoneNumber())).thenReturn(null);
@@ -61,8 +85,16 @@ public class ClientServiceTest {
 
     @Test
     public void whenInvalidEmailAndInvalidPhoneNumber_thenReturnFalse() {
-        Client validClient = new Client(1L, "bob", "bob@ua.pt", "1234", "address", "M", "96000000");
-        Client invalidClient = new Client(1L, "bob", "---", "1234", "address", "M", "---");
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Client validClient = new Client("bob", "bob@ua.pt", "1234", null, "M", "96000000");
+        validClient.setId(1L);
+        validClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
+
+        Client invalidClient = new Client("bob", "---", "1234", null, "M", "---");
+        invalidClient.setId(2L);
+        invalidClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
 
         when(repository.findByEmail(invalidClient.getEmail())).thenReturn(validClient);
         when(repository.findByPhoneNumber(invalidClient.getPhoneNumber())).thenReturn(validClient);
@@ -76,7 +108,12 @@ public class ClientServiceTest {
     // Verify login
     @Test
     public void whenValidEmailAndPassword_thenReturnClient() {
-        Client validClient = new Client(1L, "bob", "bob@ua.pt", "1234", "address", "M", "96000000");
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Client validClient = new Client("bob", "bob@ua.pt", "1234", null, "M", "96000000");
+        validClient.setId(1L);
+        validClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
 
         when(repository.findByEmail(validClient.getEmail())).thenReturn(validClient);
 
@@ -87,8 +124,17 @@ public class ClientServiceTest {
 
     @Test
     public void whenValidEmailAndInvalidPassword_thenReturnNull() {
-        Client validClient = new Client(1L, "bob", "bob@ua.pt", "1234", "address", "M", "96000000");
-        Client nonClient = new Client(1L, "bob", "bob@ua.pt", "---", "address", "M", "96000000");
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Client validClient = new Client("bob", "bob@ua.pt", "1234", null, "M", "96000000");
+        validClient.setId(1L);
+        validClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
+
+        Client nonClient = new Client("bob", "bob@ua.pt", "---", null, "M", "96000000");
+        nonClient.setId(2L);
+        nonClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
+
 
         when(repository.findByEmail(nonClient.getEmail())).thenReturn(validClient);
 
@@ -99,7 +145,12 @@ public class ClientServiceTest {
 
     @Test
     public void whenInValidEmailAndValidPassword_thenReturnNull() {
-        Client nonClient = new Client(1L, "bob", "---", "1234", "address", "M", "96000000");
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Client nonClient = new Client("bob", "---", "1234", null, "M", "96000000");
+        nonClient.setId(1L);
+        nonClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
 
         when(repository.findByEmail(nonClient.getEmail())).thenReturn(null);
 
@@ -110,7 +161,12 @@ public class ClientServiceTest {
 
     @Test
     public void whenInValidEmailAndInvalidPassword_thenReturnNull() {
-        Client nonClient = new Client(1L, "bob", "---", "1234", "address", "M", "96000000");
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Client nonClient = new Client("bob", "---", "1234", null, "M", "96000000");
+        nonClient.setId(1L);
+        nonClient.setAddresses(new HashSet<>(Collections.singletonList(address)));
 
         when(repository.findByEmail(nonClient.getEmail())).thenReturn(null);
 

@@ -9,15 +9,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pt.deliveries.business_iniciative.JsonUtil;
 import pt.deliveries.business_iniciative.contoller.StoreRestController;
+import pt.deliveries.business_iniciative.model.Address;
 import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
 import pt.deliveries.business_iniciative.service.StoreServiceImpl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,10 +35,17 @@ public class StoreRestController_WithMockServiceTest {
 
     @Test
     void whenFindAllProductsInStoreWithValidStoreId_thenReturnProducts() throws Exception {
-        Store store = new Store(1L, "store1", "address", null, 10, 11);
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
 
-        Product prod1 = new Product(1L, "prod1", "origin1", 10, "path", 100 );
-        Product prod2 = new Product(2L, "prod2", "origin2", 10, "path", 100 );
+        Store store = new Store("store1", null, null);
+        store.setId(1L);
+        store.setAddress(address);
+
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
+        prod1.setId(1L);
+        Product prod2 = new Product("prod2", "origin2", 10, "path", 100 );
+        prod2.setId(2L);
 
         Set<Product> productsInStore = new HashSet<>();
         productsInStore.add(prod1);
@@ -90,23 +96,27 @@ public class StoreRestController_WithMockServiceTest {
 
     @Test
     void whenFindStoreWithValidName_thenReturnStore() throws Exception {
-        Store store = new Store(1L, "store1", "address", null, 10, 11);
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Store store = new Store("store1", null, null);
+        store.setId(1L);
+        store.setAddress(address);
+
         List<Store> stores_found = new ArrayList<>();
         stores_found.add(store);
 
         when( service.findByName( store.getName() )).thenReturn( stores_found );
 
         mvc.perform(get("/businesses-api/store-name?name=store1").contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\n" +
-                        "    \"id\": 1,\n" +
-                        "    \"name\": \"store1\",\n" +
-                        "    \"address\": \"address\",\n" +
-                        "    \"products\": null,\n" +
-                        "    \"latitude\": 10.0,\n" +
-                        "    \"longitude\": 11.0\n" +
-                        "}]"));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.[0]name", is("store1")))
+                .andExpect(jsonPath("$.[0]address.id", is(1)))
+                .andExpect(jsonPath("$.[0]address.city", is("city")))
+                .andExpect(jsonPath("$.[0]address.address", is("address")))
+                .andExpect(jsonPath("$.[0]address.latitude", is(10.0)))
+                .andExpect(jsonPath("$.[0]address.longitude", is(11.0)));
 
         verify(service, times(1)).findByName( store.getName() );
     }
@@ -126,25 +136,29 @@ public class StoreRestController_WithMockServiceTest {
 
     @Test
     void whenFindStoreWithValidAddress_thenReturnStore() throws Exception {
-        Store store = new Store(1L, "store1", "address", null, 10, 11);
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Store store = new Store("store1", null, null);
+        store.setId(1L);
+        store.setAddress(address);
+
         List<Store> stores_found = new ArrayList<>();
         stores_found.add(store);
 
-        when( service.findByAddress( store.getAddress() )).thenReturn( stores_found );
+        when( service.findByAddress( store.getAddress().getAddress() )).thenReturn( stores_found );
 
         mvc.perform(get("/businesses-api/store-address?address=address").contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\n" +
-                        "    \"id\": 1,\n" +
-                        "    \"name\": \"store1\",\n" +
-                        "    \"address\": \"address\",\n" +
-                        "    \"products\": null,\n" +
-                        "    \"latitude\": 10.0,\n" +
-                        "    \"longitude\": 11.0\n" +
-                        "}]"));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.[0]name", is("store1")))
+                .andExpect(jsonPath("$.[0]address.id", is(1)))
+                .andExpect(jsonPath("$.[0]address.city", is("city")))
+                .andExpect(jsonPath("$.[0]address.address", is("address")))
+                .andExpect(jsonPath("$.[0]address.latitude", is(10.0)))
+                .andExpect(jsonPath("$.[0]address.longitude", is(11.0)));
 
-        verify(service, times(1)).findByAddress( store.getAddress() );
+        verify(service, times(1)).findByAddress( store.getAddress().getAddress() );
     }
 
     @Test
@@ -162,23 +176,26 @@ public class StoreRestController_WithMockServiceTest {
 
     @Test
     void whenFindStoreWithValidCoords_thenReturnStore() throws Exception {
-        Store store = new Store(1L, "store1", "address", null, 10, 11);
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
 
-        when( service.findByLatAndLng( store.getLatitude(), store.getLongitude() )).thenReturn( store );
+        Store store = new Store("store1", null, null);
+        store.setId(1L);
+        store.setAddress(address);
+
+        when( service.findByLatAndLng( store.getAddress().getLatitude(), store.getAddress().getLongitude() )).thenReturn( store );
 
         mvc.perform(get("/businesses-api/store-coords?lat=10&lng=11").contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\n" +
-                        "    \"id\": 1,\n" +
-                        "    \"name\": \"store1\",\n" +
-                        "    \"address\": \"address\",\n" +
-                        "    \"products\": null,\n" +
-                        "    \"latitude\": 10.0,\n" +
-                        "    \"longitude\": 11.0\n" +
-                        "}"));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("name", is("store1")))
+                .andExpect(jsonPath("address.id", is(1)))
+                .andExpect(jsonPath("address.city", is("city")))
+                .andExpect(jsonPath("address.address", is("address")))
+                .andExpect(jsonPath("address.latitude", is(10.0)))
+                .andExpect(jsonPath("address.longitude", is(11.0)));
 
-        verify(service, times(1)).findByLatAndLng( store.getLatitude(), store.getLongitude() );
+        verify(service, times(1)).findByLatAndLng( store.getAddress().getLatitude(), store.getAddress().getLongitude() );
     }
 
     @Test
@@ -194,25 +211,27 @@ public class StoreRestController_WithMockServiceTest {
         verify(service, times(1)).findByLatAndLng( 0, 0 );
     }
 
-    /* TODO: Teste errado? no response?
     @Test
     void whenPostValidStore_thenReturnStore() throws Exception {
-        Store store = new Store("store1", "address", null, 10, 11);
+        Address address = new Address("city", "address", 10, 11);
 
-        when( service.saveStore(store) ).thenReturn( store );
+        Store store = new Store("store1", null, null);
+        store.setAddress(address);
+
+
+        when( service.saveStore( Mockito.any()) ).thenReturn( store );
+
 
         mvc.perform(post("/businesses-api/saveStore").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(store)))
                 .andExpect(status().isCreated())
-                .andExpect(content().json("{\n" +
-                        "    \"id\": 1,\n" +
-                        "    \"name\": \"store1\",\n" +
-                        "    \"address\": \"address\",\n" +
-                        "    \"products\": null,\n" +
-                        "    \"latitude\": 10.0,\n" +
-                        "    \"longitude\": 1.0\n" +
-                        "}"));
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("name", is("store1")))
+                .andExpect(jsonPath("address.city", is("city")))
+                .andExpect(jsonPath("address.address", is("address")))
+                .andExpect(jsonPath("address.latitude", is(10.0)))
+                .andExpect(jsonPath("address.longitude", is(11.0)));
 
         verify(service, times(1)).saveStore( Mockito.any() );
-    }*/
+    }
 
 }

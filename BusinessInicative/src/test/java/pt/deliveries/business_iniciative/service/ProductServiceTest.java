@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.business_iniciative.model.Address;
 import pt.deliveries.business_iniciative.model.Product;
 import pt.deliveries.business_iniciative.model.Store;
 import pt.deliveries.business_iniciative.repository.ProductRepository;
@@ -26,12 +27,19 @@ public class ProductServiceTest {
     @InjectMocks
     private ProductServiceImpl service;
 
+    @InjectMocks
+    private StoreServiceImpl storeService;
+
+
 
     @BeforeEach
     public void setUp() {
-        Product prod1 = new Product(1L, "prod1", "origin1", 10, "path", 100 );
-        Product prod2 = new Product(2L, "prod2", "origin2", 10, "path", 100 );
-        Product prod3 = new Product(3L, "prod3", "origin3", 10, "path", 100 );
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
+        Product prod2 = new Product("prod2", "origin2", 10, "path", 100 );
+        Product prod3 = new Product("prod3", "origin3", 10, "path", 100 );
+        prod1.setId(1L);
+        prod2.setId(2L);
+        prod3.setId(3L);
 
         List<Product> allProducts = Arrays.asList(prod1, prod2, prod3);
 
@@ -44,9 +52,12 @@ public class ProductServiceTest {
 
     @Test
     public void given3Products_whenFindAllProducts_thenReturnAllProducts() {
-        Product prod1 = new Product(1L, "prod1", "origin1", 10, "path", 100);
-        Product prod2 = new Product(2L, "prod2", "origin2", 10, "path", 100);
-        Product prod3 = new Product(3L, "prod3", "origin3", 10, "path", 100);
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100);
+        Product prod2 = new Product("prod2", "origin2", 10, "path", 100);
+        Product prod3 = new Product("prod3", "origin3", 10, "path", 100);
+        prod1.setId(1L);
+        prod2.setId(2L);
+        prod3.setId(3L);
 
         List<Product> allProducts = service.findAllProducts();
 
@@ -62,6 +73,37 @@ public class ProductServiceTest {
 
         assertThat(found.getId()).isEqualTo(prodId);
         verifyFindByIdIsCalledOnce(prodId);
+    }
+
+
+    //@Test
+    public void whenValidProduct_thenProductShouldBeCreated() {
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Store store = new Store("store1", null, null);
+        store.setId(1L);
+        store.setAddress(address);
+
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
+        prod1.setId(1L);
+        Set<Product> productsInStore = new HashSet<>();
+        productsInStore.add(prod1);
+        store.setProducts(productsInStore);
+
+        System.out.println(store.getId());
+
+        when(storeService.findById(store.getId())).thenReturn(store);
+        when(storeService.saveStore(store)).thenReturn(store);
+
+
+        Store store_found = storeService.findById(store.getId());
+
+        System.out.println(store_found);
+        //assertThat(store_found.getId()).isEqualTo(store.getId());
+        //assertThat(store_found.getProducts()).isEqualTo(productsInStore);
+
+        //verifyFindByIdIsCalledOnce(store.getId());
     }
 
 

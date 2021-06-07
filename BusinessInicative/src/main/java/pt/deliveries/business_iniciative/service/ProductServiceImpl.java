@@ -18,9 +18,6 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository repository;
 
     @Autowired
-    StoreRepository storeRepository;
-
-    @Autowired
     StoreServiceImpl storeService;
 
 
@@ -41,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
         if( store_found != null ) {
             logger.log(Level.INFO, "Associating store {0} to the product and saving ...", store_id);
             store_found.getProducts().add(product);
-            return storeRepository.save(store_found);
+            return storeService.saveStore(store_found);
         }
 
         logger.log(Level.WARNING, "Store not found for id {0} ...", store_id);

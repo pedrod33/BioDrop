@@ -1,6 +1,8 @@
 package pt.deliveries.business_iniciative.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Client {
@@ -18,8 +20,9 @@ public class Client {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String address;
+    @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
+    @JoinColumn(name = "client_id")
+    private Set<Address> addresses = new HashSet<>();
 
     @Column(nullable = false)
     private String gender;
@@ -29,21 +32,12 @@ public class Client {
 
     public Client() { }
 
-    public Client(Long id, String name, String email, String password, String address, String gender, String phoneNumber) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
-    }
 
-    public Client(String name, String email, String password, String address, String gender, String phoneNumber) {
+    public Client(String name, String email, String password, Set<Address> addresses, String gender, String phoneNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.address = address;
+        this.addresses = addresses;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
     }
@@ -80,12 +74,12 @@ public class Client {
         this.password = password;
     }
 
-    public String getAddress() {
-        return address;
+    public Set<Address> getAddresses() {
+        return addresses;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddresses(Set<Address> addresses) {
+        this.addresses = addresses;
     }
 
     public String getGender() {
@@ -111,7 +105,7 @@ public class Client {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", address='" + address + '\'' +
+                ", addresses=" + addresses +
                 ", gender='" + gender + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';

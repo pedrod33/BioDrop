@@ -33,19 +33,14 @@ public class Product {
     //@JoinColumn(name="unit_id")
     //private Unit unit;
 
+    //@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    //private Set<O> bookPublishers = new HashSet<>();
+
     @Column(nullable = false)
     private double weight;
 
     public Product() { }
 
-    public Product(Long id, String name, String origin, double price, String imgPath, double weight) {
-        this.id = id;
-        this.name = name;
-        this.origin = origin;
-        this.price = price;
-        this.imgPath = imgPath;
-        this.weight = weight;
-    }
 
     public Product(String name, String origin, double price, String imgPath, double weight) {
         this.name = name;

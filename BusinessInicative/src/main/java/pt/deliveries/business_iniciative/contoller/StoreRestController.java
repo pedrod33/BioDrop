@@ -10,6 +10,7 @@ import pt.deliveries.business_iniciative.service.StoreServiceImpl;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RestController

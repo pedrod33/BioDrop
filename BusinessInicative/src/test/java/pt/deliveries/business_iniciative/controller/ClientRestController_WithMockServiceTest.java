@@ -9,8 +9,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pt.deliveries.business_iniciative.JsonUtil;
 import pt.deliveries.business_iniciative.contoller.ClientRestController;
+import pt.deliveries.business_iniciative.model.Address;
 import pt.deliveries.business_iniciative.model.Client;
 import pt.deliveries.business_iniciative.service.ClientServiceImpl;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,8 +34,8 @@ class ClientRestController_WithMockServiceTest {
 
     @Test
     void whenValidRegisterInput_thenStatus201( ) throws Exception {
-
-        Client goodClient = new Client(1L, "cunha", "cunha@ua.pt", "1234", "address", "M", "96000000");
+        Client goodClient = new Client("cunha", "cunha@ua.pt", "1234", null, "M", "96000000");
+        goodClient.setId(1L);
 
         when( service.verifyRegister( Mockito.any()) ).thenReturn( true );
         when( service.save( Mockito.any()) ).thenReturn(goodClient);
@@ -43,7 +48,6 @@ class ClientRestController_WithMockServiceTest {
                         "    \"name\": \"cunha\",\n" +
                         "    \"email\": \"cunha@ua.pt\",\n" +
                         "    \"password\": \"1234\",\n" +
-                        "    \"address\": \"address\",\n" +
                         "    \"gender\": \"M\",\n" +
                         "    \"phoneNumber\": \"96000000\"\n" +
                         "}"));
@@ -53,18 +57,18 @@ class ClientRestController_WithMockServiceTest {
 
     @Test
     void  whenInvalidRegisterInput_thenStatus226( ) throws Exception {
-        Client badClient = new Client("cunha", "cunha@ua.pt", "1234", "address", "M", "96000000");
+        Client badClient = new Client("cunha", "cunha@ua.pt", "1234", null, "M", "96000000");
+        badClient.setId(1L);
 
         when( service.verifyRegister( Mockito.any()) ).thenReturn( false );
 
         mvc.perform(post("/businesses-api/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(badClient)))
                 .andExpect(status().isImUsed())
                 .andExpect(content().json("{\n" +
-                        "    \"id\": null,\n" +
+                        "    \"id\": 1,\n" +
                         "    \"name\": \"cunha\",\n" +
                         "    \"email\": \"cunha@ua.pt\",\n" +
                         "    \"password\": \"1234\",\n" +
-                        "    \"address\": \"address\",\n" +
                         "    \"gender\": \"M\",\n" +
                         "    \"phoneNumber\": \"96000000\"\n" +
                         "}"));
@@ -74,13 +78,12 @@ class ClientRestController_WithMockServiceTest {
 
     @Test
     void  whenValidLoginInput_thenStatus200( ) throws Exception {
-
-        Client goodClient = new Client(1L, "cunha", "cunha@ua.pt", "1234", "address", "M", "96000000");
+        Client goodClient = new Client("cunha", "cunha@ua.pt", "1234", null, "M", "96000000");
+        goodClient.setId(1L);
 
         when( service.verifyLogin( Mockito.any()) ).thenReturn(goodClient);
 
         String body = "{\"email\":\"cunha@ua.pt\", \"password\": \"1234\"}";
-
         mvc.perform(post("/businesses-api/login").contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
@@ -88,7 +91,6 @@ class ClientRestController_WithMockServiceTest {
                         "    \"name\": \"cunha\",\n" +
                         "    \"email\": \"cunha@ua.pt\",\n" +
                         "    \"password\": \"1234\",\n" +
-                        "    \"address\": \"address\",\n" +
                         "    \"gender\": \"M\",\n" +
                         "    \"phoneNumber\": \"96000000\"\n" +
                         "}"));
@@ -125,7 +127,7 @@ class ClientRestController_WithMockServiceTest {
 
     @Test
     void whenInvalidLoginEmailAndPassword_thenStatus403( ) throws Exception {
-        Client badClient = new Client(null, null, "----@ua.pt", "----", null, null, null);
+        Client badClient = new Client(null, "----@ua.pt", "----", null, null, null);
 
         when( service.verifyLogin( Mockito.any()) ).thenReturn(null);
 
