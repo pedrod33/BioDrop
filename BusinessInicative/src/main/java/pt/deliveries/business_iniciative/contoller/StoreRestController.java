@@ -20,10 +20,6 @@ public class StoreRestController {
     @Autowired
     private StoreServiceImpl service;
 
-    private static final Logger logger
-            = Logger.getLogger(
-            StoreRestController.class.getName());
-
 
     @GetMapping("/stores")
     public List<Store> findAllStores() {
@@ -38,6 +34,11 @@ public class StoreRestController {
     @GetMapping("/store-name")
     public List<Store> findStoreByName(@RequestParam String name) {
          return service.findByName(name);
+    }
+
+    @GetMapping("/store-city")
+    public List<Store> findStoreByCity(@RequestParam String city) {
+        return service.findByCity(city);
     }
 
     @GetMapping("/store-address")

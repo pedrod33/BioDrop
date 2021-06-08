@@ -40,7 +40,7 @@ public class ProductRestController {
             return new ResponseEntity<>(saved, status);
         } else {
             status = HttpStatus.NOT_FOUND;
-            return new ResponseEntity<>(null, status);
+            return new ResponseEntity<>(saved, status);
         }
     }
 }

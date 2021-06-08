@@ -174,6 +174,47 @@ public class StoreRestController_WithMockServiceTest {
     }
 
     @Test
+    void whenFindStoreWithValidCity_thenReturnStore() throws Exception {
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Store store = new Store("store1", null, null);
+        store.setId(1L);
+        store.setAddress(address);
+
+        List<Store> stores_found = new ArrayList<>();
+        stores_found.add(store);
+
+        when( service.findByCity( store.getAddress().getCity() )).thenReturn( stores_found );
+
+        mvc.perform(get("/businesses-api/store-city?city=city").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.[0]name", is("store1")))
+                .andExpect(jsonPath("$.[0]address.id", is(1)))
+                .andExpect(jsonPath("$.[0]address.city", is("city")))
+                .andExpect(jsonPath("$.[0]address.address", is("address")))
+                .andExpect(jsonPath("$.[0]address.latitude", is(10.0)))
+                .andExpect(jsonPath("$.[0]address.longitude", is(11.0)));
+
+        verify(service, times(1)).findByCity( store.getAddress().getCity() );
+    }
+
+    @Test
+    void whenFindStoreWithInvalidCity_thenReturnEmpty() throws Exception {
+
+        when( service.findByCity( "wrong_city" )).thenReturn( new ArrayList<>() );
+
+        mvc.perform(get("/businesses-api/store-city?city=wrong_city").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+
+        verify(service, times(1)).findByCity( "wrong_city" );
+    }
+
+
+    @Test
     void whenFindStoreWithValidAddress_thenReturnStore() throws Exception {
         Address address = new Address("city", "address", 10, 11);
         address.setId(1L);

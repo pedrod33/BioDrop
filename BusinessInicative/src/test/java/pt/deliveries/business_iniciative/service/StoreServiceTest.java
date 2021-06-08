@@ -28,8 +28,8 @@ public class StoreServiceTest {
     @BeforeEach
     public void setUp() {
         Address address1 = new Address("city1", "address1", 10, 11);
-        Address address2 = new Address("city2", "address2", 10, 11);
-        Address address3 = new Address("city3", "address3", 10, 11);
+        Address address2 = new Address("city1", "address2", 10, 11);
+        Address address3 = new Address("city2", "address3", 10, 11);
         address1.setId(1L);
         address2.setId(2L);
         address3.setId(3L);
@@ -62,15 +62,19 @@ public class StoreServiceTest {
 
 
         List<Store> allStores = Arrays.asList(store1, store2, store3);
+        List<Store> storesInCity1 = Arrays.asList(store1, store2);
+
 
         when(repository.findAll()).thenReturn(allStores);
         when(repository.findByName(store1.getName())).thenReturn(Collections.singletonList(store1));
-        when(repository.findByName("wrong_name")).thenReturn(null);
+        when(repository.findByName("wrong_name")).thenReturn(new ArrayList<>());
         when(repository.findByAddress_Address(store1.getAddress().getAddress())).thenReturn(Collections.singletonList(store1));
-        when(repository.findByAddress_Address("wrong_name")).thenReturn(null);
+        when(repository.findByAddress_Address("wrong_name")).thenReturn(new ArrayList<>());
         when(repository.findByAddress_LatitudeAndAddress_Longitude(store1.getAddress().getLatitude(), store1.getAddress().getLongitude())).thenReturn(store1);
         when(repository.findByAddress_LatitudeAndAddress_Longitude(0, 0)).thenReturn(null);
         when(repository.findById(store1.getId())).thenReturn(Optional.of(store1));
+        when(repository.findByAddress_City(store1.getAddress().getCity())).thenReturn(storesInCity1);
+        when(repository.findByAddress_City("wrong_city")).thenReturn(new ArrayList<>());
     }
 
     @Test
@@ -120,9 +124,29 @@ public class StoreServiceTest {
         String name = "wrong_name";
         List<Store> notFound = service.findByName(name);
 
-        assertThat(notFound).isEqualTo(null);
+        assertThat(notFound).isEmpty();
         verifyFindByNameIsCalledOnce(name);
     }
+
+    @Test
+    public void whenValidCity_thenStoreShouldBeFound() {
+        String city = "city1";
+        List<Store> found = service.findByCity(city);
+
+        assertThat(found.get(0).getAddress().getCity()).isEqualTo(city);
+        assertThat(found.get(1).getAddress().getCity()).isEqualTo(city);
+        verifyFindByCityIsCalledOnce(city);
+    }
+
+    @Test
+    public void whenInvalidCity_thenStoreShouldNotBeFound() {
+        String city = "wrong_city";
+        List<Store> notFound = service.findByCity(city);
+
+        assertThat(notFound).isEmpty();
+        verifyFindByCityIsCalledOnce(city);
+    }
+
 
     @Test
     public void whenValidAddress_thenStoreShouldBeFound() {
@@ -233,6 +257,10 @@ public class StoreServiceTest {
 
     private void verifyFindByNameIsCalledOnce(String name) {
         verify(repository, times(1)).findByName(name);
+    }
+
+    private void verifyFindByCityIsCalledOnce(String city) {
+        verify(repository, times(1)).findByAddress_City(city);
     }
 
     private void verifyFindByAddressIsCalledOnce(String address) {

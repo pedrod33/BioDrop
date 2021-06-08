@@ -14,4 +14,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     Store findByAddress_LatitudeAndAddress_Longitude(double latitude, double longitude);
 
     List<Store> findByAddress_Address(String address);
+
+    List<Store> findByAddress_City(String city);
+
 }

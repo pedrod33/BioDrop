@@ -16,6 +16,8 @@ public interface StoreService {
 
     List<Store> findByName(String name);
 
+    List<Store> findByCity(String city);
+
     List<Store> findByAddress(String address);
 
     Store findByLatAndLng(double lat, double lng);

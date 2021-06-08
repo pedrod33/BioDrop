@@ -58,6 +58,12 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public List<Store> findByCity(String city) {
+        logger.log(Level.INFO, "Finding store by city ...");
+        return repository.findByAddress_City(city);
+    }
+
+    @Override
     public List<Store> findByAddress(String address) {
         logger.log(Level.INFO, "Finding store by address ...");
         return repository.findByAddress_Address(address);

@@ -59,7 +59,7 @@ public class ClientRestController {
         } else {
             logger.log(Level.INFO, "Client email or password is incorrect");
             HttpStatus status = HttpStatus.FORBIDDEN;
-            return new ResponseEntity<>(null, status);
+            return new ResponseEntity<>(loggedClient, status);
         }
     }
 }
