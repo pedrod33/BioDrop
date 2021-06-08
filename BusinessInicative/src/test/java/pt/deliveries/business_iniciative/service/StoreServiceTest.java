@@ -46,6 +46,20 @@ public class StoreServiceTest {
         store3.setAddress(address3);
 
 
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
+        Product prod2 = new Product("prod2", "origin2", 10, "path", 100 );
+        Product prod3 = new Product("prod3", "origin3", 10, "path", 100 );
+        prod1.setId(1L);
+        prod2.setId(2L);
+        prod3.setId(3L);
+
+        Set<Product> productsInStore = new HashSet<>();
+        productsInStore.add(prod1);
+        productsInStore.add(prod2);
+        productsInStore.add(prod3);
+
+        store1.setProducts(productsInStore);
+
 
         List<Store> allStores = Arrays.asList(store1, store2, store3);
 
@@ -56,6 +70,7 @@ public class StoreServiceTest {
         when(repository.findByAddress_Address("wrong_name")).thenReturn(null);
         when(repository.findByAddress_LatitudeAndAddress_Longitude(store1.getAddress().getLatitude(), store1.getAddress().getLongitude())).thenReturn(store1);
         when(repository.findByAddress_LatitudeAndAddress_Longitude(0, 0)).thenReturn(null);
+        when(repository.findById(store1.getId())).thenReturn(Optional.of(store1));
     }
 
     @Test
@@ -80,6 +95,15 @@ public class StoreServiceTest {
 
         verifyFindAllIsCalledOnce();
         assertThat(allStores).hasSize(3).extracting(Store::getName).contains(store1.getName(), store2.getName(), store3.getName());
+    }
+
+    @Test
+    public void whenValidId_thenStoreShouldBeFound() {
+        Long storeId = 1L;
+        Store found = service.findById(storeId);
+
+        assertThat(found.getId()).isEqualTo(storeId);
+        verifyFindByIdIsCalledOnce(storeId);
     }
 
     @Test
@@ -162,14 +186,12 @@ public class StoreServiceTest {
         store1.setProducts(productsInStore);
 
 
-        when(repository.findById(store1.getId())).thenReturn(Optional.of(store1));
-
-        Store store = repository.findById(store1.getId()).orElse(null);
+        Set<Product> productsInStore1 = service.findAllProductsInStore(store1.getId());
 
 
         verifyFindByIdIsCalledOnce(store1.getId());
-        assertThat(store).isNotNull();
-        assertThat(store.getProducts()).hasSize(3).extracting(Product::getName).contains(prod1.getName(), prod2.getName(), prod3.getName());
+        assertThat(productsInStore1).isNotNull();
+        assertThat(productsInStore1).hasSize(3).extracting(Product::getName).contains(prod1.getName(), prod2.getName(), prod3.getName());
     }
 
     @Test
@@ -194,7 +216,7 @@ public class StoreServiceTest {
 
 
         when(repository.save(store1)).thenReturn(store1);
-        Store saved = repository.save(store1);
+        Store saved = service.saveStore(store1);
 
 
         assertThat(saved.getId()).isEqualTo(store1.getId());
@@ -203,6 +225,7 @@ public class StoreServiceTest {
 
         verifySaveIsCalledOnce(store1);
     }
+
 
     private void verifyFindAllIsCalledOnce() {
         verify(repository, times(1)).findAll();
