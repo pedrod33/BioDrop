@@ -7,7 +7,9 @@ import pt.deliveries.business_iniciative.model.Store;
 import pt.deliveries.business_iniciative.repository.ProductRepository;
 import pt.deliveries.business_iniciative.repository.StoreRepository;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,16 +34,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Store saveProd(Product product, Long store_id) {
-        Store store_found = storeService.findById(store_id);
+    public Store saveProd(Product product, Long storeId) {
+        Store storeFound = storeService.findById(storeId);
 
-        if( store_found != null ) {
-            logger.log(Level.INFO, "Associating store {0} to the product and saving ...", store_id);
-            store_found.getProducts().add(product);
-            return storeService.saveStore(store_found);
+        if( storeFound != null ) {
+            logger.log(Level.INFO, "Associating store {0} to the product and saving ...", storeId);
+            if ( storeFound.getProducts() != null)
+                storeFound.getProducts().add(product);
+            else {
+                Set<Product> productsInStore = new HashSet<>();
+                productsInStore.add(product);
+
+                storeFound.setProducts(productsInStore);
+            }
+
+            return storeService.saveStore(storeFound);
         }
 
-        logger.log(Level.WARNING, "Store not found for id {0} ...", store_id);
+        logger.log(Level.WARNING, "Store not found for id {0} ...", storeId);
         return null;
     }
 

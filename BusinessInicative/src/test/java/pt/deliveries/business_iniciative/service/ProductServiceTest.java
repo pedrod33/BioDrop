@@ -89,30 +89,72 @@ public class ProductServiceTest {
         prod1.setId(1L);
         Set<Product> productsInStore = new HashSet<>();
         productsInStore.add(prod1);
-        store.setProducts(productsInStore);
 
 
         when(storeService.findById(store.getId())).thenReturn(store);
+        if (store.getProducts() != null) store.getProducts().add(prod1);
+        else {
+            store.setProducts(productsInStore);
+        }
         when(storeService.saveStore(store)).thenReturn(store);
 
 
-        Store store_found = storeService.findById(store.getId());
-        assertThat(store_found.getId()).isEqualTo(store.getId());
-        assertThat(store_found.getProducts()).isEqualTo(productsInStore);
+        Store updatedStore = service.saveProd(prod1, store.getId());
 
+
+        assertThat(updatedStore.getId()).isEqualTo(store.getId());
+        assertThat(updatedStore.getProducts()).isEqualTo(productsInStore);
+        verifyFindByIdIsCalledOnce(store.getId());
+    }
+
+    @Test
+    public void whenValidProduct_withValidStoreId_thenProductShouldBeAdded() {
+        Address address = new Address("city", "address", 10, 11);
+        address.setId(1L);
+
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
+        prod1.setId(1L);
+        Set<Product> productsInStore = new HashSet<>();
+        productsInStore.add(prod1);
+
+        Store store = new Store("store1", null, productsInStore);
+        store.setId(1L);
+        store.setAddress(address);
+
+
+        Product prod2 = new Product("prod2", "origin2", 10, "path", 100 );
+        prod2.setId(2L);
+
+
+        when(storeService.findById(store.getId())).thenReturn(store);
+        if (store.getProducts() != null) store.getProducts().add(prod2);
+        else {
+            productsInStore.add(prod2);
+            store.setProducts(productsInStore);
+        }
+        when(storeService.saveStore(store)).thenReturn(store);
+
+
+        Store updatedStore = service.saveProd(prod1, store.getId());
+
+
+        assertThat(updatedStore.getId()).isEqualTo(store.getId());
+        assertThat(updatedStore.getProducts()).isEqualTo(productsInStore);
         verifyFindByIdIsCalledOnce(store.getId());
     }
 
 
     @Test
     public void whenValidProduct_withInvalidStoreId_thenProductShouldNotBeCreated() {
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
+        prod1.setId(1L);
         Long invalidStoreId = 0L;
 
 
         when(storeService.findById(invalidStoreId)).thenReturn(null);
 
 
-        Store store_notFound = storeService.findById(invalidStoreId);
+        Store store_notFound = service.saveProd(prod1, invalidStoreId);
         assertThat(store_notFound).isNull();
 
         verifyFindByIdIsCalledOnce(invalidStoreId);
