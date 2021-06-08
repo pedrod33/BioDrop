@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/businesses-api")
+@RequestMapping("/businesses-api/products")
 public class ProductRestController {
 
     @Autowired
@@ -23,13 +23,13 @@ public class ProductRestController {
             = Logger.getLogger(
             ProductRestController.class.getName());
 
-    @GetMapping("/products")
+    @GetMapping("/allProducts")
     public List<Product> findAllProducts() {
         return service.findAllProducts();
     }
 
 
-    @PostMapping("/saveProduct")
+    @PostMapping("/save")
     public ResponseEntity<Store> saveProductInStore(@RequestBody Product product, @RequestParam Long storeId) {
         HttpStatus status;
         Store saved = service.saveProd(product, storeId);

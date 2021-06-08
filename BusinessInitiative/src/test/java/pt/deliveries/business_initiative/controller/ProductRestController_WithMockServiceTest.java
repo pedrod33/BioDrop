@@ -48,7 +48,7 @@ class ProductRestController_WithMockServiceTest {
 
         when( service.findAllProducts() ).thenReturn( products );
 
-        mvc.perform(get("/businesses-api/products").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/products/allProducts").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[\n" +
                         "    {\n" +
@@ -88,7 +88,7 @@ class ProductRestController_WithMockServiceTest {
 
         when( service.saveProd(Mockito.any(), eq(store.getId())) ).thenReturn( store );
 
-        mvc.perform(post("/businesses-api/saveProduct?storeId=1").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(prod1)))
+        mvc.perform(post("/businesses-api/products/save?storeId=1").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(prod1)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("name", is("store1")))
@@ -123,7 +123,7 @@ class ProductRestController_WithMockServiceTest {
 
         when( service.saveProd(Mockito.any(), eq(2L)) ).thenReturn( null );
 
-        mvc.perform(post("/businesses-api/saveProduct?storeId=2").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(prod1)))
+        mvc.perform(post("/businesses-api/products/save?storeId=2").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(prod1)))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$").doesNotExist());
 

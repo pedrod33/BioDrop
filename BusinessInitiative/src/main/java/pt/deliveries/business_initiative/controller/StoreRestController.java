@@ -12,14 +12,14 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/businesses-api")
+@RequestMapping("/businesses-api/stores")
 public class StoreRestController {
 
     @Autowired
     private StoreServiceImpl service;
 
 
-    @GetMapping("/stores")
+    @GetMapping("/allStores")
     public List<Store> findAllStores() {
         return service.findAllStores();
     }
@@ -50,7 +50,7 @@ public class StoreRestController {
     }
 
 
-    @PostMapping("/saveStore")
+    @PostMapping("/save")
     public ResponseEntity<Store> saveStore(@RequestBody Store store) {
         HttpStatus status = HttpStatus.CREATED;
         Store saved = service.saveStore(store);

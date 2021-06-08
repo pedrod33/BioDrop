@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = BusinessIniciativeApplication.class)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = BusinessInitiativeApplication.class)
 //@AutoConfigureMockMvc
 
 //@TestPropertySource(locations = "classpath:application-integrationtest.properties")
@@ -45,7 +45,7 @@ public class ClientRestControllerIT {
     public void whenValidRegisterInput_thenCreateClient() throws IOException, Exception {
         Client cunha = new Client("cunha", "cunha@ua.pt", "1234", null, "M", "96000000");
 
-        mvc.perform(post("/businesses-api/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(cunha)));
+        mvc.perform(post("/businesses-api/clients/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(cunha)));
 
         List<Client> found = repository.findAll();
         assertThat(found).extracting(Client::getName).containsOnly("cunha");
@@ -58,7 +58,7 @@ public class ClientRestControllerIT {
         Client invalidClient = new Client("cunha", "cunha@ua.pt", "1234", "address", "M", "1111111");
         Client invalidClient2 = new Client("cunha", "john@ua.pt", "1234", "address", "M", "96000000");
 
-        mvc.perform(post("/businesses-api/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(invalidClient)))
+        mvc.perform(post("/businesses-api/clients/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(invalidClient)))
                 .andExpect(status().isImUsed())
                 .andExpect(content().json("{\n" +
                         "    \"id\": null,\n" +
@@ -71,7 +71,7 @@ public class ClientRestControllerIT {
                         "}"));
 
 
-        mvc.perform(post("/businesses-api/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(invalidClient2)))
+        mvc.perform(post("/businesses-api/clients/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(invalidClient2)))
                 .andExpect(status().isImUsed())
                 .andExpect(content().json("{\n" +
                         "    \"id\": null,\n" +
@@ -96,7 +96,7 @@ public class ClientRestControllerIT {
         Client cunha = new Client(null, "cunha@ua.pt", "1234", null, null, null);
         cunha.setAddresses(new HashSet<>(Collections.singletonList(address)));
 
-        mvc.perform(post("/businesses-api/login").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(cunha)))
+        mvc.perform(post("/businesses-api/clients/login").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(cunha)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 /* Nao funciona pq o id vai variando, apesar de haver o tear down da bd after each ??.
@@ -124,7 +124,7 @@ public class ClientRestControllerIT {
         repository.save(new Client("diogo", "giodo@ua.pt", "1234", "address", "M", "96000000"));
         repository.save(new Client("cunha", "cunha@ua.pt", "1234", "address", "M", "96004540"));
 
-        mvc.perform(get("/businesses-api/clients").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/clients/clients").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

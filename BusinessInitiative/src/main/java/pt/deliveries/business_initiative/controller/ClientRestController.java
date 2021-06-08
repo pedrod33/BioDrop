@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/businesses-api")
+@RequestMapping("/businesses-api/clients")
 public class ClientRestController {
 
     @Autowired
@@ -28,7 +28,7 @@ public class ClientRestController {
     }
 
 
-    @GetMapping("/clients")
+    @GetMapping("/allClients")
     public List<Client> findAllClients() {
         return service.findAll();
     }

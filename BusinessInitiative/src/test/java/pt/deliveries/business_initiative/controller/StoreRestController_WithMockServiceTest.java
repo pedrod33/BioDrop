@@ -59,7 +59,7 @@ public class StoreRestController_WithMockServiceTest {
         when( service.findAllStores() ).thenReturn( allStores );
 
 
-        mvc.perform(get("/businesses-api/stores").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/allStores").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0].name", is("store1")))
@@ -95,7 +95,7 @@ public class StoreRestController_WithMockServiceTest {
         when( service.findAllProductsInStore(store.getId()) ).thenReturn( productsInStore );
 
 
-        mvc.perform(get("/businesses-api/productsIn?storeId=1").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/productsIn?storeId=1").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("[{\n" +
@@ -124,7 +124,7 @@ public class StoreRestController_WithMockServiceTest {
         when( service.findAllProductsInStore( Mockito.any() )).thenReturn( null );
 
 
-        mvc.perform(get("/businesses-api/productsIn?storeId=1").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/productsIn?storeId=1").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
@@ -146,7 +146,7 @@ public class StoreRestController_WithMockServiceTest {
 
         when( service.findByName( store.getName() )).thenReturn( stores_found );
 
-        mvc.perform(get("/businesses-api/store-name?name=store1").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/store-name?name=store1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0]name", is("store1")))
@@ -164,7 +164,7 @@ public class StoreRestController_WithMockServiceTest {
 
         when( service.findByName( "wrong_name" )).thenReturn( new ArrayList<>() );
 
-        mvc.perform(get("/businesses-api/store-name?name=wrong_name").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/store-name?name=wrong_name").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
@@ -186,7 +186,7 @@ public class StoreRestController_WithMockServiceTest {
 
         when( service.findByCity( store.getAddress().getCity() )).thenReturn( stores_found );
 
-        mvc.perform(get("/businesses-api/store-city?city=city").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/store-city?city=city").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0]name", is("store1")))
@@ -204,7 +204,7 @@ public class StoreRestController_WithMockServiceTest {
 
         when( service.findByCity( "wrong_city" )).thenReturn( new ArrayList<>() );
 
-        mvc.perform(get("/businesses-api/store-city?city=wrong_city").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/store-city?city=wrong_city").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
@@ -227,7 +227,7 @@ public class StoreRestController_WithMockServiceTest {
 
         when( service.findByAddress( store.getAddress().getAddress() )).thenReturn( stores_found );
 
-        mvc.perform(get("/businesses-api/store-address?address=address").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/store-address?address=address").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0]name", is("store1")))
@@ -245,7 +245,7 @@ public class StoreRestController_WithMockServiceTest {
 
         when( service.findByAddress( "wrong_address" )).thenReturn( new ArrayList<>() );
 
-        mvc.perform(get("/businesses-api/store-address?address=wrong_address").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/store-address?address=wrong_address").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
@@ -264,7 +264,7 @@ public class StoreRestController_WithMockServiceTest {
 
         when( service.findByLatAndLng( store.getAddress().getLatitude(), store.getAddress().getLongitude() )).thenReturn( store );
 
-        mvc.perform(get("/businesses-api/store-coords?lat=10&lng=11").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/store-coords?lat=10&lng=11").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("name", is("store1")))
@@ -282,7 +282,7 @@ public class StoreRestController_WithMockServiceTest {
 
         when( service.findByLatAndLng( 0, 0 )).thenReturn( null );
 
-        mvc.perform(get("/businesses-api/store-coords?lat=0&lng=0").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/businesses-api/stores/store-coords?lat=0&lng=0").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").doesNotExist());
@@ -301,7 +301,7 @@ public class StoreRestController_WithMockServiceTest {
         when( service.saveStore( Mockito.any()) ).thenReturn( store );
 
 
-        mvc.perform(post("/businesses-api/saveStore").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(store)))
+        mvc.perform(post("/businesses-api/stores/save").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(store)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("name", is("store1")))

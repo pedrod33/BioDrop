@@ -34,7 +34,7 @@ class ClientRestController_WithMockServiceTest {
         when( service.verifyRegister( Mockito.any()) ).thenReturn( true );
         when( service.save( Mockito.any()) ).thenReturn(goodClient);
 
-        mvc.perform(post("/businesses-api/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(goodClient)))
+        mvc.perform(post("/businesses-api/clients/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(goodClient)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{\n" +
@@ -56,7 +56,7 @@ class ClientRestController_WithMockServiceTest {
 
         when( service.verifyRegister( Mockito.any()) ).thenReturn( false );
 
-        mvc.perform(post("/businesses-api/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(badClient)))
+        mvc.perform(post("/businesses-api/clients/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(badClient)))
                 .andExpect(status().isImUsed())
                 .andExpect(content().json("{\n" +
                         "    \"id\": 1,\n" +
@@ -78,7 +78,7 @@ class ClientRestController_WithMockServiceTest {
         when( service.verifyLogin( Mockito.any()) ).thenReturn(goodClient);
 
         String body = "{\"email\":\"cunha@ua.pt\", \"password\": \"1234\"}";
-        mvc.perform(post("/businesses-api/login").contentType(MediaType.APPLICATION_JSON).content(body))
+        mvc.perform(post("/businesses-api/clients/login").contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\n" +
                         "    \"id\": 1,\n" +
@@ -98,7 +98,7 @@ class ClientRestController_WithMockServiceTest {
 
         when( service.verifyLogin( Mockito.any()) ).thenReturn(null);
 
-        mvc.perform(post("/businesses-api/login").contentType(MediaType.APPLICATION_JSON).content(body))
+        mvc.perform(post("/businesses-api/clients/login").contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$").doesNotExist());
 
@@ -112,7 +112,7 @@ class ClientRestController_WithMockServiceTest {
 
         String body = "{\"email\":\"cunha@ua.pt\", \"password\": \"----\"}";
 
-        mvc.perform(post("/businesses-api/login").contentType(MediaType.APPLICATION_JSON).content(body))
+        mvc.perform(post("/businesses-api/clients/login").contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$").doesNotExist());
 
@@ -125,7 +125,7 @@ class ClientRestController_WithMockServiceTest {
 
         when( service.verifyLogin( Mockito.any()) ).thenReturn(null);
 
-        mvc.perform(post("/businesses-api/login").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(badClient)))
+        mvc.perform(post("/businesses-api/clients/login").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(badClient)))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$").doesNotExist());
 
