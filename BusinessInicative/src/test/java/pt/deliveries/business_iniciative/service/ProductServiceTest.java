@@ -24,11 +24,11 @@ public class ProductServiceTest {
     @Mock(lenient = true)
     private ProductRepository repository;
 
-    @InjectMocks
-    private ProductServiceImpl service;
+    @Mock(lenient = true)
+    private StoreServiceImpl storeService;
 
     @InjectMocks
-    private StoreServiceImpl storeService;
+    private ProductServiceImpl service;
 
 
 
@@ -72,18 +72,18 @@ public class ProductServiceTest {
         Product found = service.findById(prodId);
 
         assertThat(found.getId()).isEqualTo(prodId);
-        verifyFindByIdIsCalledOnce(prodId);
+        verifyProdRepFindByIdIsCalledOnce(prodId);
     }
 
 
-    //@Test
-    public void whenValidProduct_thenProductShouldBeCreated() {
+    @Test
+    public void whenValidProduct_withValidStoreId_thenProductShouldBeCreated() {
         Address address = new Address("city", "address", 10, 11);
         address.setId(1L);
-
         Store store = new Store("store1", null, null);
         store.setId(1L);
         store.setAddress(address);
+
 
         Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
         prod1.setId(1L);
@@ -91,21 +91,32 @@ public class ProductServiceTest {
         productsInStore.add(prod1);
         store.setProducts(productsInStore);
 
-        System.out.println(store.getId());
 
         when(storeService.findById(store.getId())).thenReturn(store);
         when(storeService.saveStore(store)).thenReturn(store);
 
 
         Store store_found = storeService.findById(store.getId());
+        assertThat(store_found.getId()).isEqualTo(store.getId());
+        assertThat(store_found.getProducts()).isEqualTo(productsInStore);
 
-        System.out.println(store_found);
-        //assertThat(store_found.getId()).isEqualTo(store.getId());
-        //assertThat(store_found.getProducts()).isEqualTo(productsInStore);
-
-        //verifyFindByIdIsCalledOnce(store.getId());
+        verifyFindByIdIsCalledOnce(store.getId());
     }
 
+
+    @Test
+    public void whenValidProduct_withInvalidStoreId_thenProductShouldNotBeCreated() {
+        Long invalidStoreId = 0L;
+
+
+        when(storeService.findById(invalidStoreId)).thenReturn(null);
+
+
+        Store store_notFound = storeService.findById(invalidStoreId);
+        assertThat(store_notFound).isNull();
+
+        verifyFindByIdIsCalledOnce(invalidStoreId);
+    }
 
 
     private void verifyFindAllIsCalledOnce() {
@@ -113,8 +124,11 @@ public class ProductServiceTest {
     }
 
     private void verifyFindByIdIsCalledOnce(Long prodId) {
-        verify(repository, times(1)).findById(prodId);
+        verify(storeService, times(1)).findById(prodId);
     }
 
+    private void verifyProdRepFindByIdIsCalledOnce(Long prodId) {
+        verify(repository, times(1)).findById(prodId);
+    }
 
 }

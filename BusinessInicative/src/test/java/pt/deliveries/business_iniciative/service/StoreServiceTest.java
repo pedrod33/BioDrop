@@ -183,6 +183,26 @@ public class StoreServiceTest {
         assertThat(notFound).isNull();
     }
 
+    @Test
+    public void whenSaveValidStore_thenStoreShouldBeSaved() {
+        Address address1 = new Address("city1", "address1", 10, 11);
+        address1.setId(1L);
+
+        Store store1 = new Store("store1", null, null);
+        store1.setId(1L);
+        store1.setAddress(address1);
+
+
+        when(repository.save(store1)).thenReturn(store1);
+        Store saved = repository.save(store1);
+
+
+        assertThat(saved.getId()).isEqualTo(store1.getId());
+        assertThat(saved.getName()).isEqualTo(store1.getName());
+        assertThat(saved.getAddress()).isEqualTo(store1.getAddress());
+
+        verifySaveIsCalledOnce(store1);
+    }
 
     private void verifyFindAllIsCalledOnce() {
         verify(repository, times(1)).findAll();
@@ -202,6 +222,10 @@ public class StoreServiceTest {
 
     private void verifyFindByIdIsCalledOnce(Long storeId) {
         verify(repository, times(1)).findById(storeId);
+    }
+
+    private void verifySaveIsCalledOnce(Store store) {
+        verify(repository, times(1)).save(store);
     }
 
 }

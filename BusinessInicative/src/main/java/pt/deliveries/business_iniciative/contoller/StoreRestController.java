@@ -55,7 +55,6 @@ public class StoreRestController {
     public ResponseEntity<Store> saveStore(@RequestBody Store store) {
         HttpStatus status = HttpStatus.CREATED;
         Store saved = service.saveStore(store);
-
         return new ResponseEntity<>(saved, status);
     }
 

@@ -16,6 +16,7 @@ import pt.deliveries.business_iniciative.service.StoreServiceImpl;
 
 import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,6 +34,44 @@ public class StoreRestController_WithMockServiceTest {
     private StoreServiceImpl service;
 
 
+    @Test
+    public void given3Stores_whenFindAllStores_thenReturnAllStores() throws Exception {
+        Address address1 = new Address("city1", "address1", 10, 11);
+        Address address2 = new Address("city2", "address2", 10, 11);
+        Address address3 = new Address("city3", "address3", 10, 11);
+        address1.setId(1L);
+        address2.setId(2L);
+        address3.setId(3L);
+
+
+        Set<Product> products = new HashSet<>();
+        Store store1 = new Store("store1", null, products);
+        Store store2 = new Store("store2", null, products);
+        Store store3 = new Store("store3", null, products);
+        store1.setAddress(address1);
+        store2.setAddress(address2);
+        store3.setAddress(address3);
+
+        List<Store> allStores = new ArrayList<>();
+        allStores.add(store1);
+        allStores.add(store2);
+        allStores.add(store3);
+
+        when( service.findAllStores() ).thenReturn( allStores );
+
+
+        mvc.perform(get("/businesses-api/stores").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.[0].name", is("store1")))
+                .andExpect(jsonPath("$.[1].name", is("store2")))
+                .andExpect(jsonPath("$.[2].name", is("store3")));
+
+        verify(service, times(1)).findAllStores();
+
+        assertThat(allStores).hasSize(3).extracting(Store::getName).contains(store1.getName(), store2.getName(), store3.getName());
+    }
+    
     @Test
     void whenFindAllProductsInStoreWithValidStoreId_thenReturnProducts() throws Exception {
         Address address = new Address("city", "address", 10, 11);
