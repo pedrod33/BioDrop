@@ -44,7 +44,7 @@ class CourierControllerTest {
     void registerCredentialsSuccessful() throws Exception {
         when(service.exists(courier)).thenReturn(false);
         when(service.save(Mockito.any())).thenReturn(courier);
-        mvc.perform((post("/deliveries-api/register")
+        mvc.perform((post("/deliveries-api/courier/register")
             .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(courier))))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.name", is(courier.getName())));
@@ -54,15 +54,11 @@ class CourierControllerTest {
     @Test
     void registerExistingEmail() throws Exception{
         when(service.exists(Mockito.any())).thenReturn(true);
-        mvc.perform((post("/deliveries-api/register")
+        mvc.perform((post("/deliveries-api/courier/register")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(courier))))
                 .andExpect(status().isImUsed())
                 .andExpect(jsonPath("$.name", is("Marco Alves")));
         verify(service, times(1)).exists(Mockito.any());
-    }
-
-    @Test
-    void registerInvalidCredentialsError() {
     }
 
     //Login Tests
@@ -70,7 +66,7 @@ class CourierControllerTest {
     void LoginValidCredentialsSuccessful() throws Exception{
         when(service.exists(Mockito.any())).thenReturn(true);
         when(service.verifyLogin(Mockito.any())).thenReturn(courier);
-        mvc.perform((post("/deliveries-api/login")
+        mvc.perform((post("/deliveries-api/courier/login")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(courier))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Marco Alves")));
@@ -81,7 +77,7 @@ class CourierControllerTest {
     void LoginPasswordDoesNotMatch() throws Exception{
         when(service.exists(Mockito.any())).thenReturn(true);
         when(service.verifyLogin(Mockito.any())).thenReturn(null);
-        mvc.perform((post("/deliveries-api/login")
+        mvc.perform((post("/deliveries-api/courier/login")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(courier))))
                 .andExpect(jsonPath("$").doesNotExist())
                 .andExpect(status().isUnauthorized());
@@ -91,7 +87,7 @@ class CourierControllerTest {
     void LoginEmailDoesNotMatch() throws Exception{
         when(service.exists(Mockito.any())).thenReturn(false);
         when(service.verifyLogin(Mockito.any())).thenReturn(Mockito.any());
-        mvc.perform((post("/deliveries-api/login")
+        mvc.perform((post("/deliveries-api/courier/login")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(courier))))
                 .andExpect(jsonPath("$").doesNotExist())
                 .andExpect(status().isUnauthorized());

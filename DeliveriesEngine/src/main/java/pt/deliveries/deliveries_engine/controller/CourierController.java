@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("/deliveries-api/")
+@RequestMapping("/deliveries-api/courier")
 public class CourierController {
 
     @Autowired

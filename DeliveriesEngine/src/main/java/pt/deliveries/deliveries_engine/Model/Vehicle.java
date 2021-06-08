@@ -14,8 +14,14 @@ public class Vehicle {
     @Column(name = "type", nullable = false, unique = true)
     private String type;
 
-    @OneToOne(mappedBy = "vehicle")
-    private Courier courier;
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                '}';
+    }
 
     public Vehicle(String type) {
         this.type = type;
@@ -39,11 +45,4 @@ public class Vehicle {
         this.type = type;
     }
 
-    public Courier getCourier() {
-        return courier;
-    }
-
-    public void setCourier(Courier courier) {
-        this.courier = courier;
-    }
 }

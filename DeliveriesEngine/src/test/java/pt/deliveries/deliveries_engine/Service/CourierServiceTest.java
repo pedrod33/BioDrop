@@ -37,19 +37,19 @@ public class CourierServiceTest {
     }
 
     @Test
-    void whenExistingEmailOrPhoneNumber_thenReturnCourier_exists(){
+    void whenExistingEmailOrPhoneNumber_thenReturnTrue_exists(){
         boolean doesCourierEmailOrPhoneMatch = courierService.exists(c1);
         assertThat(doesCourierEmailOrPhoneMatch).isTrue();
     }
 
     @Test
-    void whenExistingEmail_thenReturnCourier_exists(){
+    void whenExistingEmail_thenReturnTrue_exists(){
         boolean doesCourierEmailOrPhoneMatch = courierService.exists(COURIER_WRONG_PHONE);
         assertThat(doesCourierEmailOrPhoneMatch).isTrue();
     }
 
     @Test
-    void whenExistingPhoneNumber_thenReturnCourier_exists(){
+    void whenExistingPhoneNumber_thenReturnTrue_exists(){
         boolean doesCourierEmailOrPhoneMatch = courierService.exists(COURIER_WRONG_EMAIL);
         assertThat(doesCourierEmailOrPhoneMatch).isTrue();
     }
