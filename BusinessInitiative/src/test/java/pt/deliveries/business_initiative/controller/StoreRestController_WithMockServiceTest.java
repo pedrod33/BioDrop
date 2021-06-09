@@ -13,7 +13,10 @@ import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
 import pt.deliveries.business_initiative.service.StoreServiceImpl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -212,7 +215,6 @@ public class StoreRestController_WithMockServiceTest {
         verify(service, times(1)).findByCity( "wrong_city" );
     }
 
-
     @Test
     void whenFindStoreWithValidAddress_thenReturnStore() throws Exception {
         Address address = new Address("city", "address", 10, 11);
@@ -298,7 +300,7 @@ public class StoreRestController_WithMockServiceTest {
         store.setAddress(address);
 
 
-        when( service.saveStore( Mockito.any()) ).thenReturn( store );
+        when( service.save( Mockito.any()) ).thenReturn( store );
 
 
         mvc.perform(post("/businesses-api/stores/save").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(store)))
@@ -310,7 +312,7 @@ public class StoreRestController_WithMockServiceTest {
                 .andExpect(jsonPath("address.latitude", is(10.0)))
                 .andExpect(jsonPath("address.longitude", is(11.0)));
 
-        verify(service, times(1)).saveStore( Mockito.any() );
+        verify(service, times(1)).save( Mockito.any() );
     }
 
 }

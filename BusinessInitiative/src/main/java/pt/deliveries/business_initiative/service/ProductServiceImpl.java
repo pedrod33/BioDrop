@@ -2,6 +2,7 @@ package pt.deliveries.business_initiative.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pt.deliveries.business_initiative.exception.ProductNotFoundException;
 import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
 import pt.deliveries.business_initiative.repository.ProductRepository;
@@ -47,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
                 storeFound.setProducts(productsInStore);
             }
 
-            return storeService.saveStore(storeFound);
+            return storeService.save(storeFound);
         }
 
         logger.log(Level.WARNING, "Store not found for id {0} ...", storeId);
@@ -57,7 +58,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findById(Long id) {
         logger.log(Level.INFO, "Finding product by id ...");
-        return repository.findById(id).orElse(null);
+
+        return repository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product id not found"));
     }
 
 

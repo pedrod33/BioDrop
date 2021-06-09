@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
@@ -25,8 +26,13 @@ public class Address {
     @Column(nullable = false)
     private double longitude;
 
-    @OneToOne(mappedBy = "address")
-    private Store store;
+    //@OneToOne(mappedBy = "address")
+    //private Store store;
+
+    //@ManyToOne(cascade=CascadeType.ALL)
+    //@JoinColumn(name="client_id")
+    //private Client client;
+
 
     public Address() { }
 
@@ -77,12 +83,21 @@ public class Address {
         this.longitude = longitude;
     }
 
-    public Store getStore() {
-        return store;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address1 = (Address) o;
+        return Double.compare(address1.latitude, latitude) == 0 &&
+                Double.compare(address1.longitude, longitude) == 0 &&
+                Objects.equals(id, address1.id) &&
+                Objects.equals(city, address1.city) &&
+                Objects.equals(address, address1.address);
     }
 
-    public void setStore(Store store) {
-        this.store = store;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, city, address, latitude, longitude);
     }
 
     @Override
@@ -93,7 +108,6 @@ public class Address {
                 ", address='" + address + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
-                ", store=" + store +
                 '}';
     }
 }

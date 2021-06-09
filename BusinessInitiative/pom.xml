@@ -20,6 +20,8 @@
         <sonar.projectKey>pedrod33_BioDrop</sonar.projectKey>
         <sonar.organization>biodropsonarcloudkey</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.exclusions>src/main/java/pt/deliveries/business_initiative/exception/*.java</sonar.exclusions>
+        <sonar.exclusions>src/main/java/pt/deliveries/business_initiative/BusinessInitiativeApplication.java</sonar.exclusions>
     </properties>
     <dependencies>
         <dependency>

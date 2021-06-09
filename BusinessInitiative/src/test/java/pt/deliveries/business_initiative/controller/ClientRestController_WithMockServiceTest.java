@@ -26,6 +26,8 @@ class ClientRestController_WithMockServiceTest {
     private ClientServiceImpl service;
 
 
+    //TODO: All clients
+
     @Test
     void whenValidRegisterInput_thenStatus201( ) throws Exception {
         Client goodClient = new Client("cunha", "cunha@ua.pt", "1234", null, "M", "96000000");

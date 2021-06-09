@@ -22,5 +22,5 @@ public interface StoreService {
 
     Store findByLatAndLng(double lat, double lng);
 
-    Store saveStore(Store store);
+    Store save(Store store);
 }

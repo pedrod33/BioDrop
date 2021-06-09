@@ -2,6 +2,7 @@ package pt.deliveries.business_initiative.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -21,8 +22,11 @@ public class Client {
     private String password;
 
     @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
-    @JoinColumn(name = "client_id")
+    //@JoinColumn(name = "client_id")
     private Set<Address> addresses = new HashSet<>();
+
+    @OneToMany(mappedBy="client")
+    private Set<Order> orders = new HashSet<>();
 
     @Column(nullable = false)
     private String gender;
@@ -32,12 +36,21 @@ public class Client {
 
     public Client() { }
 
-
     public Client(String name, String email, String password, Set<Address> addresses, String gender, String phoneNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.addresses = addresses;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Client(String name, String email, String password, Set<Address> addresses, Set<Order> orders, String gender, String phoneNumber) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.addresses = addresses;
+        this.orders = orders;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
     }
@@ -82,6 +95,14 @@ public class Client {
         this.addresses = addresses;
     }
 
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
     public String getGender() {
         return gender;
     }
@@ -106,6 +127,7 @@ public class Client {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", addresses=" + addresses +
+                ", orders=" + orders +
                 ", gender='" + gender + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';

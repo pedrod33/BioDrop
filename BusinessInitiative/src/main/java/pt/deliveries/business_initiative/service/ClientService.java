@@ -12,4 +12,6 @@ public interface ClientService {
     Client save(Client client);
 
     Client verifyLogin(Client client);
+
+    Client findById(Long clientId);
 }

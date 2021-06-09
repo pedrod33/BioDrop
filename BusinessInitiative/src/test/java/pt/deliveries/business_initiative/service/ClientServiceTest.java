@@ -5,14 +5,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.business_initiative.exception.ClientNotFoundException;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Client;
 import pt.deliveries.business_initiative.repository.ClientRepository;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -176,7 +179,29 @@ public class ClientServiceTest {
     }
 
 
+    // Find by Id
+    @Test
+    public void whenValidId_thenClientShouldBeFound() {
+        Client validClient = new Client("bob", "bob@ua.pt", "1234", null, "M", "96000000");
+        validClient.setId(1L);
 
+        Long clientId = 1L;
+        when(repository.findById(clientId)).thenReturn(Optional.of(validClient));
+
+        Client found = service.findById(clientId);
+        assertThat(found.getId()).isEqualTo(clientId);
+        verifyFindByIdIsCalledOnce(clientId);
+    }
+
+    @Test
+    public void whenValidInvalidId_throwClientNotFound() {
+
+        Long clientId = 0L;
+        when(repository.findById(clientId)).thenThrow(ClientNotFoundException.class);
+
+        assertThrows(ClientNotFoundException.class, () -> { service.findById(clientId); });
+        verifyFindByIdIsCalledOnce(clientId);
+    }
 
 
     private void verifyFindByEmailIsCalledOnce(String email) {
@@ -186,5 +211,10 @@ public class ClientServiceTest {
     private void verifyFindByPhoneNumberIsCalledOnce(String phoneNumber) {
         verify(repository, times(1)).findByPhoneNumber(phoneNumber);
     }
+
+    private void verifyFindByIdIsCalledOnce(Long clientId) {
+        verify(repository, times(1)).findById(clientId);
+    }
+
 
 }

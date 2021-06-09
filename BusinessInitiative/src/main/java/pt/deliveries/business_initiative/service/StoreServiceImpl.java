@@ -76,7 +76,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public Store saveStore(Store store) {
+    public Store save(Store store) {
         logger.log(Level.INFO, "Saving new store ...");
         return repository.save(store);
     }

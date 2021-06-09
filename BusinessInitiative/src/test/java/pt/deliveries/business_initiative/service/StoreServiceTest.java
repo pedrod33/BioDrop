@@ -240,7 +240,7 @@ public class StoreServiceTest {
 
 
         when(repository.save(store1)).thenReturn(store1);
-        Store saved = service.saveStore(store1);
+        Store saved = service.save(store1);
 
 
         assertThat(saved.getId()).isEqualTo(store1.getId());

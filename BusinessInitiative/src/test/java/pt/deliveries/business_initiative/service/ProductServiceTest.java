@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.business_initiative.exception.ProductNotFoundException;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
@@ -14,6 +15,7 @@ import pt.deliveries.business_initiative.repository.ProductRepository;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
@@ -44,7 +46,7 @@ public class ProductServiceTest {
 
         when(repository.findAll()).thenReturn(allProducts);
         when(repository.findById(prod1.getId())).thenReturn(Optional.of(prod1));
-        when(repository.findById(0L)).thenReturn(null);
+        when(repository.findById(0L)).thenThrow(ProductNotFoundException.class);
     }
 
 
@@ -74,6 +76,15 @@ public class ProductServiceTest {
         verifyProdRepFindByIdIsCalledOnce(prodId);
     }
 
+    @Test
+    public void whenValidInvalidId_throwClientNotFound() {
+        Long prodId = 0L;
+        when(repository.findById(prodId)).thenThrow(ProductNotFoundException.class);
+
+        assertThrows(ProductNotFoundException.class, () -> { service.findById(prodId); });
+        verifyProdRepFindByIdIsCalledOnce(prodId);
+    }
+
 
     @Test
     public void whenValidProduct_withValidStoreId_thenProductShouldBeCreated() {
@@ -95,7 +106,7 @@ public class ProductServiceTest {
         else {
             store.setProducts(productsInStore);
         }
-        when(storeService.saveStore(store)).thenReturn(store);
+        when(storeService.save(store)).thenReturn(store);
 
 
         Store updatedStore = service.saveProd(prod1, store.getId());
@@ -131,7 +142,7 @@ public class ProductServiceTest {
             productsInStore.add(prod2);
             store.setProducts(productsInStore);
         }
-        when(storeService.saveStore(store)).thenReturn(store);
+        when(storeService.save(store)).thenReturn(store);
 
 
         Store updatedStore = service.saveProd(prod1, store.getId());
@@ -158,6 +169,7 @@ public class ProductServiceTest {
 
         verifyFindByIdIsCalledOnce(invalidStoreId);
     }
+
 
 
     private void verifyFindAllIsCalledOnce() {

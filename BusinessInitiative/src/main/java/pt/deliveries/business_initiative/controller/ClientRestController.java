@@ -48,7 +48,7 @@ public class ClientRestController {
         }
     }
 
-    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/login")
     public ResponseEntity<Client> login(@RequestBody Client client) {
         Client loggedClient = service.verifyLogin(client);
 
