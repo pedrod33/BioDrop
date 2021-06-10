@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
 
 @Repository
-public interface VehicleRepository  extends JpaRepository<Vehicle, Long> {
+public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     Vehicle save(Vehicle vehicle);
 

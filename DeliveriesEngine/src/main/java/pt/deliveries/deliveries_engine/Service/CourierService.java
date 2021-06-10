@@ -1,14 +1,12 @@
 package pt.deliveries.deliveries_engine.Service;
 
 import pt.deliveries.deliveries_engine.Model.Courier;
+import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
 
-import java.util.Optional;
 
 public interface CourierService {
-    Courier save(Courier courier);
+    Courier save(RegisterCourierPojo courier);
 
-    boolean exists(Courier courier);
-
-    Courier verifyLogin(Courier courier);
+    boolean exists(RegisterCourierPojo courier);
 
 }

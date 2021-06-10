@@ -4,38 +4,69 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.deliveries.deliveries_engine.Model.Courier;
+import pt.deliveries.deliveries_engine.Pojo.LoginCourierPojo;
+import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
 import pt.deliveries.deliveries_engine.Repository.CourierRepository;
+import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 @Service
 @Transactional
 public class CourierServiceImpl implements CourierService{
 
+    Logger logger = Logger.getLogger(CourierServiceImpl.class.getName());
     @Autowired
     private CourierRepository courierRepository;
 
-    private Logger logger = Logger.getLogger(CourierServiceImpl.class.getName());
 
-    public Courier save(Courier courier){
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
+
+    public Courier save(RegisterCourierPojo courierPojo){
+
+        Courier courier = new Courier();
+        courier.setEmail(courierPojo.getEmail());
+        courier.setGender(courierPojo.getGender());
+        courier.setName(courierPojo.getName());
+        courier.setPassword(courierPojo.getPassword());
+        courier.setPhoneNumber(courierPojo.getPhoneNumber());
+        courier.setVehicle(vehicleRepository.getById(courierPojo.getVehicle_id()));
+        courierRepository.save(courier);
         return courierRepository.save(courier);
     }
 
-    public boolean exists(Courier courier){
-        if(courierRepository.findByEmail(courier.getEmail())!=null){
+    public boolean exists(RegisterCourierPojo courierPojo){
+        logger.log(Level.INFO, courierPojo.getEmail()+"+"+courierPojo.getPassword()+courierPojo.getVehicle_id());
+        if(this.checkIfEmailOrPasswordAlreadyExistInDB(courierPojo) && vehicleRepository.findById(courierPojo.getVehicle_id())!=null){
+            logger.log(Level.INFO, "gets true");
             return true;
         }
-        else if(courierRepository.findByPhoneNumber(courier.getPhoneNumber())!=null){
+        logger.log(Level.INFO, "gets false");
+
+        return false;
+    }
+
+    public boolean checkIfEmailOrPasswordAlreadyExistInDB(RegisterCourierPojo courierPojo){
+        logger.log(Level.INFO, courierPojo.getEmail()+"+"+courierPojo.getPassword());
+        return (courierRepository.findByEmail(courierPojo.getEmail())!=null || courierRepository.findByPhoneNumber(courierPojo.getPhoneNumber())!=null);
+
+    }
+    public boolean emailExists(LoginCourierPojo loginCourierPojo){
+        if(courierRepository.findByEmail(loginCourierPojo.getEmail())!=null){
             return true;
         }
         return false;
     }
 
-    public Courier verifyLogin(Courier courier){
-        Courier courierInDB = courierRepository.findByEmail(courier.getEmail());
-        if(courierInDB!=null && courierInDB.getPassword().equals(courier.getPassword())){
-            return courier;
+
+    public Courier verifyLogin(LoginCourierPojo loginCourierPojo){
+        Courier courierInDB = courierRepository.findByEmail(loginCourierPojo.getEmail());
+        if(courierInDB!=null && courierInDB.getPassword().equals(loginCourierPojo.getPassword())){
+            return courierInDB;
         }
         return null;
     }

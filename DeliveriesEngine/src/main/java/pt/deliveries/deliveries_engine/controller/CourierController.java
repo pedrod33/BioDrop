@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pt.deliveries.deliveries_engine.Model.Courier;
-import pt.deliveries.deliveries_engine.Service.CourierService;
+import pt.deliveries.deliveries_engine.Pojo.LoginCourierPojo;
+import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
+import pt.deliveries.deliveries_engine.Service.CourierServiceImpl;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,24 +18,24 @@ import java.util.logging.Logger;
 @RequestMapping("/deliveries-api/courier")
 public class CourierController {
 
-    @Autowired
-    private CourierService service;
+    Logger logger = Logger.getLogger(CourierController.class.getName());
 
-    private Logger logger = Logger.getLogger(CourierController.class.getName());
+    @Autowired
+    private CourierServiceImpl service;
 
     @RequestMapping("/register")
-    public ResponseEntity<Courier> register(@RequestBody Courier courier) {
-    if(service.exists(courier)){
-        return new ResponseEntity<>(courier, HttpStatus.IM_USED);
+    public ResponseEntity<Courier> register(@RequestBody RegisterCourierPojo courierPojo) {
+    if(service.exists(courierPojo)){
+        return new ResponseEntity<>(null, HttpStatus.IM_USED);
     }
-        Courier savedCourier = service.save(courier);
+        Courier savedCourier = service.save(courierPojo);
         return new ResponseEntity<>(savedCourier, HttpStatus.CREATED);
     }
 
     @RequestMapping("/login")
-    public ResponseEntity<Courier> login(@RequestBody Courier courier) {
-        if(service.exists(courier)){
-            Courier verificationCourier = service.verifyLogin(courier);
+    public ResponseEntity<Courier> login(@RequestBody LoginCourierPojo loginCourierPojo) {
+        if(service.emailExists(loginCourierPojo)){
+            Courier verificationCourier = service.verifyLogin(loginCourierPojo);
             if(verificationCourier!=null){
                 return new ResponseEntity<>(verificationCourier, HttpStatus.OK);
             }

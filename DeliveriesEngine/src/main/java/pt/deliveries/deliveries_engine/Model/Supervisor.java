@@ -21,9 +21,13 @@ public class Supervisor {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false, unique = true)
+    private String name;
+
     public Supervisor() {}
 
-    public Supervisor(String email, String password) {
+    public Supervisor(String email, String password, String name) {
+        this.name = name;
         this.email = email;
         this.password = password;
     }
@@ -50,5 +54,13 @@ public class Supervisor {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

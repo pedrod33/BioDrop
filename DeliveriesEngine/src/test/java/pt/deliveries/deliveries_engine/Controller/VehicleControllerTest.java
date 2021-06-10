@@ -44,6 +44,6 @@ public class VehicleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(vehicle))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.type", is(vehicle.getType())));
-        //verify(service, times(1)).create(Mockito.any());
+        verify(service, times(1)).create(Mockito.any());
     }
 }
