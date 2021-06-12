@@ -25,6 +25,7 @@ public class CourierController {
 
     @RequestMapping("/register")
     public ResponseEntity<Courier> register(@RequestBody RegisterCourierPojo courierPojo) {
+    logger.log(Level.INFO, courierPojo.getEmail());
     if(service.exists(courierPojo)){
         return new ResponseEntity<>(null, HttpStatus.IM_USED);
     }

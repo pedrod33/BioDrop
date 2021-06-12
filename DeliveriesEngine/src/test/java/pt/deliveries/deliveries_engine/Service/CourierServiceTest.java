@@ -26,9 +26,9 @@ public class CourierServiceTest {
 
     Logger logger = Logger.getLogger(CourierServiceTest.class.getName());
 
-    private final RegisterCourierPojo REGISTER_POJO_WRONG_PHONE = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
-    private final RegisterCourierPojo REGISTER_POJO_WRONG_EMAIL = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
-    private final RegisterCourierPojo REGISTER_POJO_WRONG_PHONE_AND_EMAIL = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
+    private final RegisterCourierPojo REGISTER_POJO_WRONG_PHONE = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
+    private final RegisterCourierPojo REGISTER_POJO_WRONG_EMAIL = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
+    private final RegisterCourierPojo REGISTER_POJO_WRONG_PHONE_AND_EMAIL = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
     private final LoginCourierPojo LOGIN_COURIER_POJO_WRONG_PASSWORD = new LoginCourierPojo("marcoA@gmail.com","12345677");
     private final LoginCourierPojo LOGIN_COURIER_POJO_WRONG_EMAIL = new LoginCourierPojo("marco@gmail.com","12345678");
 
@@ -56,7 +56,7 @@ public class CourierServiceTest {
 
     @Test
     void whenExistingEmailOrPhoneNumberAndVehicle_ID_thenReturnTrue_exists(){
-        RegisterCourierPojo rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
+        RegisterCourierPojo rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
         when(courierRepository.findByEmail(rcp1.getEmail())).thenReturn(c1);
         when(courierRepository.findByPhoneNumber(rcp1.getPhoneNumber())).thenReturn(c1);
         when(vehicleRepository.findById(rcp1.getVehicle_id())).thenReturn(java.util.Optional.ofNullable(v1));
@@ -66,7 +66,7 @@ public class CourierServiceTest {
 
     @Test
     void whenExistingEmailOrPhoneNumberButNotVehicle_ID_thenReturnTrue_exists(){
-        RegisterCourierPojo rcp2 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L);
+        RegisterCourierPojo rcp2 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L, 1L);
         when(courierRepository.findByEmail(rcp2.getEmail())).thenReturn(c1);
         when(courierRepository.findByPhoneNumber(rcp2.getPhoneNumber())).thenReturn(c1);
         when(vehicleRepository.findById(rcp2.getVehicle_id())).thenReturn(null);
@@ -76,7 +76,7 @@ public class CourierServiceTest {
 
     @Test
     void whenExistingEmailAndVehicle_ID_thenReturnTrue_exists(){
-        RegisterCourierPojo rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
+        RegisterCourierPojo rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
         when(courierRepository.findByEmail(rcp1.getEmail())).thenReturn(c1);
         when(courierRepository.findByPhoneNumber(rcp1.getPhoneNumber())).thenReturn(null);
         when(vehicleRepository.findById(rcp1.getVehicle_id())).thenReturn(java.util.Optional.ofNullable(v1));
@@ -86,7 +86,7 @@ public class CourierServiceTest {
 
     @Test
     void whenExistingEmail_thenReturnTrue_exists(){
-        RegisterCourierPojo rcp2 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L);
+        RegisterCourierPojo rcp2 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L, 1L);
         when(courierRepository.findByEmail(rcp2.getEmail())).thenReturn(c1);
         when(courierRepository.findByPhoneNumber(rcp2.getPhoneNumber())).thenReturn(null);
         when(vehicleRepository.findById(Mockito.any())).thenReturn(null);
@@ -96,7 +96,7 @@ public class CourierServiceTest {
 
     @Test
     void whenExistingPhoneNumberAndVehicle_ID_thenReturnTrue_exists(){
-        RegisterCourierPojo rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
+        RegisterCourierPojo rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
         when(courierRepository.findByEmail(rcp1.getEmail())).thenReturn(null);
         when(courierRepository.findByPhoneNumber(rcp1.getPhoneNumber())).thenReturn(c1);
         when(vehicleRepository.findById(rcp1.getVehicle_id())).thenReturn(java.util.Optional.ofNullable(v1));
@@ -106,7 +106,7 @@ public class CourierServiceTest {
 
     @Test
     void whenExistingPhoneNumber_thenReturnTrue_exists(){
-        RegisterCourierPojo rcp2 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L);
+        RegisterCourierPojo rcp2 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L, 1L);
         when(courierRepository.findByEmail(rcp2.getEmail())).thenReturn(null);
         when(courierRepository.findByPhoneNumber(rcp2.getPhoneNumber())).thenReturn(c1);
         when(vehicleRepository.findById(Mockito.any())).thenReturn(null);//should be using hashes
@@ -116,7 +116,7 @@ public class CourierServiceTest {
 
     @Test
     void whenNonExistingEmailOrPhoneNumber_thenReturnFalse_exists(){
-        RegisterCourierPojo rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
+        RegisterCourierPojo rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
         when(courierRepository.findByEmail(rcp1.getEmail())).thenReturn(null);
         when(courierRepository.findByPhoneNumber(rcp1.getPhoneNumber())).thenReturn(null);
         when(vehicleRepository.findById(rcp1.getVehicle_id())).thenReturn(java.util.Optional.ofNullable(v1));
@@ -126,7 +126,7 @@ public class CourierServiceTest {
 
     @Test
     void whenNonExistingEmailOrPhoneNumberOrVehicle_ID_thenReturnFalse_exists(){
-        RegisterCourierPojo rcp2 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
+        RegisterCourierPojo rcp2 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
         when(courierRepository.findByEmail(rcp2.getEmail())).thenReturn(null);
         when(courierRepository.findByPhoneNumber(rcp2.getPhoneNumber())).thenReturn(null);
         when(vehicleRepository.findById(rcp2.getVehicle_id())).thenReturn(java.util.Optional.ofNullable(v1));

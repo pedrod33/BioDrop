@@ -7,6 +7,7 @@ import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.Pojo.LoginCourierPojo;
 import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
 import pt.deliveries.deliveries_engine.Repository.CourierRepository;
+import pt.deliveries.deliveries_engine.Repository.SupervisorRepository;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
 import java.util.logging.Level;
@@ -25,6 +26,8 @@ public class CourierServiceImpl implements CourierService{
     @Autowired
     private VehicleRepository vehicleRepository;
 
+    @Autowired
+    private SupervisorRepository supervisorRepository;
 
     public Courier save(RegisterCourierPojo courierPojo){
 
@@ -34,7 +37,8 @@ public class CourierServiceImpl implements CourierService{
         courier.setName(courierPojo.getName());
         courier.setPassword(courierPojo.getPassword());
         courier.setPhoneNumber(courierPojo.getPhoneNumber());
-        courier.setVehicle(vehicleRepository.getById(courierPojo.getVehicle_id()));
+        courier.setVehicle(vehicleRepository.findById(courierPojo.getVehicle_id()).orElse(null));
+        courier.setSupervisor(supervisorRepository.findById(courierPojo.getSupervisor_id()).orElse(null));
         courierRepository.save(courier);
         return courierRepository.save(courier);
     }

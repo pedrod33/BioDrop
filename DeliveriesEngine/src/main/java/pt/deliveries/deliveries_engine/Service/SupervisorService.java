@@ -1,12 +1,13 @@
 package pt.deliveries.deliveries_engine.Service;
 
 import pt.deliveries.deliveries_engine.Model.Supervisor;
+import pt.deliveries.deliveries_engine.Pojo.RegisterSupervisorPojo;
 
 public interface SupervisorService {
 
-    Supervisor create(Supervisor supervisor);
+    Supervisor create(RegisterSupervisorPojo supervisor);
 
-    boolean exists(Supervisor supervisor);
+    boolean existsRegister(RegisterSupervisorPojo supervisor);
 
-    boolean credentialValidity(Supervisor supervisor);
+    boolean credentialValidity(RegisterSupervisorPojo supervisor);
 }

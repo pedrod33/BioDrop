@@ -7,10 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pt.deliveries.deliveries_engine.Model.Courier;
-import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
-import pt.deliveries.deliveries_engine.Repository.CourierRepository;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

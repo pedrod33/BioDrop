@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pt.deliveries.deliveries_engine.Model.Supervisor;
+import pt.deliveries.deliveries_engine.Pojo.RegisterSupervisorPojo;
 import pt.deliveries.deliveries_engine.Service.SupervisorServiceImpl;
 
 import java.util.logging.Level;
@@ -23,12 +24,12 @@ public class SupervisorController {
     private SupervisorServiceImpl service;
 
     @RequestMapping("/register")
-    public ResponseEntity<Supervisor> createSupervisor(@RequestBody Supervisor supervisor){
-        if(service.exists(supervisor)){
+    public ResponseEntity<Supervisor> createSupervisor(@RequestBody RegisterSupervisorPojo supervisorPojo){
+        if(service.existsRegister(supervisorPojo)){
             logger.log(Level.INFO,"true");
-            return new ResponseEntity<>(supervisor, HttpStatus.IM_USED);
+            return new ResponseEntity<>(null, HttpStatus.IM_USED);
         }
-        Supervisor created = service.create(supervisor);
+        Supervisor created = service.create(supervisorPojo);
         if(created==null){
             logger.log(Level.INFO,"false but is null");
             return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);

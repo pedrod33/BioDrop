@@ -22,12 +22,14 @@ public class RegisterCourierPojo {
 
     private Long phoneNumber;
 
+    private Long supervisor_id;
 
 
     public RegisterCourierPojo(){}
 
-    public RegisterCourierPojo(String name, String email, String password, String gender, Long phoneNumber, Long vehicle_id) {
+    public RegisterCourierPojo(String name, String email, String password, String gender, Long phoneNumber, Long vehicle_id, Long supervisor_id) {
         this.vehicle_id = vehicle_id;
+        this.supervisor_id = supervisor_id;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -81,5 +83,13 @@ public class RegisterCourierPojo {
 
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Long getSupervisor_id() {
+        return supervisor_id;
+    }
+
+    public void setSupervisor_id(Long supervisor_id) {
+        this.supervisor_id = supervisor_id;
     }
 }

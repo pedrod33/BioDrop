@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
+import pt.deliveries.deliveries_engine.Pojo.RegisterSupervisorPojo;
 import pt.deliveries.deliveries_engine.Service.CourierServiceImpl;
 import pt.deliveries.deliveries_engine.Service.SupervisorServiceImpl;
 import pt.deliveries.deliveries_engine.controller.CourierController;
@@ -31,6 +32,7 @@ public class SupervisorControllerTest {
 
     private Logger logger = Logger.getLogger(CourierController.class.getName());
     private Supervisor supervisor;
+    private RegisterSupervisorPojo supervisorPojo;
 
     @Autowired
     MockMvc mvc;
@@ -40,12 +42,13 @@ public class SupervisorControllerTest {
 
     @BeforeEach
     void setUp(){
+        supervisorPojo = new RegisterSupervisorPojo("supervisorPojo@gmail.com", "12345678", "Semedo Manuel");
         supervisor = new Supervisor("supervisor@gmail.com", "12345678", "Domingos Manuel");
     }
 
     @Test
     void registerUsedCredentialsSuccessful() throws Exception {
-        when(service.exists(supervisor)).thenReturn(false);
+        when(service.existsRegister(supervisorPojo)).thenReturn(false);
         when(service.create(Mockito.any())).thenReturn(supervisor);
         mvc.perform((post("/deliveries-api/supervisor/register")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(supervisor))))
@@ -55,11 +58,11 @@ public class SupervisorControllerTest {
     }
     @Test
     void registerExistingCredentialsUnsuccessful() throws Exception {
-        when(service.exists(Mockito.any())).thenReturn(true);
+        when(service.existsRegister(Mockito.any())).thenReturn(true);
         mvc.perform((post("/deliveries-api/supervisor/register")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(supervisor))))
                 .andExpect(status().isImUsed())
-                .andExpect(jsonPath("$.name",is(supervisor.getName())));
+                .andExpect(jsonPath("$").doesNotExist());
         verify(service, times(0)).create(Mockito.any());
     }
 }
