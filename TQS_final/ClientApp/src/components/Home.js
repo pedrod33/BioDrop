@@ -83,25 +83,6 @@ class Home extends Component {
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formConta">
-                                        <Form.Label>Account type:</Form.Label>
-                                        <Row>   
-                                            <Col>
-                                            <Form.Check
-                                                type={'radio'}
-                                                id={'inline-radio-1'}
-                                                label={'Client'}
-                                                />
-                                            </Col>
-                                            <Col>
-                                            <Form.Check
-                                                type={'radio'}
-                                                id={'inline-radio-2'}
-                                                label={'Driver'}
-                                                />
-                                            </Col>
-                                        </Row>
-                                    </Form.Group>
                                 </Form>
                             </CardContent>
                         </Card>

@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\NewFolder\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
 
