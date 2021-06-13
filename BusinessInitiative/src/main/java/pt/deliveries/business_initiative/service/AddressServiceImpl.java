@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Client;
+import pt.deliveries.business_initiative.pojo.AddressSaveForClientPOJO;
 import pt.deliveries.business_initiative.repository.AddressRepository;
 
 import java.util.List;
@@ -32,7 +33,13 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Client saveClientAddress(Address address, Long clientId) {
+    public Client saveClientAddress(AddressSaveForClientPOJO addressPOJO, Long clientId) {
+        Address address = new Address();
+        address.setCity(addressPOJO.getCity());
+        address.setCompleteAddress(addressPOJO.getCompleteAddress());
+        address.setLatitude(addressPOJO.getLatitude());
+        address.setLongitude(addressPOJO.getLongitude());
+
         Client clientFound = clientService.findById(clientId);
 
         logger.log(Level.INFO, "Associating Address to client {0} and saving ...", clientId);

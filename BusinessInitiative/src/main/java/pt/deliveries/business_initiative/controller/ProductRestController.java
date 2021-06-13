@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
+import pt.deliveries.business_initiative.pojo.SaveProductInStorePOJO;
 import pt.deliveries.business_initiative.service.ProductServiceImpl;
 
 import java.util.List;
@@ -30,9 +31,9 @@ public class ProductRestController {
 
 
     @PostMapping("/save")
-    public ResponseEntity<Store> saveProductInStore(@RequestBody Product product, @RequestParam Long storeId) {
+    public ResponseEntity<Store> saveProductInStore(@RequestBody SaveProductInStorePOJO productPOJO, @RequestParam Long storeId) {
         HttpStatus status;
-        Store saved = service.saveProd(product, storeId);
+        Store saved = service.saveProd(productPOJO, storeId);
 
         if (saved != null) {
             logger.log(Level.INFO, "Store with id {0} was saved", storeId);

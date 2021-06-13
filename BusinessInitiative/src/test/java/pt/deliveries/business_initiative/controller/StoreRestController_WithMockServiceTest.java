@@ -11,6 +11,7 @@ import pt.deliveries.business_initiative.JsonUtil;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
+import pt.deliveries.business_initiative.pojo.StoreSavePOJO;
 import pt.deliveries.business_initiative.service.StoreServiceImpl;
 
 import java.util.ArrayList;
@@ -70,8 +71,6 @@ public class StoreRestController_WithMockServiceTest {
                 .andExpect(jsonPath("$.[2].name", is("store3")));
 
         verify(service, times(1)).findAllStores();
-
-        assertThat(allStores).hasSize(3).extracting(Store::getName).contains(store1.getName(), store2.getName(), store3.getName());
     }
     
     @Test
@@ -155,7 +154,7 @@ public class StoreRestController_WithMockServiceTest {
                 .andExpect(jsonPath("$.[0]name", is("store1")))
                 .andExpect(jsonPath("$.[0]address.id", is(1)))
                 .andExpect(jsonPath("$.[0]address.city", is("city")))
-                .andExpect(jsonPath("$.[0]address.address", is("address")))
+                .andExpect(jsonPath("$.[0]address.completeAddress", is("address")))
                 .andExpect(jsonPath("$.[0]address.latitude", is(10.0)))
                 .andExpect(jsonPath("$.[0]address.longitude", is(11.0)));
 
@@ -195,7 +194,7 @@ public class StoreRestController_WithMockServiceTest {
                 .andExpect(jsonPath("$.[0]name", is("store1")))
                 .andExpect(jsonPath("$.[0]address.id", is(1)))
                 .andExpect(jsonPath("$.[0]address.city", is("city")))
-                .andExpect(jsonPath("$.[0]address.address", is("address")))
+                .andExpect(jsonPath("$.[0]address.completeAddress", is("address")))
                 .andExpect(jsonPath("$.[0]address.latitude", is(10.0)))
                 .andExpect(jsonPath("$.[0]address.longitude", is(11.0)));
 
@@ -227,7 +226,7 @@ public class StoreRestController_WithMockServiceTest {
         List<Store> stores_found = new ArrayList<>();
         stores_found.add(store);
 
-        when( service.findByAddress( store.getAddress().getAddress() )).thenReturn( stores_found );
+        when( service.findByAddress( store.getAddress().getCompleteAddress() )).thenReturn( stores_found );
 
         mvc.perform(get("/businesses-api/stores/store-address?address=address").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -235,11 +234,11 @@ public class StoreRestController_WithMockServiceTest {
                 .andExpect(jsonPath("$.[0]name", is("store1")))
                 .andExpect(jsonPath("$.[0]address.id", is(1)))
                 .andExpect(jsonPath("$.[0]address.city", is("city")))
-                .andExpect(jsonPath("$.[0]address.address", is("address")))
+                .andExpect(jsonPath("$.[0]address.completeAddress", is("address")))
                 .andExpect(jsonPath("$.[0]address.latitude", is(10.0)))
                 .andExpect(jsonPath("$.[0]address.longitude", is(11.0)));
 
-        verify(service, times(1)).findByAddress( store.getAddress().getAddress() );
+        verify(service, times(1)).findByAddress( store.getAddress().getCompleteAddress() );
     }
 
     @Test
@@ -272,7 +271,7 @@ public class StoreRestController_WithMockServiceTest {
                 .andExpect(jsonPath("name", is("store1")))
                 .andExpect(jsonPath("address.id", is(1)))
                 .andExpect(jsonPath("address.city", is("city")))
-                .andExpect(jsonPath("address.address", is("address")))
+                .andExpect(jsonPath("address.completeAddress", is("address")))
                 .andExpect(jsonPath("address.latitude", is(10.0)))
                 .andExpect(jsonPath("address.longitude", is(11.0)));
 
@@ -295,24 +294,25 @@ public class StoreRestController_WithMockServiceTest {
     @Test
     void whenPostValidStore_thenReturnStore() throws Exception {
         Address address = new Address("city", "address", 10, 11);
-
+        StoreSavePOJO storePOJO = new StoreSavePOJO("store1", null, new HashSet<>());
+        storePOJO.setAddress(address);
         Store store = new Store("store1", null, null);
         store.setAddress(address);
 
 
-        when( service.save( Mockito.any()) ).thenReturn( store );
+        when( service.createStore( storePOJO )).thenReturn( store );
 
 
-        mvc.perform(post("/businesses-api/stores/save").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(store)))
+        mvc.perform(post("/businesses-api/stores/save").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(storePOJO)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("name", is("store1")))
                 .andExpect(jsonPath("address.city", is("city")))
-                .andExpect(jsonPath("address.address", is("address")))
+                .andExpect(jsonPath("address.completeAddress", is("address")))
                 .andExpect(jsonPath("address.latitude", is(10.0)))
                 .andExpect(jsonPath("address.longitude", is(11.0)));
 
-        verify(service, times(1)).save( Mockito.any() );
+        verify(service, times(1)).createStore( storePOJO );
     }
 
 }

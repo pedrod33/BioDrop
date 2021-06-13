@@ -6,10 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.business_initiative.exception.ClientEmailOrPasswordIncorrectException;
+import pt.deliveries.business_initiative.exception.ClientNotFoundException;
 import pt.deliveries.business_initiative.exception.ProductNotFoundException;
+import pt.deliveries.business_initiative.exception.StoreNotFoundException;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
+import pt.deliveries.business_initiative.pojo.SaveProductInStorePOJO;
 import pt.deliveries.business_initiative.repository.ProductRepository;
 
 import java.util.*;
@@ -32,7 +36,6 @@ public class ProductServiceTest {
     private ProductServiceImpl service;
 
 
-
     @BeforeEach
     public void setUp() {
         Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
@@ -48,7 +51,6 @@ public class ProductServiceTest {
         when(repository.findById(prod1.getId())).thenReturn(Optional.of(prod1));
         when(repository.findById(0L)).thenThrow(ProductNotFoundException.class);
     }
-
 
 
     @Test
@@ -95,6 +97,8 @@ public class ProductServiceTest {
         store.setAddress(address);
 
 
+        SaveProductInStorePOJO prod1POJO = new SaveProductInStorePOJO("prod1", "origin1", 10, "path", 100 );
+
         Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
         prod1.setId(1L);
         Set<Product> productsInStore = new HashSet<>();
@@ -109,7 +113,7 @@ public class ProductServiceTest {
         when(storeService.save(store)).thenReturn(store);
 
 
-        Store updatedStore = service.saveProd(prod1, store.getId());
+        Store updatedStore = service.saveProd(prod1POJO, store.getId());
 
 
         assertThat(updatedStore.getId()).isEqualTo(store.getId());
@@ -121,6 +125,9 @@ public class ProductServiceTest {
     public void whenValidProduct_withValidStoreId_thenProductShouldBeAdded() {
         Address address = new Address("city", "address", 10, 11);
         address.setId(1L);
+
+        SaveProductInStorePOJO prod1POJO = new SaveProductInStorePOJO("prod1", "origin1", 10, "path", 100 );
+
 
         Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
         prod1.setId(1L);
@@ -145,7 +152,7 @@ public class ProductServiceTest {
         when(storeService.save(store)).thenReturn(store);
 
 
-        Store updatedStore = service.saveProd(prod1, store.getId());
+        Store updatedStore = service.saveProd(prod1POJO, store.getId());
 
 
         assertThat(updatedStore.getId()).isEqualTo(store.getId());
@@ -153,19 +160,15 @@ public class ProductServiceTest {
         verifyFindByIdIsCalledOnce(store.getId());
     }
 
-
     @Test
     public void whenValidProduct_withInvalidStoreId_thenProductShouldNotBeCreated() {
-        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
-        prod1.setId(1L);
         Long invalidStoreId = 0L;
+        SaveProductInStorePOJO prod1POJO = new SaveProductInStorePOJO("prod1", "origin1", 10, "path", 100 );
 
 
-        when(storeService.findById(invalidStoreId)).thenReturn(null);
+        when(storeService.findById(invalidStoreId)).thenThrow(StoreNotFoundException.class);
 
-
-        Store store_notFound = service.saveProd(prod1, invalidStoreId);
-        assertThat(store_notFound).isNull();
+        assertThrows(StoreNotFoundException.class, () -> service.saveProd(prod1POJO, invalidStoreId));
 
         verifyFindByIdIsCalledOnce(invalidStoreId);
     }

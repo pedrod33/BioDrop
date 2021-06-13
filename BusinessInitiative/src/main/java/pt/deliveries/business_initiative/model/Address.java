@@ -18,7 +18,7 @@ public class Address {
     private String city;
 
     @Column(nullable = false)
-    private String address;
+    private String completeAddress;
 
     @Column(nullable = false)
     private double latitude;
@@ -36,9 +36,9 @@ public class Address {
 
     public Address() { }
 
-    public Address(String city, String address, double latitude, double longitude) {
+    public Address(String city, String completeAddress, double latitude, double longitude) {
         this.city = city;
-        this.address = address;
+        this.completeAddress = completeAddress;
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -59,12 +59,12 @@ public class Address {
         this.city = city;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCompleteAddress() {
+        return completeAddress;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCompleteAddress(String completeAddress) {
+        this.completeAddress = completeAddress;
     }
 
     public double getLatitude() {
@@ -92,12 +92,12 @@ public class Address {
                 Double.compare(address1.longitude, longitude) == 0 &&
                 Objects.equals(id, address1.id) &&
                 Objects.equals(city, address1.city) &&
-                Objects.equals(address, address1.address);
+                Objects.equals(completeAddress, address1.completeAddress);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, city, address, latitude, longitude);
+        return Objects.hash(id, city, completeAddress, latitude, longitude);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class Address {
         return "Address{" +
                 "id=" + id +
                 ", city='" + city + '\'' +
-                ", address='" + address + '\'' +
+                ", completeAddress='" + completeAddress + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 '}';

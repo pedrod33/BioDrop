@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pt.deliveries.business_initiative.exception.ProductNotFoundException;
 import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
+import pt.deliveries.business_initiative.pojo.SaveProductInStorePOJO;
 import pt.deliveries.business_initiative.repository.ProductRepository;
 
 import java.util.HashSet;
@@ -34,25 +35,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Store saveProd(Product product, Long storeId) {
+    public Store saveProd(SaveProductInStorePOJO productPOJO, Long storeId) {
         Store storeFound = storeService.findById(storeId);
 
-        if( storeFound != null ) {
-            logger.log(Level.INFO, "Associating store {0} to the product and saving ...", storeId);
-            if ( storeFound.getProducts() != null)
-                storeFound.getProducts().add(product);
-            else {
-                Set<Product> productsInStore = new HashSet<>();
-                productsInStore.add(product);
+        Product product = new Product();
+        product.setName(productPOJO.getName());
+        product.setOrigin(productPOJO.getOrigin());
+        product.setPrice(productPOJO.getPrice());
+        product.setImgPath(productPOJO.getImgPath());
+        product.setWeight(productPOJO.getWeight());
 
-                storeFound.setProducts(productsInStore);
-            }
+        logger.log(Level.INFO, "Associating store {0} to the product and saving ...", storeId);
+        if ( storeFound.getProducts() != null)
+            storeFound.getProducts().add(product);
+        else {
+            Set<Product> productsInStore = new HashSet<>();
+            productsInStore.add(product);
 
-            return storeService.save(storeFound);
+            storeFound.setProducts(productsInStore);
         }
 
-        logger.log(Level.WARNING, "Store not found for id {0} ...", storeId);
-        return null;
+        return storeService.save(storeFound);
     }
 
     @Override

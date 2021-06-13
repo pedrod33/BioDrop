@@ -95,7 +95,7 @@ class ProductRestController_WithMockServiceTest {
                 .andExpect(jsonPath("name", is("store1")))
                 .andExpect(jsonPath("address.id", is(1)))
                 .andExpect(jsonPath("address.city", is("city")))
-                .andExpect(jsonPath("address.address", is("address")))
+                .andExpect(jsonPath("address.completeAddress", is("address")))
                 .andExpect(jsonPath("address.latitude", is(10.0)))
                 .andExpect(jsonPath("address.longitude", is(11.0)))
                 .andExpect(jsonPath("$.products[0].id", is(1)))

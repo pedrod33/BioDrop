@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Client;
+import pt.deliveries.business_initiative.pojo.AddressSaveForClientPOJO;
 import pt.deliveries.business_initiative.repository.AddressRepository;
 
 import java.util.*;
@@ -85,17 +86,17 @@ public class AddressServiceTest {
 
     @Test
     void whenAssociateAddressToClient_thenClientShouldBeUpdated() {
+        AddressSaveForClientPOJO address2POJO = new AddressSaveForClientPOJO("city2", "address2", 10, 11);
+
         Address address2 = new Address("city2", "address2", 10, 11);
-        Address address3 = new Address("city3", "address3", 10, 11);
         address2.setId(2L);
-        address3.setId(3L);
 
         Client goodClient3 = new Client("cunha3", "cunha@ua.pt", "1234", null, "M", "96000003");
         goodClient3.setId(3L);
         goodClient3.setAddresses(new HashSet<>(Collections.singleton(address2)));
 
 
-        Client saved = service.saveClientAddress(address3, goodClient3.getId());
+        Client saved = service.saveClientAddress(address2POJO, goodClient3.getId());
 
 
         assertThat(saved.getId()).isEqualTo(goodClient3.getId());

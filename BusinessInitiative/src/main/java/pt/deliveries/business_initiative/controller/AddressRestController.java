@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Client;
+import pt.deliveries.business_initiative.pojo.AddressSaveForClientPOJO;
 import pt.deliveries.business_initiative.service.AddressServiceImpl;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class AddressRestController {
 
     private static final Logger logger
             = Logger.getLogger(
-            ClientRestController.class.getName());
+            AddressRestController.class.getName());
 
 
     @GetMapping("/allAddresses")
@@ -31,7 +32,7 @@ public class AddressRestController {
 
 
     @PutMapping("/save-address")
-    public ResponseEntity<Client> saveClientAddress(@RequestBody Address address, @RequestParam Long clientId) {
+    public ResponseEntity<Client> saveClientAddress(@RequestBody AddressSaveForClientPOJO address, @RequestParam Long clientId) {
         HttpStatus status;
         Client saved = service.saveClientAddress(address, clientId);
 
