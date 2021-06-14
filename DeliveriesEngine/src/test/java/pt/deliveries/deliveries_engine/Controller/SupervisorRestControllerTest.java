@@ -8,16 +8,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import pt.deliveries.deliveries_engine.Exception.CourierEmailOrPhoneNumberInUseException;
+import pt.deliveries.deliveries_engine.Exception.SupervisorEmailIsUsedException;
+import pt.deliveries.deliveries_engine.Exception.SupervisorMailAndPasswordDoesNotMatchException;
 import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Pojo.RegisterSupervisorPojo;
 import pt.deliveries.deliveries_engine.Service.SupervisorServiceImpl;
-import pt.deliveries.deliveries_engine.controller.CourierRestController;
-import pt.deliveries.deliveries_engine.controller.SupervisorRestController;
 import pt.deliveries.deliveries_engine.utils.JsonUtil;
 
 import java.util.logging.Logger;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -54,11 +56,11 @@ public class SupervisorRestControllerTest {
     }
     @Test
     void registerExistingCredentialsUnsuccessful() throws Exception {
-        when(service.existsRegister(Mockito.any())).thenReturn(true);
+        doThrow(SupervisorEmailIsUsedException.class).when(service).existsRegister(Mockito.any());
         mvc.perform((post("/deliveries-api/supervisor/register")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(supervisor))))
                 .andExpect(status().isImUsed())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof SupervisorEmailIsUsedException));
         verify(service, times(0)).create(Mockito.any());
     }
 }

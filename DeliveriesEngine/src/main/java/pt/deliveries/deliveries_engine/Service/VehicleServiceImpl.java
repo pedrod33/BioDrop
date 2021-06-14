@@ -3,6 +3,7 @@ package pt.deliveries.deliveries_engine.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.deliveries.deliveries_engine.Exception.VehicleTypeIsUsedException;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
@@ -16,7 +17,6 @@ public class VehicleServiceImpl implements VehicleService{
     @Autowired
     VehicleRepository repository;
 
-    Logger logger = Logger.getLogger(VehicleServiceImpl.class.getName());
     @Override
     public Vehicle create(Vehicle vehicle) {
         return repository.save(vehicle);
@@ -25,10 +25,8 @@ public class VehicleServiceImpl implements VehicleService{
     @Override
     public boolean exists(Vehicle vehicle) {
         if(repository.findByType(vehicle.getType())!=null){
-            logger.log(Level.INFO,"true");
-            return true;
+            throw new VehicleTypeIsUsedException("This type of vehicle already exists");
         }
-        logger.log(Level.INFO,"false");
         return false;
     }
 

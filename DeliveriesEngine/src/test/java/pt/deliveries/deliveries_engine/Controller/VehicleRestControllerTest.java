@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
 import pt.deliveries.deliveries_engine.Service.VehicleServiceImpl;
-import pt.deliveries.deliveries_engine.controller.VehicleRestController;
 import pt.deliveries.deliveries_engine.utils.JsonUtil;
 
 import static org.hamcrest.Matchers.is;

@@ -3,6 +3,8 @@ package pt.deliveries.deliveries_engine.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.deliveries.deliveries_engine.Exception.SupervisorEmailIsUsedException;
+import pt.deliveries.deliveries_engine.Exception.SupervisorMailAndPasswordDoesNotMatchException;
 import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Pojo.RegisterSupervisorPojo;
 import pt.deliveries.deliveries_engine.Repository.SupervisorRepository;
@@ -28,13 +30,13 @@ public class SupervisorServiceImpl implements SupervisorService{
         if (repository.findByEmail(supervisorPojo.getEmail()) == null) {
             return false;
         }
-        return true;
+        throw new SupervisorEmailIsUsedException("This email is already being used!");
     }
 
     @Override
     public boolean credentialValidity(RegisterSupervisorPojo supervisorPojo) {
         if (repository.findByEmailAndPassword(supervisorPojo.getEmail(), supervisorPojo.getPassword()) == null) {
-            return false;
+            throw new SupervisorMailAndPasswordDoesNotMatchException("This password does not match the email!");
         }
         return true;
     }

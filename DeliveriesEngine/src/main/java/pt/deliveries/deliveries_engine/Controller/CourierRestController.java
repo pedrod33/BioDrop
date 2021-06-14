@@ -1,4 +1,4 @@
-package pt.deliveries.deliveries_engine.controller;
+package pt.deliveries.deliveries_engine.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,12 +33,10 @@ public class CourierRestController {
 
     @RequestMapping("/login")
     public ResponseEntity<Courier> login(@RequestBody LoginCourierPojo loginCourierPojo) {
-        if(service.emailExists(loginCourierPojo)){
             Courier verificationCourier = service.verifyLogin(loginCourierPojo);
             if(verificationCourier!=null){
                 return new ResponseEntity<>(verificationCourier, HttpStatus.OK);
             }
-        }
         return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
     }
 }

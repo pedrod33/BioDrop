@@ -7,6 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.deliveries_engine.Exception.CourierEmailAndPasswordDoNotMatchException;
+import pt.deliveries.deliveries_engine.Exception.CourierEmailOrPhoneNumberInUseException;
+import pt.deliveries.deliveries_engine.Exception.SupervisorOrVehicleTypeAssociationException;
 import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
@@ -20,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,79 +68,94 @@ public class CourierServiceTest {
     @Test
     void whenExistingEmailPhoneNumberVID_SID_thenReturnFalse_canRegister(){
         RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingEmailPhoneNumberVID_thenReturnFalse_canRegister(){
         RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 2L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingEmailPhoneNumberSID_thenReturnFalse_canRegister(){
         RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L, 1L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingEmailSIDVID_thenReturnFalse_canRegister(){
         RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231234L, 1L, 1L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingPhoneNumberSIDVID_thenReturnFalse_canRegister(){
         RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 1L, 1L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingEmailPhoneNumber_thenReturnFalse_canRegister(){
         RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L, 2L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
     @Test
     void whenExistingEmailSID_thenReturnFalse_canRegister(){
         RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231234L, 1L, 1L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingEmailVID_thenReturnFalse_canRegister(){
         RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231234L, 1L, 2L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingPhoneNumberVID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231234L, 1L, 2L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 1L, 2L);
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingPhoneNumberSID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231234L, 1L, 1L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 2L, 1L);
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingSIDVID_thenReturnTrue_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 1L, 1L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231234L, 1L, 1L);
+        assertThrows(SupervisorOrVehicleTypeAssociationException.class, () -> courierService.canRegister(rcp));
+
     }
 
+    @Test
+    void whenExistingEmail_thenReturnFalse_canRegister(){
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231236L, 12L, 12L);
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
+
+    }
+
+    @Test
+    void whenExistingPhoneNumber_thenReturnFalse_canRegister(){
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 12L, 12L);
+        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
+
+    }
+
+    @Test
+    void whenExistingVID_thenReturnFalse_canRegister(){
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231234L, 1L, 12L);
+        assertThrows(SupervisorOrVehicleTypeAssociationException.class, () -> courierService.canRegister(rcp));
+    }
+
+    @Test
+    void whenExistingSID_thenReturnFalse_canRegister(){
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231239L, 12L, 1L);
+        assertThrows(SupervisorOrVehicleTypeAssociationException.class, () -> courierService.canRegister(rcp));
+    }
 
     //verifyLogin
     @Test
@@ -149,46 +167,17 @@ public class CourierServiceTest {
         assertThat(lcp1.getEmail()).isEqualTo(c1.getEmail());
         assertThat(lcp1.getPassword()).isEqualTo(c1.getPassword());
     }
-    @Test
-    void whenMailCorrespondsButNotPassword_ThenReturnNull_verifyLogin(){
-        LoginCourierPojo lcp = new LoginCourierPojo("marcoA@gmail.com","1234567");
-        Courier res_courier = courierService.verifyLogin(lcp);
-        assertThat(res_courier).isNull();
-    }
-
-    @Test
-    void whenExistingEmail_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231236L, 12L, 12L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
-    }
-
-    @Test
-    void whenExistingPhoneNumber_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 12L, 12L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
-    }
-
-    @Test
-    void whenExistingVID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231234L, 1L, 12L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
-    }
-
-    @Test
-    void whenExistingSID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231239L, 12L, 1L);
-        boolean doesCourierEmailOrPhoneMatch = courierService.canRegister(rcp);
-        assertThat(doesCourierEmailOrPhoneMatch).isFalse();
-    }
 
     @Test
     void whenPasswordCorrespondsButNotEmail_ThenReturnNull_verifyLogin(){
         LoginCourierPojo lcp = new LoginCourierPojo("marco@gmail.com","12345678");
-        Courier res_courier = courierService.verifyLogin(lcp);
-        assertThat(res_courier).isNull();
+        assertThrows(CourierEmailAndPasswordDoNotMatchException.class, () -> courierService.verifyLogin(lcp));
+
     }
 
+    @Test
+    void whenMailCorrespondsButNotPassword_ThenReturnNull_verifyLogin(){
+        LoginCourierPojo lcp = new LoginCourierPojo("marcoA@gmail.com","1234567");
+        assertThrows(CourierEmailAndPasswordDoNotMatchException.class, () -> courierService.verifyLogin(lcp));
+    }
 }

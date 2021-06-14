@@ -1,4 +1,4 @@
-package pt.deliveries.deliveries_engine.controller;
+package pt.deliveries.deliveries_engine.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

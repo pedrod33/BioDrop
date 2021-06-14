@@ -3,6 +3,9 @@ package pt.deliveries.deliveries_engine.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.deliveries.deliveries_engine.Exception.CourierEmailAndPasswordDoNotMatchException;
+import pt.deliveries.deliveries_engine.Exception.CourierEmailOrPhoneNumberInUseException;
+import pt.deliveries.deliveries_engine.Exception.SupervisorOrVehicleTypeAssociationException;
 import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.Pojo.LoginCourierPojo;
 import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
@@ -49,30 +52,29 @@ public class CourierServiceImpl implements CourierService{
     }
 
     public boolean canRegister(RegisterCourierPojo courierPojo){
-        if(this.checkIfEmailOrPhoneNumberAlreadyExistInDB(courierPojo) && this.checkIfFKsArePresent(courierPojo.getVehicle_id(), courierPojo.getSupervisor_id())){
-            logger.log(Level.INFO, "gets true");
-            return true;
-        }
-        logger.log(Level.INFO, "gets false");
+        this.checkIfEmailOrPhoneNumberAlreadyExistInDB(courierPojo);
+        this.checkIfFKsArePresent(courierPojo.getVehicle_id(), courierPojo.getSupervisor_id());
+        logger.log(Level.INFO, "gets true");
+        return true;
 
-        return false;
     }
 
     private boolean checkIfFKsArePresent(Long vehicle_id, Long supervisor_id){
-        logger.log(Level.INFO, String.valueOf(!vehicleRepository.findById(vehicle_id).isPresent() && !supervisorRepository.findById(supervisor_id).isPresent()));
-        return vehicleRepository.findById(vehicle_id).isPresent() && supervisorRepository.findById(supervisor_id).isPresent();
+        if(vehicleRepository.findById(vehicle_id).isPresent()
+        && supervisorRepository.findById(supervisor_id).isPresent()){
+            return true;
+        }
+        logger.log(Level.INFO, "cant register fks");
+        throw new SupervisorOrVehicleTypeAssociationException("Cannot associate courier with vehicle type or with supervisor!");
     }
 
     private boolean checkIfEmailOrPhoneNumberAlreadyExistInDB(RegisterCourierPojo courierPojo){
-        logger.log(Level.INFO, String.valueOf(courierRepository.findByEmail(courierPojo.getEmail())!=null && courierRepository.findByPhoneNumber(courierPojo.getPhoneNumber())!=null));
-        return (courierRepository.findByEmail(courierPojo.getEmail())!=null && courierRepository.findByPhoneNumber(courierPojo.getPhoneNumber())!=null);
-
-    }
-    public boolean emailExists(LoginCourierPojo loginCourierPojo){
-        if(courierRepository.findByEmail(loginCourierPojo.getEmail())!=null){
+        if(courierRepository.findByEmail(courierPojo.getEmail())==null
+        && courierRepository.findByPhoneNumber(courierPojo.getPhoneNumber())==null){
             return true;
         }
-        return false;
+        logger.log(Level.INFO, "should throw exception");
+        throw new CourierEmailOrPhoneNumberInUseException("Email or Phone Number Credentials are used in another account!");
     }
 
 
@@ -81,6 +83,6 @@ public class CourierServiceImpl implements CourierService{
         if(courierInDB!=null && courierInDB.getPassword().equals(loginCourierPojo.getPassword())){
             return courierInDB;
         }
-        return null;
+        throw new CourierEmailAndPasswordDoNotMatchException("Email and Password credentials do not match!");
     }
 }

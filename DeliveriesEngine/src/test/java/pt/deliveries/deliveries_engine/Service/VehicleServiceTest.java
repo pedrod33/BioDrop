@@ -7,10 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.deliveries_engine.Exception.SupervisorEmailIsUsedException;
+import pt.deliveries.deliveries_engine.Exception.VehicleTypeIsUsedException;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class VehicleServiceTest {
@@ -31,8 +34,7 @@ public class VehicleServiceTest {
 
     @Test
     void whenExistingType_thenReturnTrue_exists(){
-        boolean doesCourierTypeMatch = vehicleService.exists(v1);
-        assertThat(doesCourierTypeMatch).isTrue();
+        assertThrows(VehicleTypeIsUsedException.class, () -> vehicleService.exists(v1));
     }
     @Test
     void whenNonExistingType_thenReturnFalse_exists(){

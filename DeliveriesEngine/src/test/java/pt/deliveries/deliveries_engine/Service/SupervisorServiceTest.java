@@ -6,11 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.deliveries_engine.Exception.CourierEmailOrPhoneNumberInUseException;
+import pt.deliveries.deliveries_engine.Exception.SupervisorEmailIsUsedException;
 import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Pojo.RegisterSupervisorPojo;
 import pt.deliveries.deliveries_engine.Repository.SupervisorRepository;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +27,6 @@ public class SupervisorServiceTest {
 
     Supervisor s1;
     RegisterSupervisorPojo rsp1 = new RegisterSupervisorPojo("supervisor1@gmail.com","12345678","Manuel Torres");
-    RegisterSupervisorPojo rsp2 = new RegisterSupervisorPojo("supervisor@gmail.com","12345678","Manuel Torres");
     @BeforeEach
     public void setUp(){
         s1 = new Supervisor("supervisor@gmail.com", "12345678", "Carlos Silva");
@@ -46,13 +48,14 @@ public class SupervisorServiceTest {
 
     @Test
     public void givenPojoEmailAlreadyExists_returnTrue_existsRegister(){
-        boolean doesSupervisorExist = supervisorService.existsRegister(rsp2);
-        assertThat(doesSupervisorExist).isTrue();
+        RegisterSupervisorPojo rsp2 = new RegisterSupervisorPojo("supervisor@gmail.com","12345678","Manuel Torres");
+        assertThrows(SupervisorEmailIsUsedException.class, () -> supervisorService.existsRegister(rsp2));
+
     }
 
     @Test
     public void givenPojoEmailDoesNotExist_returnFalse_existsRegister(){
-        boolean doesSupervisorExist = supervisorService.existsRegister(rsp1);
-        assertThat(doesSupervisorExist).isFalse();
+        RegisterSupervisorPojo rsp2 = new RegisterSupervisorPojo("supervisor@gmail.com","12345678","Manuel Torres");
+        assertThrows(SupervisorEmailIsUsedException.class, () -> supervisorService.existsRegister(rsp2));
     }
 }

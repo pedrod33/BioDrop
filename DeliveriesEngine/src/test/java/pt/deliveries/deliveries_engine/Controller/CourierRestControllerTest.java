@@ -8,18 +8,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import pt.deliveries.deliveries_engine.Exception.CourierEmailAndPasswordDoNotMatchException;
+import pt.deliveries.deliveries_engine.Exception.CourierEmailOrPhoneNumberInUseException;
 import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
 import pt.deliveries.deliveries_engine.Pojo.LoginCourierPojo;
 import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
 import pt.deliveries.deliveries_engine.Service.CourierServiceImpl;
-import pt.deliveries.deliveries_engine.controller.CourierRestController;
 import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.utils.JsonUtil;
 
 import java.util.logging.Logger;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -63,44 +65,33 @@ class CourierRestControllerTest {
 
     @Test
     void registerExistingEmail() throws Exception{
-        when(service.canRegister(Mockito.any())).thenReturn(false);
+        doThrow(CourierEmailOrPhoneNumberInUseException.class).when(service).canRegister(Mockito.any());
         mvc.perform((post("/deliveries-api/courier/register")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(rcp1))))
                 .andExpect(status().isImUsed())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CourierEmailOrPhoneNumberInUseException));
         verify(service, times(1)).canRegister(Mockito.any());
     }
 
     //Login Tests
     @Test
     void LoginValidCredentialsSuccessful() throws Exception{
-        when(service.emailExists(Mockito.any())).thenReturn(true);
         when(service.verifyLogin(Mockito.any())).thenReturn(courier);
         mvc.perform((post("/deliveries-api/courier/login")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(lcp1))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Marco Alves")));
-        verify(service, times(1)).emailExists(Mockito.any());
+        verify(service, times(1)).verifyLogin(Mockito.any());
     }
 
     @Test
     void LoginPasswordDoesNotMatch() throws Exception{
-        when(service.emailExists(Mockito.any())).thenReturn(true);
-        when(service.verifyLogin(Mockito.any())).thenReturn(null);
+        doThrow(CourierEmailAndPasswordDoNotMatchException.class).when(service).verifyLogin(Mockito.any());
         mvc.perform((post("/deliveries-api/courier/login")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(lcp1))))
-                .andExpect(jsonPath("$").doesNotExist())
-                .andExpect(status().isUnauthorized());
-        verify(service, times(1)).emailExists(Mockito.any());
-    }
-    @Test
-    void LoginEmailDoesNotMatch() throws Exception{
-        when(service.emailExists(Mockito.any())).thenReturn(false);
-        when(service.verifyLogin(Mockito.any())).thenReturn(Mockito.any());
-        mvc.perform((post("/deliveries-api/courier/login")
-                .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(lcp1))))
-                .andExpect(jsonPath("$").doesNotExist())
-                .andExpect(status().isUnauthorized());
-        verify(service, times(1)).emailExists(Mockito.any());
+                .andExpect(status().isUnauthorized())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CourierEmailAndPasswordDoNotMatchException));
+
+        verify(service, times(1)).verifyLogin(Mockito.any());
     }
 }

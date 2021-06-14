@@ -1,4 +1,4 @@
-package pt.deliveries.deliveries_engine.controller;
+package pt.deliveries.deliveries_engine.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +22,7 @@ public class VehicleRestController {
 
     @RequestMapping("/create")
     public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle){
-        if(service.exists(vehicle)){
-            return new ResponseEntity<>(null, HttpStatus.IM_USED);
-        }
+        service.exists(vehicle);
         Vehicle created = service.create(vehicle);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
