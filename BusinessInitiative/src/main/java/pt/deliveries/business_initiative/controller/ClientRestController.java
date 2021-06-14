@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.deliveries.business_initiative.model.Client;
+import pt.deliveries.business_initiative.pojo.ClientLoginPOJO;
+import pt.deliveries.business_initiative.pojo.ClientRegistrationPOJO;
 import pt.deliveries.business_initiative.service.ClientServiceImpl;
 
 import java.util.List;
@@ -22,44 +24,26 @@ public class ClientRestController {
             = Logger.getLogger(
             ClientRestController.class.getName());
 
-    @GetMapping("/")
-    public String home() {
-        return "Hello Docker World !";
-    }
-
-
     @GetMapping("/allClients")
     public List<Client> findAllClients() {
         return service.findAll();
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<Client> register(@RequestBody Client client) {
-        Boolean b = service.verifyRegister(client);
+    public ResponseEntity<Client> register(@RequestBody ClientRegistrationPOJO client) {
+        service.verifyRegister(client);
 
-        if( Boolean.FALSE.equals(b) ) {
-            logger.log(Level.INFO, "Client already exists");
-            HttpStatus status = HttpStatus.IM_USED;
-            return new ResponseEntity<>(client, status);
-        } else {
-            HttpStatus status = HttpStatus.CREATED;
-            Client saved = service.save(client);
-            return new ResponseEntity<>(saved, status);
-        }
+        var saved = service.registerClient(client);
+        HttpStatus status = HttpStatus.CREATED;
+        return new ResponseEntity<>(saved, status);
     }
 
-    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Client> login(@RequestBody Client client) {
-        Client loggedClient = service.verifyLogin(client);
+    @PostMapping(value = "/login")
+    public ResponseEntity<Client> login(@RequestBody ClientLoginPOJO client) {
+        var loggedClient = service.verifyLogin(client);
 
-        if (loggedClient != null) {
-            logger.log(Level.INFO, "Client {0} logged in", client.getEmail());
-            HttpStatus status = HttpStatus.OK;
-            return new ResponseEntity<>(loggedClient, status);
-        } else {
-            logger.log(Level.INFO, "Client email or password is incorrect");
-            HttpStatus status = HttpStatus.FORBIDDEN;
-            return new ResponseEntity<>(loggedClient, status);
-        }
+        logger.log(Level.INFO, "Client {0} logged in", client.getEmail());
+        HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(loggedClient, status);
     }
 }

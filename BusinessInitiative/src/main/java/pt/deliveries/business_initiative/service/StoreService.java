@@ -2,6 +2,7 @@ package pt.deliveries.business_initiative.service;
 
 import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
+import pt.deliveries.business_initiative.pojo.StoreSavePOJO;
 
 import java.util.List;
 import java.util.Set;
@@ -22,5 +23,7 @@ public interface StoreService {
 
     Store findByLatAndLng(double lat, double lng);
 
-    Store saveStore(Store store);
+    Store save(Store store);
+
+    Store createStore(StoreSavePOJO storePOJO);
 }

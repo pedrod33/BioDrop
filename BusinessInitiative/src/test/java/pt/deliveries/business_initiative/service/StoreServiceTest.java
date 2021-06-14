@@ -6,14 +6,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.business_initiative.exception.StoreNotFoundException;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
+import pt.deliveries.business_initiative.pojo.StoreSavePOJO;
 import pt.deliveries.business_initiative.repository.StoreRepository;
 
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -68,8 +71,8 @@ public class StoreServiceTest {
         when(repository.findAll()).thenReturn(allStores);
         when(repository.findByName(store1.getName())).thenReturn(Collections.singletonList(store1));
         when(repository.findByName("wrong_name")).thenReturn(new ArrayList<>());
-        when(repository.findByAddress_Address(store1.getAddress().getAddress())).thenReturn(Collections.singletonList(store1));
-        when(repository.findByAddress_Address("wrong_name")).thenReturn(new ArrayList<>());
+        when(repository.findByAddress_CompleteAddress(store1.getAddress().getCompleteAddress())).thenReturn(Collections.singletonList(store1));
+        when(repository.findByAddress_CompleteAddress("wrong_name")).thenReturn(new ArrayList<>());
         when(repository.findByAddress_LatitudeAndAddress_Longitude(store1.getAddress().getLatitude(), store1.getAddress().getLongitude())).thenReturn(store1);
         when(repository.findByAddress_LatitudeAndAddress_Longitude(0, 0)).thenReturn(null);
         when(repository.findById(store1.getId())).thenReturn(Optional.of(store1));
@@ -147,13 +150,12 @@ public class StoreServiceTest {
         verifyFindByCityIsCalledOnce(city);
     }
 
-
     @Test
     public void whenValidAddress_thenStoreShouldBeFound() {
         String address = "address1";
         List<Store> found = service.findByAddress(address);
 
-        assertThat(found.get(0).getAddress().getAddress()).isEqualTo(address);
+        assertThat(found.get(0).getAddress().getCompleteAddress()).isEqualTo(address);
         verifyFindByAddressIsCalledOnce(address);
     }
 
@@ -220,13 +222,11 @@ public class StoreServiceTest {
 
     @Test
     public void whenFindAllProductsInStore_withInvalidId_thenReturnAllProductsInStore() {
+        when(repository.findById(0L)).thenThrow(StoreNotFoundException.class);
 
-        when(repository.findById(0L)).thenReturn(Optional.empty());
-
-        Store notFound = repository.findById(0L).orElse(null);
+        assertThrows(StoreNotFoundException.class, () -> service.findAllProductsInStore(0L));
 
         verifyFindByIdIsCalledOnce(0L);
-        assertThat(notFound).isNull();
     }
 
     @Test
@@ -240,7 +240,30 @@ public class StoreServiceTest {
 
 
         when(repository.save(store1)).thenReturn(store1);
-        Store saved = service.saveStore(store1);
+        Store saved = service.save(store1);
+
+
+        assertThat(saved.getId()).isEqualTo(store1.getId());
+        assertThat(saved.getName()).isEqualTo(store1.getName());
+        assertThat(saved.getAddress()).isEqualTo(store1.getAddress());
+
+        verifySaveIsCalledOnce(store1);
+    }
+
+    @Test
+    public void whenCreatingValidStore_thenStoreShouldBeSaved() {
+        Address address1 = new Address("city1", "address1", 10, 11);
+        address1.setId(1L);
+
+        Store store1 = new Store("store1", null, null);
+        store1.setAddress(address1);
+
+        StoreSavePOJO storePOJO = new StoreSavePOJO("store1", null, null);
+        storePOJO.setAddress(address1);
+
+
+        when(repository.save(store1)).thenReturn(store1);
+        Store saved = service.createStore(storePOJO);
 
 
         assertThat(saved.getId()).isEqualTo(store1.getId());
@@ -264,7 +287,7 @@ public class StoreServiceTest {
     }
 
     private void verifyFindByAddressIsCalledOnce(String address) {
-        verify(repository, times(1)).findByAddress_Address(address);
+        verify(repository, times(1)).findByAddress_CompleteAddress(address);
     }
 
     private void verifyFindByLatAndLngIsCalledOnce(double lat, double lng) {

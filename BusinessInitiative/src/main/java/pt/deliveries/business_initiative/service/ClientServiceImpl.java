@@ -3,7 +3,12 @@ package pt.deliveries.business_initiative.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.deliveries.business_initiative.exception.ClientEmailOrPasswordIncorrectException;
+import pt.deliveries.business_initiative.exception.ClientEmailOrPhoneNumberInUseException;
+import pt.deliveries.business_initiative.exception.ClientNotFoundException;
 import pt.deliveries.business_initiative.model.Client;
+import pt.deliveries.business_initiative.pojo.ClientLoginPOJO;
+import pt.deliveries.business_initiative.pojo.ClientRegistrationPOJO;
 import pt.deliveries.business_initiative.repository.ClientRepository;
 
 import java.util.List;
@@ -28,10 +33,26 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Boolean verifyRegister(Client client) {
+    public void verifyRegister(ClientRegistrationPOJO clientPOJO) {
         logger.log(Level.INFO, "Checking if clients email and phone number exists ...");
+        if( clientRepository.findByEmail(clientPOJO.getEmail()) != null || clientRepository.findByPhoneNumber(clientPOJO.getPhoneNumber()) != null )
+            throw new ClientEmailOrPhoneNumberInUseException("Email ou phone number already in use.");
+    }
 
-        return clientRepository.findByEmail(client.getEmail()) == null && clientRepository.findByPhoneNumber(client.getPhoneNumber()) == null;
+    @Override
+    public Client registerClient(ClientRegistrationPOJO clientPOJO) {
+        var client = new Client();
+        client.setName(clientPOJO.getName());
+        client.setEmail(clientPOJO.getEmail());
+        client.setPassword(clientPOJO.getPassword());
+        client.setGender(clientPOJO.getGender());
+        client.setPhoneNumber(clientPOJO.getPhoneNumber());
+
+        System.out.println(clientPOJO.toString());
+        System.out.println(client.toString());
+
+        logger.log(Level.INFO, "Saving new client ...");
+        return clientRepository.save(client);
     }
 
     @Override
@@ -41,17 +62,26 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client verifyLogin(Client client) {
+    public Client verifyLogin(ClientLoginPOJO clientPOJO) {
+        var client = new Client();
+        client.setEmail(clientPOJO.getEmail());
+        client.setPassword(clientPOJO.getPassword());
+
         logger.log(Level.INFO, "Verifying client credentials ...");
+        var loggedClient = clientRepository.findByEmail(client.getEmail());
+        if (loggedClient != null && loggedClient.getPassword().equals(client.getPassword()))
+            return loggedClient;
 
-        Client loggedClient = clientRepository.findByEmail(client.getEmail());
+        throw new ClientEmailOrPasswordIncorrectException("Email or Password Incorrect");
+    }
 
-        if (loggedClient != null)
-            if ( loggedClient.getPassword().equals(client.getPassword()))
-                return loggedClient;
-            else
-                return null;
-        else
-            return null;
+    @Override
+    public Client findById(Long clientId) {
+        logger.log(Level.INFO, "Finding client by id ...");
+
+        return clientRepository.findById(clientId).orElseThrow(() -> new ClientNotFoundException("Client id not found"));
     }
 }
+
+
+

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
+import pt.deliveries.business_initiative.pojo.StoreSavePOJO;
 import pt.deliveries.business_initiative.service.StoreServiceImpl;
 
 import java.util.List;
@@ -51,9 +52,9 @@ public class StoreRestController {
 
 
     @PostMapping("/save")
-    public ResponseEntity<Store> saveStore(@RequestBody Store store) {
+    public ResponseEntity<Store> saveStore(@RequestBody StoreSavePOJO store) {
         HttpStatus status = HttpStatus.CREATED;
-        Store saved = service.saveStore(store);
+        var saved = service.createStore(store);
         return new ResponseEntity<>(saved, status);
     }
 

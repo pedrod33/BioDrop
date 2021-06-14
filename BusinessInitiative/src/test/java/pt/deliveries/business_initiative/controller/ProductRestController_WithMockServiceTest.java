@@ -13,15 +13,16 @@ import pt.deliveries.business_initiative.model.Product;
 import pt.deliveries.business_initiative.model.Store;
 import pt.deliveries.business_initiative.service.ProductServiceImpl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
-import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.hamcrest.CoreMatchers.is;
 
 
 @WebMvcTest(ProductRestController.class)
@@ -94,7 +95,7 @@ class ProductRestController_WithMockServiceTest {
                 .andExpect(jsonPath("name", is("store1")))
                 .andExpect(jsonPath("address.id", is(1)))
                 .andExpect(jsonPath("address.city", is("city")))
-                .andExpect(jsonPath("address.address", is("address")))
+                .andExpect(jsonPath("address.completeAddress", is("address")))
                 .andExpect(jsonPath("address.latitude", is(10.0)))
                 .andExpect(jsonPath("address.longitude", is(11.0)))
                 .andExpect(jsonPath("$.products[0].id", is(1)))
