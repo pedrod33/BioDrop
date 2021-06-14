@@ -13,7 +13,7 @@ import pt.deliveries.deliveries_engine.Model.Vehicle;
 import pt.deliveries.deliveries_engine.Pojo.LoginCourierPojo;
 import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
 import pt.deliveries.deliveries_engine.Service.CourierServiceImpl;
-import pt.deliveries.deliveries_engine.controller.CourierController;
+import pt.deliveries.deliveries_engine.controller.CourierRestController;
 import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.utils.JsonUtil;
 
@@ -25,10 +25,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CourierController.class)
-class CourierControllerTest {
+@WebMvcTest(CourierRestController.class)
+class CourierRestControllerTest {
 
-    private Logger logger = Logger.getLogger(CourierController.class.getName());
+    private Logger logger = Logger.getLogger(CourierRestController.class.getName());
 
     @Autowired
     MockMvc mvc;
@@ -52,7 +52,7 @@ class CourierControllerTest {
     //Register Tests
     @Test
     void registerCredentialsSuccessful() throws Exception {
-        when(service.exists(rcp1)).thenReturn(false);
+        when(service.canRegister(Mockito.any())).thenReturn(true);
         when(service.save(Mockito.any())).thenReturn(courier);
         mvc.perform((post("/deliveries-api/courier/register")
             .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(rcp1))))
@@ -63,12 +63,12 @@ class CourierControllerTest {
 
     @Test
     void registerExistingEmail() throws Exception{
-        when(service.exists(Mockito.any())).thenReturn(true);
+        when(service.canRegister(Mockito.any())).thenReturn(false);
         mvc.perform((post("/deliveries-api/courier/register")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(rcp1))))
                 .andExpect(status().isImUsed())
                 .andExpect(jsonPath("$").doesNotExist());
-        verify(service, times(1)).exists(Mockito.any());
+        verify(service, times(1)).canRegister(Mockito.any());
     }
 
     //Login Tests

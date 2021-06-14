@@ -13,21 +13,19 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/deliveries-api/vehicle")
-public class VehicleController {
+public class VehicleRestController {
 
     @Autowired
     private VehicleServiceImpl service;
 
-    private Logger logger = Logger.getLogger(CourierController.class.getName());
+    private Logger logger = Logger.getLogger(CourierRestController.class.getName());
 
     @RequestMapping("/create")
     public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle){
         if(service.exists(vehicle)){
-            System.out.println("entra aqui null");
             return new ResponseEntity<>(null, HttpStatus.IM_USED);
         }
         Vehicle created = service.create(vehicle);
-        System.out.println("entra aqui creates");
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 }

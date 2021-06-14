@@ -11,26 +11,24 @@ import pt.deliveries.deliveries_engine.Pojo.LoginCourierPojo;
 import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
 import pt.deliveries.deliveries_engine.Service.CourierServiceImpl;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/deliveries-api/courier")
-public class CourierController {
+public class CourierRestController {
 
-    Logger logger = Logger.getLogger(CourierController.class.getName());
+    Logger logger = Logger.getLogger(CourierRestController.class.getName());
 
     @Autowired
     private CourierServiceImpl service;
 
     @RequestMapping("/register")
     public ResponseEntity<Courier> register(@RequestBody RegisterCourierPojo courierPojo) {
-    logger.log(Level.INFO, courierPojo.getEmail());
-    if(service.exists(courierPojo)){
-        return new ResponseEntity<>(null, HttpStatus.IM_USED);
-    }
+    if(service.canRegister(courierPojo)){
         Courier savedCourier = service.save(courierPojo);
         return new ResponseEntity<>(savedCourier, HttpStatus.CREATED);
+    }
+        return new ResponseEntity<>(null, HttpStatus.IM_USED);
     }
 
     @RequestMapping("/login")

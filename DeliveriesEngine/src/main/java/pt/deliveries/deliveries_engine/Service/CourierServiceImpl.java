@@ -43,9 +43,13 @@ public class CourierServiceImpl implements CourierService{
         return courierRepository.save(courier);
     }
 
-    public boolean exists(RegisterCourierPojo courierPojo){
-        logger.log(Level.INFO, courierPojo.getEmail()+"+"+courierPojo.getPassword()+courierPojo.getVehicle_id());
-        if(this.checkIfEmailOrPasswordAlreadyExistInDB(courierPojo) && vehicleRepository.findById(courierPojo.getVehicle_id())!=null){
+    @Override
+    public boolean exists(RegisterCourierPojo courier) {
+        return false;
+    }
+
+    public boolean canRegister(RegisterCourierPojo courierPojo){
+        if(this.checkIfEmailOrPhoneNumberAlreadyExistInDB(courierPojo) && this.checkIfFKsArePresent(courierPojo.getVehicle_id(), courierPojo.getSupervisor_id())){
             logger.log(Level.INFO, "gets true");
             return true;
         }
@@ -54,9 +58,14 @@ public class CourierServiceImpl implements CourierService{
         return false;
     }
 
-    public boolean checkIfEmailOrPasswordAlreadyExistInDB(RegisterCourierPojo courierPojo){
-        logger.log(Level.INFO, courierPojo.getEmail()+"+"+courierPojo.getPassword());
-        return (courierRepository.findByEmail(courierPojo.getEmail())!=null || courierRepository.findByPhoneNumber(courierPojo.getPhoneNumber())!=null);
+    private boolean checkIfFKsArePresent(Long vehicle_id, Long supervisor_id){
+        logger.log(Level.INFO, String.valueOf(!vehicleRepository.findById(vehicle_id).isPresent() && !supervisorRepository.findById(supervisor_id).isPresent()));
+        return vehicleRepository.findById(vehicle_id).isPresent() && supervisorRepository.findById(supervisor_id).isPresent();
+    }
+
+    private boolean checkIfEmailOrPhoneNumberAlreadyExistInDB(RegisterCourierPojo courierPojo){
+        logger.log(Level.INFO, String.valueOf(courierRepository.findByEmail(courierPojo.getEmail())!=null && courierRepository.findByPhoneNumber(courierPojo.getPhoneNumber())!=null));
+        return (courierRepository.findByEmail(courierPojo.getEmail())!=null && courierRepository.findByPhoneNumber(courierPojo.getPhoneNumber())!=null);
 
     }
     public boolean emailExists(LoginCourierPojo loginCourierPojo){

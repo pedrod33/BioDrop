@@ -16,9 +16,9 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/deliveries-api/supervisor")
-public class SupervisorController {
+public class SupervisorRestController {
 
-    Logger logger = Logger.getLogger(SupervisorController.class.getName());
+    Logger logger = Logger.getLogger(SupervisorRestController.class.getName());
 
     @Autowired
     private SupervisorServiceImpl service;
