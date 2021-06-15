@@ -7,27 +7,24 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  services:
-    # Label used to access the service container
-    mysql:
-      # Docker Hub image
-      image: mysql:5.6
-      env:
-        MYSQL_ROOT_PASSWORD=password
-        MYSQL_DATABASE=business-mysql
-        MYSQL_USER=tqs
-        MYSQL_PASSWORD=password
-       ports:
-        - 3306
-      options: >-
-        --health-cmd="mysqladmin ping"
-        --health-interval=10s
-        --health-timeout=5s
-        --health-retries=3
-        
   build:
-    name: Build
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.6
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: business-mysql
+          MYSQL_USER: tqs
+          MYSQL_PASSWORD: password
+        ports: 
+          - 3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - uses: actions/checkout@v2
         with:
@@ -54,7 +51,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: cd BusinessInitiative && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-        
-        env:
           DB_PORT: 3306 
+        run: cd BusinessInitiative && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar  
+
+
