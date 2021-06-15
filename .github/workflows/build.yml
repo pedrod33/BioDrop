@@ -48,13 +48,13 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: entry BusinessInicative
-        run: cd BusinessInicative
+      - name: entry BusinessInitiative
+        run: cd BusinessInitiative
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        run: cd BusinessInitiative && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
         
         env:
           DB_PORT: 3306 
