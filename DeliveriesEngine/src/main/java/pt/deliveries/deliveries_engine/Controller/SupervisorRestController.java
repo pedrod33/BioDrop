@@ -25,17 +25,8 @@ public class SupervisorRestController {
 
     @RequestMapping("/register")
     public ResponseEntity<Supervisor> createSupervisor(@RequestBody RegisterSupervisorPojo supervisorPojo){
-        if(service.existsRegister(supervisorPojo)){
-            logger.log(Level.INFO,"true");
-            return new ResponseEntity<>(null, HttpStatus.IM_USED);
-        }
+        service.existsRegister(supervisorPojo);
         Supervisor created = service.create(supervisorPojo);
-        if(created==null){
-            logger.log(Level.INFO,"false but is null");
-            return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
-        }
-        logger.log(Level.INFO,"false");
-        logger.log(Level.INFO,created.toString());
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 }
