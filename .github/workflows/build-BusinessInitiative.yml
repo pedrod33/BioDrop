@@ -1,10 +1,14 @@
-name: Build
+name: Build-BusinessInitiative
 on:
   push:
     branches:
       - '**'
+    paths:
+      - BusinessInitiative/**
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - BusinessInitiative/**
 
 jobs:
   build:
