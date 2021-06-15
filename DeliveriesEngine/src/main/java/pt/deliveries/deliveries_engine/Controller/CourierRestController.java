@@ -24,19 +24,15 @@ public class CourierRestController {
 
     @RequestMapping("/register")
     public ResponseEntity<Courier> register(@RequestBody RegisterCourierPojo courierPojo) {
-    if(service.canRegister(courierPojo)){
+        service.canRegister(courierPojo);
         Courier savedCourier = service.save(courierPojo);
         return new ResponseEntity<>(savedCourier, HttpStatus.CREATED);
-    }
-        return new ResponseEntity<>(null, HttpStatus.IM_USED);
     }
 
     @RequestMapping("/login")
     public ResponseEntity<Courier> login(@RequestBody LoginCourierPojo loginCourierPojo) {
             Courier verificationCourier = service.verifyLogin(loginCourierPojo);
-            if(verificationCourier!=null){
-                return new ResponseEntity<>(verificationCourier, HttpStatus.OK);
-            }
-        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(verificationCourier, HttpStatus.OK);
+
     }
 }
