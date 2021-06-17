@@ -1,6 +1,7 @@
 package pt.deliveries.deliveries_engine.Model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "courier")
@@ -33,6 +34,8 @@ public class Courier {
     @Column(unique = true, nullable = false)
     private Long phoneNumber;
 
+    @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY)
+    private Set<Delivery> deliveries;
 
     public Courier( String name, String email, String password, String gender, Long phoneNumber, Supervisor supervisor, Vehicle vehicle) {
         this.supervisor = supervisor;
