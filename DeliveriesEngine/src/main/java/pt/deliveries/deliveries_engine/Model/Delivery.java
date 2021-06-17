@@ -9,6 +9,7 @@ public class Delivery {
     private final int ACCEPTED = 0;
     private final int PICKED_UP = 1;
     private final int DELIVERED = 2;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
