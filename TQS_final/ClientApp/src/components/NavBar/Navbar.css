@@ -1,6 +1,6 @@
 ﻿.navbar {
     background: #33845B;
-    height: 80px;
+    height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,8 +14,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80px;
-    max-width: 1500px;
+    height: 100px;
+    max-width: 1300px;
 }
 
 .navbar-logo {
@@ -40,7 +40,7 @@
     grid-gap: 10px;
     list-style: none;
     text-align: center;
-    width: 60vw;
+    width: 80vw;
     justify-content: end;
     margin-right: 2rem;
 }

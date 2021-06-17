@@ -45,15 +45,6 @@ function Navbar() {
                                 Home
                             </Link>
                         </li>
-                        <li className='nav-item'>
-                            <Link to='/CardsAbout'
-                                className='nav-links'
-                                onClick={closeMobileMenu}
-                            >
-                                About Us
-                            </Link>
-                        </li>
-
 
                         <li className='nav-item'>
                             <Link to='/Admin'
@@ -68,7 +59,15 @@ function Navbar() {
                                 className='nav-links'
                                 onClick={closeMobileMenu}
                             >
-                              Stores
+                              Products
+                            </Link>
+                        </li>
+                        <li className='nav-item'>
+                            <Link to='/Shopping'
+                                className='nav-links'
+                                onClick={closeMobileMenu}
+                            >
+                                Shop
                             </Link>
                         </li>
                     </ul>
