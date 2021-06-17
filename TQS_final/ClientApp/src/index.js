@@ -11,6 +11,9 @@ import './index.css';
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
+window.lat = 40.75;
+window.lng = -8.40;
+
 ReactDOM.render(
   <BrowserRouter basename={baseUrl}>
     <App />

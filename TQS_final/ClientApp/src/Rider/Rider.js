@@ -70,18 +70,22 @@ const styles = theme => ({
 });
 
 class Rider extends Component {
+
+
     static displayName = Rider.name;
     constructor(props) {
         super(props);
         this.state = {
-            lat: 40.631375, 
-            lng: -8.659969,
-            zoom: 17
+            lat: this.getCoords()[0], 
+            lng: this.getCoords()[1],
+            zoom: 11
         };
         this.mapContainer = React.createRef();
     }
+
     componentDidMount() {
-        const { lng, lat, zoom } = this.state;
+        const { lat, lng, zoom } = this.state;
+
         const map = new mapboxgl.Map({
             container: this.mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -95,9 +99,33 @@ class Rider extends Component {
                 lat: map.getCenter().lat.toFixed(4),
                 zoom: map.getZoom().toFixed(2)
             });
-        });
+        });        
     }
+
+    getCoords() {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(function (position) {
+                window.lat = position.coords.latitude;
+                window.lng = position.coords.longitude;
+                
+            });
+            return [window.lat, window.lng];
+        }
+    }
+
     render() {
+
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(function (position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                window.lat = lat;
+                window.lng = lng;
+                console.log(window.lat);
+                console.log(window.lng);
+            });
+        }
+
         const { lng, lat, zoom } = this.state;
         const { classes } = this.props;
         return (
