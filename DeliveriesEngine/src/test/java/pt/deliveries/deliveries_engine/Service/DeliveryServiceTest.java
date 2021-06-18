@@ -59,6 +59,7 @@ public class DeliveryServiceTest {
         c1.setId(1L);
         delivery = new Delivery(c1, 1L);
         //vehicle exists
+        when(vehicleRepository.findById(1L)).thenReturn(v1);
 
         //courier exists
         when(courierRepository.findById(Mockito.anyLong())).thenReturn(null);
@@ -78,8 +79,6 @@ public class DeliveryServiceTest {
     //canCreate() vehicle
     @Test
     public void whenCredentialsValid_thenReturnTrue_canCreate(){
-        when(vehicleRepository.findById(1L)).thenReturn(v1);
-
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L, 1L);
         boolean res_delivery = deliveryService.canCreate(cdp);
         assertThat(res_delivery).isTrue();

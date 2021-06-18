@@ -13,6 +13,7 @@ import pt.deliveries.deliveries_engine.Repository.CourierRepository;
 import pt.deliveries.deliveries_engine.Repository.DeliveryRepository;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,24 +37,22 @@ public class DeliveryServiceImpl {
 
     public boolean canCreate(CreateDeliveryPojo createPojo) {
 
-        logger.log(Level.INFO, String.valueOf(vehicleRepository.findById(2L)));
-        logger.log(Level.INFO, String.valueOf(createPojo.getVehicle_id()));
-        if(createPojo.getVehicle_id()!=null && vehicleRepository.findById(createPojo.getVehicle_id()).orElse(null)==null){
+        if(createPojo.getVehicle_id()!=null && vehicleRepository.findById(createPojo.getVehicle_id().longValue())==null){
             logger.log(Level.INFO, "this vehicle type does not exist");
             throw new VehicleTypeDoesNotExistException("This vehicle type does not exist!");
         }
 
         if(deliveryRepository.findByOrder_id(createPojo.getOrder_id())!=null){
             logger.log(Level.INFO, "This order id was already used on another delivery!");
-            //throw new OrderIdAlreadyUsedException("This order id was already used on another delivery!");
+            throw new OrderIdAlreadyUsedException("This order id was already used on another delivery!");
         }
         if(!deliveryRepository.existsOrderFromDeliveryById(createPojo.getOrder_id())){
             logger.log(Level.INFO, "There is no order with these values!");
-            //throw new OrderIdDoesNotExistException("There is no order with these values!");
+            throw new OrderIdDoesNotExistException("There is no order with these values!");
         }
-        if(courierRepository.findById(createPojo.getCourier_id())==null){
+        if(courierRepository.findById(createPojo.getCourier_id().longValue())==null){
             logger.log(Level.INFO, "The courier with this ID does not exist");
-            //throw new CourierIdDoesNotExistException("The courier with this ID does not exist");
+            throw new CourierIdDoesNotExistException("The courier with this ID does not exist");
         }
         return true;
     }
