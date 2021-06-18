@@ -6,5 +6,8 @@ import pt.deliveries.deliveries_engine.Model.Delivery;
 
 @Repository
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
-    public Delivery findByOrder_id(Long id);
+    Delivery findById(long id);
+    Delivery findByOrder_id(Long id);
+    Delivery findByVehicle_Id(Long id);
+    boolean existsOrderFromDeliveryById(Long id);
 }

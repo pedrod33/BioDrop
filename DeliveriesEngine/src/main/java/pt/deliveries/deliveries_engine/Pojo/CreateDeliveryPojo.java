@@ -18,6 +18,7 @@ public class CreateDeliveryPojo implements Serializable {
     public CreateDeliveryPojo(Long courier_id, Long order_id){
         this.order_id = order_id;
         this.courier_id = courier_id;
+        this.vehicle_id = null;
     }
 
     public CreateDeliveryPojo(){}
