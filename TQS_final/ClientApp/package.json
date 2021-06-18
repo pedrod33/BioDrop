@@ -4,9 +4,13 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.4",
+<<<<<<< HEAD
     "@material-ui/icons": "^4.11.2",
+=======
+>>>>>>> develop
     "bootstrap": "^4.6.0",
     "jquery": "^3.4.1",
+    "mapbox-gl": "^2.3.0",
     "merge": "^1.2.1",
     "oidc-client": "^1.9.0",
     "react": "^16.0.0",
