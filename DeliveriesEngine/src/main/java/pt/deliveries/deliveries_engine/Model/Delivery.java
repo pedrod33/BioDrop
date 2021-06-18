@@ -29,10 +29,9 @@ public class Delivery {
     @JoinColumn(name = "courier_id", referencedColumnName = "id", nullable = false)
     private Courier courier;
 
-    public Delivery(Long id, String status, Courier courier, Vehicle vehicle, Long order_id) {
+    public Delivery(Courier courier, Long order_id) {
         this.status = this.ACCEPTED;
         this.courier = courier;
-        this.vehicle = vehicle;
         this.order_id = order_id;
     }
 

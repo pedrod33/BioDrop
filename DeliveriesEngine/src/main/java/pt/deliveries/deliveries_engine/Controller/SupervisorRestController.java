@@ -3,6 +3,7 @@ package pt.deliveries.deliveries_engine.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,7 @@ public class SupervisorRestController {
     @Autowired
     private SupervisorServiceImpl service;
 
-    @RequestMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity<Supervisor> createSupervisor(@RequestBody RegisterSupervisorPojo supervisorPojo){
         service.existsRegister(supervisorPojo);
         Supervisor created = service.create(supervisorPojo);
