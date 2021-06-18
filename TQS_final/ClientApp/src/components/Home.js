@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
 
+
 const styles = theme => ({
     root: {
         minWidth: 275,
@@ -38,8 +39,9 @@ class Home extends Component {
     render() {
         const { classes } = this.props;
         return (
-          <div>
-                <h1>Welcome to <span style={{ color: "#536732" }}>biodrop</span></h1>
+            <div>
+       
+                <h1>Welcome to <span style={{ color: "#536732" }}>BioDrop</span></h1>
                 <h4>Get your groceries deliver to you fresh!</h4>
                 <hr />
                 <Row style={{ backgroundColor: "#ABA243" }}>   
