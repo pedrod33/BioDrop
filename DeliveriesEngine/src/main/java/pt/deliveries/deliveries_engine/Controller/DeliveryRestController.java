@@ -20,9 +20,9 @@ public class DeliveryRestController {
 
     @PostMapping("/create")
     public ResponseEntity<Delivery> createDelivery(@RequestBody CreateDeliveryPojo createPojo){
-        //deliveryService.canCreate(createPojo);
-        //Delivery delivery = deliveryService.create(createPojo);
-        //return new ResponseEntity<>(HttpStatus.CREATED, delivery);
+        deliveryService.canCreate(createPojo);
+        Delivery delivery = deliveryService.create(createPojo);
+        return new ResponseEntity<>(delivery, HttpStatus.CREATED);
     }
 
 

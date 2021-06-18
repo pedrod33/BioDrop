@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 public class CourierServiceImpl implements CourierService{
 
     Logger logger = Logger.getLogger(CourierServiceImpl.class.getName());
+
     @Autowired
     private CourierRepository courierRepository;
 
