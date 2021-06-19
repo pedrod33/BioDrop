@@ -76,51 +76,52 @@ public class DeliveryServiceTest {
 
     }
 
-    //canCreate() vehicle
-    @Test
-    public void whenCredentialsValid_thenReturnTrue_canCreate(){
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L, 1L);
-        boolean res_delivery = deliveryService.canCreate(cdp);
-        assertThat(res_delivery).isTrue();
-    }
-
     @Test
     public void whenVehicleInValid_thenReturnFalse_canCreate(){
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L, 2L);
-        assertThrows(VehicleTypeDoesNotExistException.class, () -> deliveryService.canCreate(cdp));
+        assertThrows(VehicleTypeDoesNotExistException.class, () -> deliveryService.create(cdp));
     }
 
     @Test
     public void whenOrderInValid_thenReturnFalse_canCreate(){
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L, 1L);
-        assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.canCreate(cdp));
+        assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.create(cdp));
 
     }
 
     @Test
     public void whenCourierInValid_thenReturnFalse_canCreate(){
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 2L, 1L);
-        assertThrows(CourierIdDoesNotExistException.class, () -> deliveryService.canCreate(cdp));
+        assertThrows(CourierIdDoesNotExistException.class, () -> deliveryService.create(cdp));
 
-    }
-
-    //canCreate() no vehicle
-    @Test
-    public void whenCredentialsValidNoVehicle_thenReturnTrue_canCreate(){
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L);
-        boolean res_delivery = deliveryService.canCreate(cdp);
-        assertThat(res_delivery).isTrue();
     }
 
     @Test
     public void whenCourierInValidNoVehicle_thenReturnException_canCreate(){
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 2L);
-        assertThrows(CourierIdDoesNotExistException.class, () -> deliveryService.canCreate(cdp));
+        assertThrows(CourierIdDoesNotExistException.class, () -> deliveryService.create(cdp));
     }
 
     @Test
     public void whenOrderInValidNoVehicle_thenReturnException_canCreate(){
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L);
-        assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.canCreate(cdp));
+        assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.create(cdp));
     }
+
+    //create
+    @Test
+    public void whenOrderValidNoVehicle_thenReturnWithCourierVehicle_create(){
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L);
+        Delivery delivery = deliveryService.create(cdp);
+        assertThat(delivery.getOrder_id()).isEqualTo(2L);
+        assertThat(delivery.getVehicle().getId()).isEqualTo(c1.getVehicle().getId());
+    }
+
+    @Test
+    public void whenOrderValidWithVehicle_thenReturnVehicle(){
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L, 1L);
+        Delivery delivery = deliveryService.create(cdp);
+        assertThat(delivery.getOrder_id()).isEqualTo(2L);
+        assertThat(delivery.getVehicle().getId()).isEqualTo(cdp.getVehicle_id());
+}
 }

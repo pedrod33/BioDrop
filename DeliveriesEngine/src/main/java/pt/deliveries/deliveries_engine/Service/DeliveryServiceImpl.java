@@ -7,6 +7,7 @@ import pt.deliveries.deliveries_engine.Exception.CourierIdDoesNotExistException;
 import pt.deliveries.deliveries_engine.Exception.OrderIdAlreadyUsedException;
 import pt.deliveries.deliveries_engine.Exception.OrderIdDoesNotExistException;
 import pt.deliveries.deliveries_engine.Exception.VehicleTypeDoesNotExistException;
+import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.Model.Delivery;
 import pt.deliveries.deliveries_engine.Pojo.CreateDeliveryPojo;
 import pt.deliveries.deliveries_engine.Repository.CourierRepository;
@@ -32,26 +33,30 @@ public class DeliveryServiceImpl {
     private CourierRepository courierRepository;
 
     public Delivery create(CreateDeliveryPojo deliveryPojo) {
-        return null;
+        Delivery delivery = new Delivery();
+        this.canCreate(deliveryPojo);
+        Courier courier = courierRepository.findById(deliveryPojo.getCourier_id().longValue());
+        delivery.setCourier(courier);
+        if(deliveryPojo.getVehicle_id()==null){ delivery.setVehicle(courier.getVehicle()); }
+        else{ delivery.setVehicle(vehicleRepository.findById(deliveryPojo.getVehicle_id().longValue())); }
+        delivery.setOrder_id(deliveryPojo.getOrder_id());
+        return delivery;
     }
 
     public boolean canCreate(CreateDeliveryPojo createPojo) {
 
-        if(createPojo.getVehicle_id()!=null && vehicleRepository.findById(createPojo.getVehicle_id().longValue())==null){
-            logger.log(Level.INFO, "this vehicle type does not exist");
+        if(createPojo.getVehicle_id()!=null
+            && vehicleRepository.findById(createPojo.getVehicle_id().longValue())==null){
             throw new VehicleTypeDoesNotExistException("This vehicle type does not exist!");
         }
 
         if(deliveryRepository.findByOrder_id(createPojo.getOrder_id())!=null){
-            logger.log(Level.INFO, "This order id was already used on another delivery!");
             throw new OrderIdAlreadyUsedException("This order id was already used on another delivery!");
         }
         if(!deliveryRepository.existsOrderFromDeliveryById(createPojo.getOrder_id())){
-            logger.log(Level.INFO, "There is no order with these values!");
             throw new OrderIdDoesNotExistException("There is no order with these values!");
         }
         if(courierRepository.findById(createPojo.getCourier_id().longValue())==null){
-            logger.log(Level.INFO, "The courier with this ID does not exist");
             throw new CourierIdDoesNotExistException("The courier with this ID does not exist");
         }
         return true;
