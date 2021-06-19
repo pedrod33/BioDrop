@@ -3,7 +3,7 @@
 name: Deploy
 on:
   push:
-    branches: [ main ]
+    branches: [ main, cd-test-deploy ]
   pull_request:
     branches: [ main ]
 
