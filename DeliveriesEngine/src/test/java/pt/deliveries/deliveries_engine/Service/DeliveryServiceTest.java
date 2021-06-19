@@ -180,7 +180,9 @@ public class DeliveryServiceTest {
 
     @Test
     public void whenFindById_ReturnDelivery(){
+        when(deliveryRepository.findById(1L)).thenReturn(delivery);
         Delivery delivery_result = deliveryService.findDeliveryById(1L);
         assertThat(delivery_result.getOrder_id()).isEqualTo(delivery.getOrder_id());
+        assertThat(delivery_result.getCourier().getId()).isEqualTo(delivery.getCourier().getId());
     }
 }

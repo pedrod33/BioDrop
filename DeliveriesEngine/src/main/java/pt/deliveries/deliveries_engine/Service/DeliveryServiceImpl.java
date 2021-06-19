@@ -74,7 +74,6 @@ public class DeliveryServiceImpl {
 
     public Delivery findDeliveryById(long id) {
         Delivery delivery = deliveryRepository.findById(id);
-        logger.log(Level.INFO, delivery.toString());
         if(delivery==null){
             throw new DeliveryDoesNotExistException("There is no delivery with this information");
         }
