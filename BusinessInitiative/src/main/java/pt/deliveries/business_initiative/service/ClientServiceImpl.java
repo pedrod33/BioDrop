@@ -36,7 +36,7 @@ public class ClientServiceImpl implements ClientService {
     public void verifyRegister(ClientRegistrationPOJO clientPOJO) {
         logger.log(Level.INFO, "Checking if clients email and phone number exists ...");
         if( clientRepository.findByEmail(clientPOJO.getEmail()) != null || clientRepository.findByPhoneNumber(clientPOJO.getPhoneNumber()) != null )
-            throw new ClientEmailOrPhoneNumberInUseException("Email ou phone number already in use.");
+            throw new ClientEmailOrPhoneNumberInUseException("Email or phone number already in use.");
     }
 
     @Override
