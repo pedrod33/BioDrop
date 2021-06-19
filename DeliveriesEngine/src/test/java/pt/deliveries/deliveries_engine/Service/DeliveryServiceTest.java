@@ -66,8 +66,8 @@ public class DeliveryServiceTest {
         when(courierRepository.findById(1L)).thenReturn(c1);
 
         //order already assgined to delivery
-        when(deliveryRepository.findByOrder_id(Mockito.anyLong())).thenReturn(null);
-        when(deliveryRepository.findByOrder_id(1L)).thenReturn(delivery);
+        when(deliveryRepository.findDeliveryByOrderId(Mockito.anyLong())).thenReturn(null);
+        when(deliveryRepository.findDeliveryByOrderId(1L)).thenReturn(delivery);
 
         //order exists
         when(deliveryRepository.existsOrderFromDeliveryById(Mockito.anyLong())).thenReturn(false);

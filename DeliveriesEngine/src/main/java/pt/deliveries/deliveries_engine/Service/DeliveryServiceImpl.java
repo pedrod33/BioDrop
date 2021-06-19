@@ -48,7 +48,7 @@ public class DeliveryServiceImpl {
             throw new VehicleTypeDoesNotExistException("This vehicle type does not exist!");
         }
 
-        if(deliveryRepository.findByOrder_id(createPojo.getOrder_id())!=null){
+        if(deliveryRepository.findDeliveryByOrderId(createPojo.getOrder_id())!=null){
             throw new OrderIdAlreadyUsedException("This order id was already used on another delivery!");
         }
         if(!deliveryRepository.existsOrderFromDeliveryById(createPojo.getOrder_id())){
@@ -61,7 +61,7 @@ public class DeliveryServiceImpl {
     }
 
     public Delivery getDeliveryByOrderId(long order_id) {
-        Delivery delivery = deliveryRepository.findByOrder_id(order_id);
+        Delivery delivery = deliveryRepository.findDeliveryByOrderId(order_id);
         if(delivery==null){
             throw new OrderIdDoesNotExistException("There is no assigned order with these values!");
         }

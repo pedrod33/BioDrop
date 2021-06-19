@@ -18,8 +18,8 @@ public class Delivery {
     @Column(name = "status")
     private int status;
 
-    @Column(name = "order_id", nullable = false, unique = true)
-    private Long order_id;
+    @Column(name = "orderId", nullable = false, unique = true)
+    private Long orderId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="vehicle_id", referencedColumnName = "id")
@@ -32,7 +32,7 @@ public class Delivery {
     public Delivery(Courier courier, Long order_id) {
         this.status = this.ACCEPTED;
         this.courier = courier;
-        this.order_id = order_id;
+        this.orderId = order_id;
     }
 
     public Delivery() {this.status = this.ACCEPTED;}
@@ -62,11 +62,11 @@ public class Delivery {
     }
 
     public Long getOrder_id() {
-        return order_id;
+        return orderId;
     }
 
     public void setOrder_id(Long order_id) {
-        this.order_id = order_id;
+        this.orderId = order_id;
     }
 
     public Courier getCourier() {
