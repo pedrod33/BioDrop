@@ -29,8 +29,8 @@ jobs:
         run: |
           cd BusinessInitiative
           ./mvnw package -DskipTests
-          sudo docker build -t business-initiative .
-          sudo docker run -p 8090:8090 --name business-initiative --link business-mysql:mysql business-initiative
+          docker build -t business-initiative .
+          docker run -p 8090:8090 --name business-initiative --link business-mysql:mysql business-initiative
 
 
 
