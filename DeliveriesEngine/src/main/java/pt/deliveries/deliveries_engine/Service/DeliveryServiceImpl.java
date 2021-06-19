@@ -3,10 +3,7 @@ package pt.deliveries.deliveries_engine.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pt.deliveries.deliveries_engine.Exception.CourierIdDoesNotExistException;
-import pt.deliveries.deliveries_engine.Exception.OrderIdAlreadyUsedException;
-import pt.deliveries.deliveries_engine.Exception.OrderIdDoesNotExistException;
-import pt.deliveries.deliveries_engine.Exception.VehicleTypeDoesNotExistException;
+import pt.deliveries.deliveries_engine.Exception.*;
 import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.Model.Delivery;
 import pt.deliveries.deliveries_engine.Pojo.CreateDeliveryPojo;
@@ -14,6 +11,7 @@ import pt.deliveries.deliveries_engine.Repository.CourierRepository;
 import pt.deliveries.deliveries_engine.Repository.DeliveryRepository;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,5 +58,26 @@ public class DeliveryServiceImpl {
             throw new CourierIdDoesNotExistException("The courier with this ID does not exist");
         }
         return true;
+    }
+
+    public Delivery getDeliveryByOrderId(long order_id) {
+        Delivery delivery = deliveryRepository.findByOrder_id(order_id);
+        if(delivery==null){
+            throw new OrderIdDoesNotExistException("There is no assigned order with these values!");
+        }
+        return delivery;
+    }
+
+    public List<Delivery> findAllDeliveries() {
+        return deliveryRepository.findAll();
+    }
+
+    public Delivery findDeliveryById(long id) {
+        Delivery delivery = deliveryRepository.findById(id);
+        logger.log(Level.INFO, delivery.toString());
+        if(delivery==null){
+            throw new DeliveryDoesNotExistException("There is no delivery with this information");
+        }
+        return delivery;
     }
 }
