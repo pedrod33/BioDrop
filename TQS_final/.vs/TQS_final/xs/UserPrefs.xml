@@ -1,0 +1,36 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="ClientApp/src/App.js">
+    <Files>
+      <File FileName="ClientApp/src/index.js" Line="1" Column="1" />
+      <File FileName="ClientApp/src/App.js" Line="14" Column="1" />
+      <File FileName="ClientApp/src/components/Admin/Admin.js" Line="7" Column="1" />
+      <File FileName="ClientApp/src/components/ShoppingCart/shop.js" Line="21" Column="1" />
+      <File FileName="ClientApp/src/components/ShoppingCart/styles.css" />
+      <File FileName="ClientApp/src/components/ShoppingCart/ItemDetails.js" Line="116" Column="1" />
+      <File FileName="ClientApp/src/components/ShoppingCart/SubTotal.js" />
+      <File FileName="ClientApp/src/components/NavBar/Navbar.js" Line="6" Column="1" />
+      <File FileName="ClientApp/src/components/Layout.js" Line="22" Column="11" />
+      <File FileName="ClientApp/src/components/ShoppingCart/EstimatedTotal.js" Line="18" Column="1" />
+      <File FileName="ClientApp/src/components/Button/Button.js" Line="1" Column="1" />
+      <File FileName="ClientApp/src/components/Home.js" Line="1" Column="1" />
+      <File FileName="ClientApp/src/components/storelist.js" Line="145" Column="39" />
+      <File FileName="ClientApp/src/components/NavBar/Navbar.css" Line="4" Column="19" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="TQS_final" expanded="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>TQS_final.csproj</String>
+  </DisabledProjects>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
