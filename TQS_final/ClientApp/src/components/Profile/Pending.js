@@ -6,7 +6,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
-import { ButtonPending } from '../Button/ButtonPending';
 
 // Generate Order Data
 function createData(id, date, name, shipTo, amount) {
@@ -54,12 +53,7 @@ export default function Pending() {
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.shipTo}</TableCell>
               <TableCell align="right">{row.amount}</TableCell>
-              <TableCell align="right"><ButtonPending className='btns'
-                    buttonStyle='btn--outline'
-                    buttonSize='btn--large'
-                >
-                 Review Order
-                </ButtonPending></TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           ))}
         </TableBody>

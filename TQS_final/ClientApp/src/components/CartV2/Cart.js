@@ -1,83 +1,77 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { removeItem,addQuantity,subtractQuantity} from '../actions/cartActions';
-import Recipe from './Recipe'
-class Cart extends Component{
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Title from '../Profile/Title';
+import { Button } from 'bootstrap';
 
-    //to remove the item completely
-    handleRemove = (id)=>{
-        this.props.removeItem(id);
-    }
-    //to add the quantity
-    handleAddQuantity = (id)=>{
-        this.props.addQuantity(id);
-    }
-    //to substruct from the quantity
-    handleSubtractQuantity = (id)=>{
-        this.props.subtractQuantity(id);
-    }
-    render(){
-              
-        let addedItems = this.props.items.length ?
-            (  
-                this.props.items.map(item=>{
-                    return(
-                       
-                        <li className="collection-item avatar" key={item.id}>
-                                    <div className="item-img"> 
-                                        <img src={item.img} alt={item.img} />
-                                    </div>
-                                
-                                    <div className="item-desc">
-                                        <span className="title">{item.title}</span>
-                                        <p>{item.desc}</p>
-                                        <p><b>Price: {item.price}$</b></p> 
-                                        <p>
-                                            <b>Quantity: {item.quantity}</b> 
-                                        </p>
-                                        <div className="add-remove">
-                                            <Link to="/cart"><i className="material-icons" onClick={()=>{this.handleAddQuantity(item.id)}}>arrow_drop_up</i></Link>
-                                            <Link to="/cart"><i className="material-icons" onClick={()=>{this.handleSubtractQuantity(item.id)}}>arrow_drop_down</i></Link>
-                                        </div>
-                                        <button className="waves-effect waves-light btn pink remove" onClick={()=>{this.handleRemove(item.id)}}>Remove</button>
-                                    </div>
-                                    
-                                </li>
-                         
-                    )
-                })
-            ):
-
-             (
-                <p>Nothing.</p>
-             )
-       return(
-            <div className="container">
-                <div className="cart">
-                    <h5>You have ordered:</h5>
-                    <ul className="collection">
-                        {addedItems}
-                    </ul>
-                </div> 
-                <Recipe />          
-            </div>
-       )
-    }
+// Generate Order Data
+function createData(id, name, shipTo, quantity,amount) {
+  return { id,  name, shipTo, quantity,  amount };
 }
 
+const rows = [
+  createData(0, 'Batata', 'Porto, PT',3,  20.40),
+  createData(1,  'Couve', 'Porto, PT',4,  6.99),
+  createData(2,  'Batata', 'Porto, PT',5,  10.81),
+  createData(3,'Cenoura', 'Porto, PT',6,  4.39),
+  createData(4,  'Abacaxi', 'Porto, PT',7, 2.79),
+];
 
-const mapStateToProps = (state)=>{
-    return{
-        items: state.addedItems,
-        //addedItems: state.addedItems
-    }
+function preventDefault(event) {
+  event.preventDefault();
 }
-const mapDispatchToProps = (dispatch)=>{
-    return{
-        removeItem: (id)=>{dispatch(removeItem(id))},
-        addQuantity: (id)=>{dispatch(addQuantity(id))},
-        subtractQuantity: (id)=>{dispatch(subtractQuantity(id))}
-    }
+
+const useStyles = makeStyles((theme) => ({
+  seeMore: {
+    marginTop: theme.spacing(3),
+  },
+}));
+
+export default function Cart() {
+  const classes = useStyles();
+  return (
+    <React.Fragment>
+      <Title>Shopping Cart</Title>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+             
+         
+            <TableCell>Name</TableCell>
+            <TableCell>Ship To</TableCell>
+            <TableCell align="right">Quantity</TableCell>
+            <TableCell align="right">Sale Amount</TableCell>
+           
+            <TableCell align="right"></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.id}>
+           
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.shipTo}</TableCell>
+              <TableCell align="right">{row.quantity}</TableCell>
+              <TableCell align="right">{row.amount}</TableCell>
+              <TableCell align="right"></TableCell>
+            </TableRow>
+          ))}    
+        </TableBody>
+
+      </Table>
+      <button style={{fontWeight: 'bold',
+                                    fontSize: '0.75rem',
+                                    color: 'white',
+                                    backgroundColor: 'grey',
+                                    borderRadius: 8,
+                                    padding: '3px 10px',
+                                    display: 'inline-block',
+                                    backgroundColor: 'black',
+                                    marginTop:20}}>checkout</button>
+    </React.Fragment>
+  );
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Cart)
