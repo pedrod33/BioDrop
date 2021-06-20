@@ -1,11 +1,15 @@
 package pt.deliveries.deliveries_engine.Pojo;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 public class CreateRatingPojo implements Serializable {
 
     @NotBlank
+    @Min(value=1)
+    @Max(value=5)
     private int score;
 
     private String description;

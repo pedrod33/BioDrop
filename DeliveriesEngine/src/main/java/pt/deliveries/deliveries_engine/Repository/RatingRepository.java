@@ -7,4 +7,6 @@ import pt.deliveries.deliveries_engine.Model.Rating;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
+
+    boolean getClientById(long client_id);
 }
