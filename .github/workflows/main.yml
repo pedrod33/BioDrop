@@ -35,15 +35,6 @@ jobs:
           docker build -t business-initiative .
           docker run -d -p 8090:8090 --name business-initiative --link business-mysql:mysql business-initiative
 
-
-
-  deliveries-engine:
-    runs-on: self-hosted
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      
       - name: Setup DeliveriesEngine database
         run: |
           docker stop deliveries-mysql 2>/dev/null
