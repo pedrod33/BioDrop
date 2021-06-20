@@ -11,7 +11,7 @@ import './custom.css'
 
 
 import Admin from './components/Admin/Admin';
-import shop from './components/ShoppingCart/shop';
+
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './index.css';
@@ -30,7 +30,7 @@ class App extends Component {
             <Route exact path='/' component={Home} />
             <Route exact path='/stores' component={storelist} />
             <Route exact path='/Admin' component={Admin} />
-            <Route exact path='/Shopping' component={shop} />
+            <Route exact path='/Shopping' component={storelist} />
             <Route exact path='/Cart' component={Cart} />
             
 
