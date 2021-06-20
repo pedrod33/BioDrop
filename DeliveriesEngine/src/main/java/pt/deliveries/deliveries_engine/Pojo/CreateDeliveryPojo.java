@@ -7,25 +7,20 @@ import java.io.Serializable;
 public class CreateDeliveryPojo implements Serializable {
 
     @NotBlank
-    private Long order_id;
+    private long order_id;
 
-    @NotBlank
-    private Long courier_id;
-
-    private Long vehicle_id;
+    private long vehicle_id;
 
 
-    public CreateDeliveryPojo(Long courier_id, Long order_id){
+    public CreateDeliveryPojo(Long order_id){
         this.order_id = order_id;
-        this.courier_id = courier_id;
-        this.vehicle_id = null;
+        this.vehicle_id = -1;
     }
 
     public CreateDeliveryPojo(){}
 
-    public CreateDeliveryPojo(Long courier_id, Long order_id, Long vehicle_id){
+    public CreateDeliveryPojo(long order_id, long vehicle_id){
         this.order_id = order_id;
-        this.courier_id = courier_id;
         this.vehicle_id = vehicle_id;
     }
 
@@ -33,11 +28,8 @@ public class CreateDeliveryPojo implements Serializable {
         return order_id;
     }
 
-    public Long getCourier_id() {
-        return courier_id;
-    }
 
-    public Long getVehicle_id() {
+    public long getVehicle_id() {
         return vehicle_id;
     }
 

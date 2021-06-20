@@ -61,7 +61,7 @@ public class DeliveryRestControllerTest {
     //create
     @Test
     public void createDeliveryInvalidVehicleType() throws Exception {
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L, 2L);
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L);
         doThrow(VehicleTypeDoesNotExistException.class).when(service).canCreate(Mockito.any());
 
         mvc.perform((post("/deliveries-api/deliveries/create")
@@ -74,7 +74,7 @@ public class DeliveryRestControllerTest {
 
     @Test
     public void createDeliveryValidCredentials() throws Exception {
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L, 1L);
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L);
         when(service.canCreate(Mockito.any())).thenReturn(true);
         when(service.create(Mockito.any())).thenReturn(delivery);
 
@@ -87,7 +87,7 @@ public class DeliveryRestControllerTest {
 
     @Test
     public void createDeliveryInvalidOrder() throws Exception{
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L, 1L);
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 1L);
         doThrow(OrderIdDoesNotExistException.class).when(service).canCreate(Mockito.any());
 
         mvc.perform((post("/deliveries-api/deliveries/create")
@@ -100,7 +100,7 @@ public class DeliveryRestControllerTest {
 
     @Test
     public void createDeliveryInvalidCourier() throws Exception{
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 1L, 1L);
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L);
         doThrow(CourierIdDoesNotExistException.class).when(service).canCreate(Mockito.any());
 
         mvc.perform((post("/deliveries-api/deliveries/create")
