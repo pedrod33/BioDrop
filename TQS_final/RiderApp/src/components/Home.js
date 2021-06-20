@@ -96,11 +96,11 @@ class Home extends Component {
                                     Login
                                 </Typography>
                                 <Form className={classes.form}>
-                                    <Form.Group className="mb-3" controlId="formEmail">
+                                    <Form.Group className="mb-3" controlId="formEmail2">
                                         <Form.Label>Email</Form.Label>
                                         <Form.Control type="email" />
                                     </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formPassword">
+                                    <Form.Group className="mb-3" controlId="formPassword2">
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" />
                                     </Form.Group>
