@@ -31,10 +31,10 @@ public class AddressRestController {
     }
 
 
-    @PutMapping("/save-address")
-    public ResponseEntity<Client> saveClientAddress(@RequestBody AddressSaveForClientPOJO address, @RequestParam Long clientId) {
+    @PutMapping("/update-client-address")
+    public ResponseEntity<Client> updateClientAddress(@RequestBody AddressSaveForClientPOJO address, @RequestParam Long clientId) {
         HttpStatus status;
-        Client saved = service.saveClientAddress(address, clientId);
+        Client saved = service.updateClientAddress(address, clientId);
 
         logger.log(Level.INFO, "Client with id {0} was updated", clientId);
         status = HttpStatus.OK;
