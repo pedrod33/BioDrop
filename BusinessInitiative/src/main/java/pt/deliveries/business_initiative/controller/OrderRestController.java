@@ -23,9 +23,9 @@ public class OrderRestController {
         return service.findAllOrders();
     }
 
-    @PutMapping(value = "/save")
-    public ResponseEntity<Order> saveOrder(@RequestParam Long clientId, @RequestParam Long productId, @RequestParam Integer amount) {
-        Order saved = service.save(clientId, productId, amount);
+    @PutMapping(value = "/updateProductsOrder")
+    public ResponseEntity<Order> updateProductsOrder(@RequestParam Long clientId, @RequestParam Long productId, @RequestParam Integer amount) {
+        Order saved = service.updateProductsOrder(clientId, productId, amount);
 
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(saved, status);
@@ -34,6 +34,14 @@ public class OrderRestController {
     @PutMapping(value = "/updateStatus")
     public ResponseEntity<Order> updateStatus(@RequestParam Long clientId, @RequestParam String orderStatus) {
         Order saved = service.updateStatus(clientId, orderStatus);
+        HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(saved, status);
+    }
+
+    @PutMapping(value = "/updateAddressOrder")
+    public ResponseEntity<Order> updateAddressOrder(@RequestParam Long clientId, @RequestParam Long productId, @RequestParam Integer amount) {
+        Order saved = service.updateProductsOrder(clientId, productId, amount);
+
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(saved, status);
     }
