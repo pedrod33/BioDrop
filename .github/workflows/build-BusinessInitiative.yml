@@ -13,21 +13,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:5.6
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: business-mysql
-          MYSQL_USER: tqs
-          MYSQL_PASSWORD: password
-        ports: 
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
 
     steps:
       - uses: actions/checkout@v2
@@ -37,6 +22,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: setup docker
+        run: |
+          sudo apt install docker.io
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
