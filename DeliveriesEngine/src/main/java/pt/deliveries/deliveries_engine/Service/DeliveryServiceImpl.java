@@ -44,11 +44,8 @@ public class DeliveryServiceImpl {
             logger.log(Level.INFO, "was not null");
             delivery.setVehicle(vehicleRepository.findById(deliveryPojo.getVehicle_id())); }
         delivery.setOrder_id(deliveryPojo.getOrder_id());
-<<<<<<< HEAD
-=======
         selected_courier.setStatus(1);
         courierRepository.save(selected_courier);
->>>>>>> b271d73ecb1850489d406bf36bdd5174960fb0b7
         return deliveryRepository.save(delivery);
     }
 
