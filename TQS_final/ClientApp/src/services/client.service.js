@@ -94,6 +94,31 @@ class ClientService {
 			return { status: 404, message: json.message };
 		}
 	}
+
+    
+    async addOrderToCart(
+		clientId,
+        productId,
+        amount
+	) {
+		var url = "http://localhost:8090/businesses-api/orders/updateOrder?clientId=" + clientId + "&productId=" + productId + "&amount=" + amount;
+
+		var res = await fetch(url, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		var json = await res.json();
+
+
+		if (json.status === 226) {
+            sessionStorage.setItem("order",  JSON.stringify(json))
+			return { status: json.status, message: json.message };
+        }
+		else return { status: 201, client: json };
+	}
+
 }
 
 export default new ClientService();

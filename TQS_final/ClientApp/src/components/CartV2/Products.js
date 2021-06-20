@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import ClientService from "../../services/client.service";
 
 class Products extends Component {
-
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -13,16 +12,10 @@ class Products extends Component {
 		};
 	}
 
-
-
-	handleClick = (id) => {
-		this.props.addToCart(id);
-	};
-
-	componentDidMount() {
+    componentDidMount() {
 		ClientService.fetchProductsInStore(this.props.match.params.id).then(
 			(response) => {
-                console.log( response )
+				console.log(response);
 
 				if (response.status === 200) {
 					this.setState({
@@ -32,29 +25,58 @@ class Products extends Component {
 				} else console.log(response.message);
 			}
 		);
-    }
+	}
+
+
+
+	addToCart(item) {
+        var client = JSON.parse(sessionStorage.getItem("client"));
+        
+        console.log(client)
+        console.log(client.id)
+
+        ClientService.addOrderToCart(client.id, item.id, 10).then(
+			(response) => {
+
+				if (response.status === 200) {
+					console.log("produto adicionado")
+				} else console.log(response.message);
+			}
+		);
+	};
 
 
 	render() {
-        console.log()
-		let itemList = this.state.products.map(item=>{
-            console.log(item)
-            return(
-                <div className="card" key={item.id}>
-                        <div style={{width:'auto', height:'100px'}}>
-                           {/*  <img className="item-img" src={item.img} alt={item.title}
-                                style={{width:'auto', height:'100px'}}/> */}
-                            <span className="card-title">{item.name}</span>
-                            <span to="/" className="btn-floating halfway-fab waves-effect waves-light red" onClick={()=>{this.handleClick(item.id)}}><i className="material-icons">add</i></span>
-                        </div>
+		let itemList = this.state.products.map((item) => {
+			return (
+				<div className="card" key={item.id}>
+					<div>
+						<img
+							className="item-img"
+							src={"https://source.unsplash.com/random"}
+							alt={item.title}
+							style={{ width: "auto", height: "200px" }}
+						/>
+						<span className="card-title">{item.name}</span>
+						<span
+							to="/"
+							className="btn-floating halfway-fab waves-effect waves-light red"
+							onClick={() => {
+								this.addToCart(item);
+							}}
+						>
+							<i className="material-icons">add</i>
+						</span>
+					</div>
 
-                        <div className="card-content">
-                            <p><b>Price: {item.price}$</b></p>
-                        </div>
-                 </div>
-
-            )
-        })
+					<div className="card-content">
+						<p>
+							<b>Price: {item.price}$</b>
+						</p>
+					</div>
+				</div>
+			);
+		});
 
 		return (
 			<div className="container">
