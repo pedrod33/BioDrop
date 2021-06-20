@@ -28,7 +28,7 @@ export default function Profile() {
                             src='images/carrot.jpg'
                             text='Pending Orders'
                             label='Pending'
-                            path='/'
+                            path='/Pending'
                         />
                         <ProfileCards
                             src='images/ervilha.jpg'

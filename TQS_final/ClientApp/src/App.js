@@ -12,6 +12,7 @@ import Stores from './components/Stores/Stores';
 import Profile from './components/Profile/Profile';
 import Orders from './components/Profile/Orders';
 import ProfileSettings from './components/Profile/ProfileSettings';
+import Pending from './components/Profile/Pending';
 
 class App extends Component {
   static displayName = App.name;
@@ -28,6 +29,7 @@ class App extends Component {
             <Route exact path='/Cart' component={Cart} />
             <Route exact path='/Order' component={Orders} />
             <Route exact path='/Settings' component={ProfileSettings} />
+            <Route exact path='/Pending' component={Pending} />
 
               </Layout>
        
