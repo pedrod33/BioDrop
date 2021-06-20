@@ -1,10 +1,10 @@
 ﻿import React from 'react';
-import CardAdmin from './CardAdmin';
+import ProfileCards from './ProfileCards';
 import '../../App.css';
 import './Cards.css';
 
 
-export default function Admin() {
+export default function Profile() {
     return (
         <div className='cards'>
 
@@ -12,29 +12,29 @@ export default function Admin() {
                 <div className='cards__wrapper'>
                     <ul className='cards__items'>
                        
-                      <CardAdmin
+                      <ProfileCards
                             src='images/spinach.jpg'
                             text='View Historic'
                             label='Historic'
-                            path='/'
+                            path='/Order'
                         />
-                        <CardAdmin
+                        <ProfileCards
                             src='images/pingo.png'
                             text='Check Available Stores'
                             label='Stores'
-                            path='/'
+                            path='/Stores'
                         />
-                        <CardAdmin
+                        <ProfileCards
                             src='images/carrot.jpg'
-                            text='Check Products'
-                            label='Products'
-                            path='/'
+                            text='Pending Orders'
+                            label='Pending'
+                            path='/Pending'
                         />
-                        <CardAdmin
+                        <ProfileCards
                             src='images/ervilha.jpg'
-                            text='Configure Settings'
-                            label='Settings'
-                            path='/'
+                            text='Check Profile'
+                            label='Profile'
+                            path='/Settings'
                         />
                     </ul>
 
