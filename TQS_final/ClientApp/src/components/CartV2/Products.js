@@ -2,7 +2,7 @@
 import { connect } from 'react-redux'
 import { addToCart } from '../actions/cartActions'
 
- class storelist extends Component{
+ class Products extends Component{
     
     handleClick = (id)=>{
         this.props.addToCart(id); 
@@ -50,4 +50,4 @@ const mapDispatchToProps= (dispatch)=>{
     }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(storelist)
+export default connect(mapStateToProps,mapDispatchToProps)(Products)
