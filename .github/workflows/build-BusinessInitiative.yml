@@ -40,7 +40,7 @@ jobs:
           java-version: 11
       - name: setup database env variable
         run: |
-          MYSQL_DB="jdbc:mysql://localhost:3306/business-mysql"
+          export MYSQL_DB="jdbc:mysql://localhost:3306/business-mysql"
       
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
@@ -63,8 +63,7 @@ jobs:
           DB_PORT: 3306 
         run: |
           cd BusinessInitiative
-          echo "server.port=8090\nspring.datasource.username=tqs\nspring.datasource.password=password\nspring.datasource.url=jdbc:mysql://localhost:3306/business-mysql\nspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver\nspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect\nspring.jpa.hibernate.ddl-auto=create-drop\nserver.error.include-stacktrace=never" > src/main/resources/application.properties
-          MYSQL_DB="jdbc:mysql://localhost:3306/business-mysql"
+          export MYSQL_DB="jdbc:mysql://localhost:3306/business-mysql"
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar  
 
 
