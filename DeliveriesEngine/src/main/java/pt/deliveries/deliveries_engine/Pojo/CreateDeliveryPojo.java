@@ -21,7 +21,6 @@ public class CreateDeliveryPojo implements Serializable {
         this.vehicle_id = null;
     }
 
-    public CreateDeliveryPojo(){}
 
     public CreateDeliveryPojo(Long courier_id, Long order_id, Long vehicle_id){
         this.order_id = order_id;
@@ -39,9 +38,5 @@ public class CreateDeliveryPojo implements Serializable {
 
     public Long getVehicle_id() {
         return vehicle_id;
-    }
-
-    public void setVehicle_id(Long vehicle_id) {
-        this.vehicle_id = vehicle_id;
     }
 }

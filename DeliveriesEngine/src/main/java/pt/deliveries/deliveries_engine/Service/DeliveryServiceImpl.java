@@ -38,7 +38,7 @@ public class DeliveryServiceImpl {
         if(deliveryPojo.getVehicle_id()==null){ delivery.setVehicle(courier.getVehicle()); }
         else{ delivery.setVehicle(vehicleRepository.findById(deliveryPojo.getVehicle_id().longValue())); }
         delivery.setOrder_id(deliveryPojo.getOrder_id());
-        return delivery;
+        return deliveryRepository.save(delivery);
     }
 
     public boolean canCreate(CreateDeliveryPojo createPojo) {

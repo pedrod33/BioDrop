@@ -3,9 +3,10 @@ package pt.deliveries.deliveries_engine.Pojo;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 
-public class RegisterCourierPojo {
+public class RegisterCourierPojo implements Serializable {
 
     private Long vehicle_id;
 
@@ -25,7 +26,6 @@ public class RegisterCourierPojo {
     private Long supervisor_id;
 
 
-    public RegisterCourierPojo(){}
 
     public RegisterCourierPojo(String name, String email, String password, String gender, Long phoneNumber, Long vehicle_id, Long supervisor_id) {
         this.vehicle_id = vehicle_id;

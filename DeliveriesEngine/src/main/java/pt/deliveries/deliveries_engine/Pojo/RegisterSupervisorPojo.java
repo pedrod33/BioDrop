@@ -16,8 +16,6 @@ public class RegisterSupervisorPojo implements Serializable {
     @NotBlank
     private String password;
 
-    public RegisterSupervisorPojo() {}
-
     public RegisterSupervisorPojo(String email, String password, String name) {
         this.name = name;
         this.email = email;

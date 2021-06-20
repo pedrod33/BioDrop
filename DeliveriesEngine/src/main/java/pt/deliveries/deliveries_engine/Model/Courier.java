@@ -34,6 +34,7 @@ public class Courier {
     @Column(unique = true, nullable = false)
     private Long phoneNumber;
 
+
     @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY)
     private Set<Delivery> deliveries;
 
