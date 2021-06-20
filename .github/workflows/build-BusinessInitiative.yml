@@ -24,21 +24,25 @@ jobs:
           java-version: 11
       - name: setup docker
         run: |
-          sudo apt install docker.io
+          - uses: docker-practice/actions-setup-docker@master
+      - name: start database
+        run: |
+          docker run --name business-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=business-mysql -e MYSQL_USER=tqs -e MYSQL_PASSWORD=password -d mysql:5.6
+
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+      
       - name: Cache Maven packages
         uses: actions/cache@v1
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      - name: entry BusinessInitiative
-        run: cd BusinessInitiative
+     
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
