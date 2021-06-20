@@ -63,11 +63,12 @@ function Navbar() {
                             </Link>
                         </li>
                         <li className='nav-item'>
-                            <Link to='/Shopping'
+                            <Link to='/Cart'
                                 className='nav-links'
                                 onClick={closeMobileMenu}
                             >
-                                Shop
+                                <i className="material-icons"> shopping_cart</i>
+                              
                             </Link>
                         </li>
                     </ul>
