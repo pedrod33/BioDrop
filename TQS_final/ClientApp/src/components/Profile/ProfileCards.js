@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
 
-function CardAdmin(props) {
+function ProfileCards(props) {
     return (
         <>
             <li className='cards__item'>
@@ -21,4 +21,4 @@ function CardAdmin(props) {
     );
 }
 
-export default CardAdmin;
+export default ProfileCards;

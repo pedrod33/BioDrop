@@ -4,13 +4,14 @@ import { Layout } from './components/Layout';
 import Home from './components/Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './custom.css'
-import Admin from './components/Admin/Admin';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './index.css';
 import Cart from './components/CartV2/Cart';
-
 import Products from './components/CartV2/Products';
 import Stores from './components/Stores/Stores';
+import Profile from './components/Profile/Profile';
+import Orders from './components/Profile/Orders';
+import ProfileSettings from './components/Profile/ProfileSettings';
 
 class App extends Component {
   static displayName = App.name;
@@ -21,11 +22,12 @@ class App extends Component {
       <Layout>
 
             <Route exact path='/' component={Home} />
-            <Route exact path='/Admin' component={Admin} />
+            <Route exact path='/Profile' component={Profile} />
             <Route exact path='/Product' component={Products}/>
             <Route exact path='/Stores' component={Stores} />
             <Route exact path='/Cart' component={Cart} />
-            
+            <Route exact path='/Order' component={Orders} />
+            <Route exact path='/Settings' component={ProfileSettings} />
 
               </Layout>
        
