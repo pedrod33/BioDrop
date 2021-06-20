@@ -43,7 +43,6 @@ public class CourierServiceImpl implements CourierService{
         courier.setPhoneNumber(courierPojo.getPhoneNumber());
         courier.setVehicle(vehicleRepository.findById(courierPojo.getVehicle_id()).orElse(null));
         courier.setSupervisor(supervisorRepository.findById(courierPojo.getSupervisor_id()).orElse(null));
-        courierRepository.save(courier);
         return courierRepository.save(courier);
     }
 

@@ -33,18 +33,30 @@ public class DeliveryServiceImpl {
     public Delivery create(CreateDeliveryPojo deliveryPojo) {
         Delivery delivery = new Delivery();
         this.canCreate(deliveryPojo);
-        Courier courier = courierRepository.findById(deliveryPojo.getCourier_id().longValue());
-        delivery.setCourier(courier);
-        if(deliveryPojo.getVehicle_id()==null){ delivery.setVehicle(courier.getVehicle()); }
-        else{ delivery.setVehicle(vehicleRepository.findById(deliveryPojo.getVehicle_id().longValue())); }
+        List<Courier> availableCouriers = courierRepository.findCouriersByStatus(0);
+        Courier selected_courier = availableCouriers.get(0);
+        delivery.setCourier(selected_courier);
+        if(deliveryPojo.getVehicle_id()==-1){
+            logger.log(Level.INFO, "was null");
+            logger.log(Level.INFO, selected_courier.getVehicle().toString());
+            delivery.setVehicle(selected_courier.getVehicle()); }
+        else{
+            logger.log(Level.INFO, "was not null");
+            delivery.setVehicle(vehicleRepository.findById(deliveryPojo.getVehicle_id())); }
         delivery.setOrder_id(deliveryPojo.getOrder_id());
+<<<<<<< HEAD
+=======
+        selected_courier.setStatus(1);
+        courierRepository.save(selected_courier);
+>>>>>>> b271d73ecb1850489d406bf36bdd5174960fb0b7
         return deliveryRepository.save(delivery);
     }
 
     public boolean canCreate(CreateDeliveryPojo createPojo) {
 
-        if(createPojo.getVehicle_id()!=null
-            && vehicleRepository.findById(createPojo.getVehicle_id().longValue())==null){
+        logger.log(Level.INFO, String.valueOf(vehicleRepository.findById(createPojo.getVehicle_id())));
+        if(createPojo.getVehicle_id()!=-1
+            && vehicleRepository.findById(createPojo.getVehicle_id())==null){
             throw new VehicleTypeDoesNotExistException("This vehicle type does not exist!");
         }
 
@@ -54,8 +66,9 @@ public class DeliveryServiceImpl {
         if(!deliveryRepository.existsOrderFromDeliveryById(createPojo.getOrder_id())){
             throw new OrderIdDoesNotExistException("There is no order with these values!");
         }
-        if(courierRepository.findById(createPojo.getCourier_id().longValue())==null){
-            throw new CourierIdDoesNotExistException("The courier with this ID does not exist");
+        List<Courier> allAvailable = courierRepository.findCouriersByStatus(0);
+        if(allAvailable.size()==0){
+            throw new CourierTakenException("No Courier Available Right Now");
         }
         return true;
     }
