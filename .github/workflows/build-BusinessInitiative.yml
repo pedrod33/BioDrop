@@ -63,7 +63,7 @@ jobs:
           DB_PORT: 3306 
         run: |
           cd BusinessInitiative
-          export MYSQL_DB="jdbc:mysql://localhost:3306/business-mysql"
+          export MYSQL_DB="jdbc:mysql://deliveries-mysql:3306/deliveries-mysql"
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar  
 
 
