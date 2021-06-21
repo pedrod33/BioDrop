@@ -3,15 +3,16 @@ import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Link }from "react-router-dom";
+
 import Form from 'react-bootstrap/Form';
-import Dropdown from 'react-bootstrap/Dropdown';
 
 
 const styles = theme => ({
     root: {
-        minWidth: 275,
+        width: '80%',
         marginLeft: 15,
         marginRight: 15,
         marginTop: 10,
@@ -29,6 +30,12 @@ const styles = theme => ({
     },
     form: {
         marginTop: 30,
+    },
+    mainDiv: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "#ABA243"
     }
 
 });
@@ -36,79 +43,72 @@ const styles = theme => ({
 class Home extends Component {
     static displayName = Home.name;
 
+    constructor(props) {
+        super(props);
+        this.state = { email: '', password: '', fName: '', lName: '', phone: '', sex: '' };
+        this.handleChangeEmail = this.handleChangeEmail.bind(this);
+        this.handleChangePassword = this.handleChangePassword.bind(this);
+    }
+
+    handleSubmit(event) {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "email": this.state.email,
+                "password": this.state.password,
+            })
+        };
+        fetch('http://localhost:8089/deliveries-api/supervisor/login', requestOptions)
+            .then(response => response.json())
+            .then(data => this.setState({ postId: data.id }));
+        event.preventDefault();
+    }
+
+    handleChangeEmail(event) {
+        this.setState({ email: event.target.value });
+    }
+
+    handleChangePassword(event) {
+        this.setState({ password: event.target.value });
+    }
+
+
     render() {
         const { classes } = this.props;
         return (
             <div>
-       
                 <h1>Welcome to <span style={{ color: "#536732" }}>BioDrop - Rider</span></h1>
                 <h4>You will be notified of your orders here!</h4>
                 <hr />
-                <Row style={{ backgroundColor: "#ABA243" }}>   
-                    <Col>
-                        <Card className={classes.root} variant="outlined">
-                            <CardContent>
-                                <Typography variant="h3" className={classes.title} gutterBottom>
-                                    Register
-                                </Typography>
-                                <Form className={classes.form}>
-                                    <Form.Group className="mb-3" controlId="formEmail">
-                                        <Form.Label>Email</Form.Label>
-                                        <Form.Control type="email" />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formPassword">
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formNome">
-                                        <Form.Label>First name</Form.Label>
-                                        <Form.Control type="text" rows={1} />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formApelido">
-                                        <Form.Label>Last name</Form.Label>
-                                        <Form.Control type="text" rows={1} />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formTelefone">
-                                        <Form.Label>Cellphone number</Form.Label>
-                                        <Form.Control type="number" />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formTelefone">
-                                        <Dropdown >
-                                            <Dropdown.Toggle variant="Light" id="dropdown-basic">
-                                                Sex
-                                            </Dropdown.Toggle>
-
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item>Male</Dropdown.Item>
-                                                <Dropdown.Item>Female</Dropdown.Item>
-                                                <Dropdown.Item>Other</Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </Form.Group>
-                                </Form>
-                            </CardContent>
-                        </Card>
-                    </Col>
-                    <Col> 
-                        <Card className={classes.root} variant="outlined">
-                            <CardContent>
+                <div className={classes.mainDiv}>
+                    <Card className={classes.root} variant="outlined">
+                        <CardContent>
+                            <Typography variant="h3" className={classes.title} color="textSecondary" gutterBottom>
+                                Login
+                            </Typography>
+                            <Form className={classes.form}>
+                                <Form.Group className="mb-3" controlId="formEmail2">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="email" onChange={this.handleChangeEmail}  />
+                                </Form.Group>
+                                <Form.Group className="mb-3" controlId="formPassword2">
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.Control type="password" onChange={this.handleChangePassword}  />
+                                </Form.Group>
+                                <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30 }}>
+                                    <input type="submit" value="Login" style={{ backgroundColor: '#FFF' }} />
+                                </Row>
+                            </Form>
+                            <Row style={{display: 'flex', justifyContent: 'center', alignItems: 'center',}}>
                                 <Typography variant="h3" className={classes.title} color="textSecondary" gutterBottom>
-                                    Login
+                                    Create an account:
                                 </Typography>
-                                <Form className={classes.form}>
-                                    <Form.Group className="mb-3" controlId="formEmail2">
-                                        <Form.Label>Email</Form.Label>
-                                        <Form.Control type="email" />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formPassword2">
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" />
-                                    </Form.Group>
-                                </Form>
-                            </CardContent>
-                        </Card>
-                    </Col>
-                    </Row>    
+                                <Link to="/Register" style={{ textDecoration: 'none', color: '#536732', marginLeft: 20 }} className="outline-success">Register</Link>
+                            </Row>
+                        </CardContent>
+                    </Card>
+                </div>
           </div>
         );
     }
