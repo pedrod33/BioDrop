@@ -24,8 +24,8 @@ export default function Profile() {
 						<ProfileCards
 							src="images/spinach.jpg"
 							text="View History"
-							label="History"
-							path="/Order"
+							label="OrdesHistory"
+							path="/OrdesHistory"
 						/>
 						{/* <ProfileCards
                             src='images/pingo.png'

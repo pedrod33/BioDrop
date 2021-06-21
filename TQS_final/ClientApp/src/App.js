@@ -10,10 +10,9 @@ import Cart from "./components/CartV2/Cart";
 import Products from "./components/CartV2/Products";
 import Stores from "./components/Stores";
 import Profile from "./components/Profile/Profile";
-import Orders from "./components/Profile/Orders";
+import OrdesHistory from "./components/Profile/OrdersHistory";
 import ProfileSettings from "./components/Profile/ProfileSettings";
 import Pending from "./components/Profile/Pending";
-import Register from "./components/Register";
 
 class App extends Component {
 	static displayName = App.name;
@@ -26,10 +25,9 @@ class App extends Component {
 				<Route exact path="/Product/:id" component={Products} />
 				<Route exact path="/Stores" component={Stores} />
 				<Route exact path="/Cart" component={Cart} />
-				<Route exact path="/Order" component={Orders} />
+				<Route exact path="/OrdesHistory" component={OrdesHistory} />
 				<Route exact path="/Settings" component={ProfileSettings} />
 				<Route exact path="/Pending" component={Pending} />
-				<Route exact path="/Register" component={Register} />
 			</Layout>
 		);
 	}
