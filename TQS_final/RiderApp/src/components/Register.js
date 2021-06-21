@@ -55,7 +55,7 @@ class Register extends Component {
     componentDidMount() {
         fetch('https://localhost:8089/deliveries-api/vehicle/all')
             .then(response => response.json())
-            .then(data => this.setState({ /*options: data */}));
+            .then(data => this.setState({ /*options: data */ }));
     }
 
     handleSubmit(event) {
@@ -74,13 +74,14 @@ class Register extends Component {
             })
         };
         fetch('http://localhost:8089/deliveries-api/courier/register', requestOptions)
-            .then(response => this.setState({ status: response.status }))
-        console.log(this.state.status)
-        if (this.state.status == 201) {
-            this.props.history.push('/Rider')
-        } else {
-            this.props.history.push('/')
-        }
+            .then((response) => {
+                this.setState({ status: response.status })
+                if (response.status === 201) {
+                    console.log("fez isto")
+                    this.props.history.push('/Rider')
+                }
+
+            })
 
         event.preventDefault();
     }
@@ -134,15 +135,15 @@ class Register extends Component {
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formNome">
                                     <Form.Label>First name</Form.Label>
-                                        <Form.Control type="text" rows={1} onChange={this.handleChangeFname}/>
+                                    <Form.Control type="text" rows={1} onChange={this.handleChangeFname} />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formApelido">
                                     <Form.Label>Last name</Form.Label>
-                                        <Form.Control type="text" rows={1} onChange={this.handleChangeLname}/>
+                                    <Form.Control type="text" rows={1} onChange={this.handleChangeLname} />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formTelefone">
                                     <Form.Label>Cellphone number</Form.Label>
-                                        <Form.Control type="number" onChange={this.handleChangePhone} />
+                                    <Form.Control type="number" onChange={this.handleChangePhone} />
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="formSexo">
                                     <select value={this.state.sex} onChange={this.handleChangeSex} >
@@ -152,18 +153,38 @@ class Register extends Component {
                                     </select>
                                 </Form.Group>
                                 <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30 }}>
-                                    <input type="submit" value="Register" style={{ backgroundColor: '#FFF' }} />
+                                    <input type="submit" value="Register" style={{
+                                        fontWeight: 'bold',
+                                        fontSize: '0.75rem',
+                                        color: 'white',
+                                        backgroundColor: 'green',
+                                        borderRadius: 8,
+                                        padding: '3px 10px',
+                                        display: 'inline-block',
+
+                                    }} />
                                 </Row>
                             </Form>
                             <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
                                 <Typography variant="h3" className={classes.title} color="textSecondary" gutterBottom>
                                     Have an account?
                                 </Typography>
-                                <Link to="/" style={{ textDecoration: 'none', color: '#536732', marginLeft: 20 }} className="outline-success">Login</Link>
+                                <Link to="/" style={{
+                                    fontWeight: 'bold',
+                                    fontSize: '0.75rem',
+                                    color: 'white',
+                                    backgroundColor: 'green',
+                                    borderRadius: 8,
+                                    padding: '3px 10px',
+                                    display: 'inline-block',
+                                    marginLeft: 15,
+                                    marginBottom: 7
+
+                                }} className="outline-success">Login</Link>
                             </Row>
                         </CardContent>
                     </Card>
-                </div>    
+                </div>
             </div>
         );
     }

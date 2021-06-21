@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import * as mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions'
 import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css'
+import CourierService from "../services/courier.service";
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYmlvZHJvcCIsImEiOiJja3B1MWkyaDUwdnZzMzFvYzNjcXFmNDdwIn0.lcBD-m2Fe3zsiW2ZOcEgcQ';
 
@@ -21,11 +22,17 @@ class Rider extends Component {
     constructor(props) {
         super(props);
         this.mapContainer = React.createRef();
+        
     }
 
-
-
     componentDidMount() {
+
+        if (sessionStorage.getItem("courier")) {
+            console.log("há um cpurier -> " + sessionStorage["courier"])
+        } else {
+            console.log("n há nada")
+        }
+
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(position => {
                 var map = new mapboxgl.Map({
@@ -62,8 +69,6 @@ class Rider extends Component {
                 map.addControl(directions, 'top-left');
             });
         }
-
-
     }
 
     getCoords() {
