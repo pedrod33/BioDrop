@@ -41,8 +41,8 @@ class Home extends Component {
         return (
             <div>
        
-                <h1>Welcome to <span style={{ color: "#536732" }}>BioDrop</span></h1>
-                <h4>Get your groceries deliver to you fresh!</h4>
+                <h1>Welcome to <span style={{ color: "#536732" }}>BioDrop - Rider</span></h1>
+                <h4>You will be notified of your orders here!</h4>
                 <hr />
                 <Row style={{ backgroundColor: "#ABA243" }}>   
                     <Col>
@@ -96,11 +96,11 @@ class Home extends Component {
                                     Login
                                 </Typography>
                                 <Form className={classes.form}>
-                                    <Form.Group className="mb-3" controlId="formEmail">
+                                    <Form.Group className="mb-3" controlId="formEmail2">
                                         <Form.Label>Email</Form.Label>
                                         <Form.Control type="email" />
                                     </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formPassword">
+                                    <Form.Group className="mb-3" controlId="formPassword2">
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" />
                                     </Form.Group>
