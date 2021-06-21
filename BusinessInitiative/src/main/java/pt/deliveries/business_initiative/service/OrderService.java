@@ -9,6 +9,8 @@ public interface OrderService {
 
     List<Order> findAllOrders();
 
+    Order findOrderById(Long orderId);
+
     Order updateProductsOrder(Long clientId, Long productId, Integer amount);
 
     Order updateStatus(Long clientId, String status);

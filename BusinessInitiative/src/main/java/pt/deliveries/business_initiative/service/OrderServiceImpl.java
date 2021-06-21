@@ -3,6 +3,8 @@ package pt.deliveries.business_initiative.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.deliveries.business_initiative.exception.ClientHasNoOrdersWaiting;
+import pt.deliveries.business_initiative.exception.ClientNotFoundException;
+import pt.deliveries.business_initiative.exception.OrderNotFoundException;
 import pt.deliveries.business_initiative.model.*;
 import pt.deliveries.business_initiative.repository.OrderRepository;
 
@@ -29,8 +31,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private Order_ProductServiceImpl orderProductService;
 
-    @Autowired
-    private AddressServiceImpl addressService;
 
     private static final Logger logger
             = Logger.getLogger(
@@ -42,6 +42,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> findAllOrders() {
         return repository.findAll();
+    }
+
+    @Override
+    public Order findOrderById(Long orderId) {
+        logger.log(Level.INFO, "Finding order by id ...");
+
+        return repository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
     }
 
     @Override

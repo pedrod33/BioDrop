@@ -24,6 +24,14 @@ public class OrderRestController {
         return service.findAllOrders();
     }
 
+    @GetMapping("/")
+    public ResponseEntity<Order> findOrderById(@RequestParam Long orderId) {
+        Order found = service.findOrderById(orderId);
+
+        HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(found, status);
+    }
+
     @PutMapping(value = "/updateProductsOrder")
     public ResponseEntity<Order> updateProductsOrder(@RequestParam Long clientId, @RequestParam Long productId, @RequestParam Integer amount) {
         Order saved = service.updateProductsOrder(clientId, productId, amount);

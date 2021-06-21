@@ -7,7 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.deliveries.business_initiative.exception.ClientEmailOrPhoneNumberInUseException;
 import pt.deliveries.business_initiative.exception.ClientHasNoOrdersWaiting;
+import pt.deliveries.business_initiative.exception.OrderNotFoundException;
 import pt.deliveries.business_initiative.model.*;
 import pt.deliveries.business_initiative.repository.OrderRepository;
 
@@ -15,6 +17,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
@@ -87,9 +90,12 @@ class OrderServiceTest {
         newProductForOrder.setId(3L);
 
         Product alreadyExistingProduct = prod2;
+        Long invalidOrderId = 0L;
 
 
         when( repository.findAll() ).thenReturn( allOrders );
+        when( repository.findById(order1.getId()) ).thenReturn(Optional.of(order1));
+        when( repository.findById(invalidOrderId) ).thenThrow( new OrderNotFoundException("Order not found") );
 
         when( clientService.findById(goodClient3.getId()) ).thenReturn( goodClient3 );
         when( productService.findById(prod1.getId()) ).thenReturn( prod1 );
@@ -150,6 +156,49 @@ class OrderServiceTest {
         verifyFindAllIsCalledOnce();
         assertThat(allOrders).hasSize(3).extracting(Order::getId).contains(1L, 2L, 3L);
         assertThat(allOrders).hasSize(3).extracting(Order::getStatus).contains("waiting", "waiting", "waiting");
+    }
+
+    @Test
+    void whenFindOrderById_thenOrderShouldBeReturned() {
+        Address address1 = new Address("city1", "address1", 10, 11);
+        address1.setId(1L);
+
+        Client goodClient1 = new Client("cunha1", "cunha@ua.pt", "1234", null, "M", "96000001");
+        goodClient1.setId(1L);
+
+        Product prod1 = new Product("prod1", "origin1", 10, "path", 100 );
+        Product prod2 = new Product("prod2", "origin2", 10, "path", 100 );
+        prod1.setId(1L);
+        prod2.setId(2L);
+
+        Order_Product orderProduct1 = new Order_Product(null, prod1, 10);
+        Order_Product orderProduct2 = new Order_Product(null, prod2, 11);
+        orderProduct1.setId(1L);
+        orderProduct2.setId(2L);
+
+        Set<Order_Product> orderProductSet1 = new HashSet<>(Arrays.asList(orderProduct1, orderProduct2));
+
+        Order order1 = new Order(address1, orderProductSet1, goodClient1, "waiting");
+        order1.setId(1L);
+
+        Order found = service.findOrderById(order1.getId());
+
+
+        assertThat(found.getId()).isEqualTo(order1.getId());
+        assertThat(found.getStatus()).isEqualTo(order1.getStatus());
+        assertThat(found.getAddress().getId()).isEqualTo(order1.getAddress().getId());
+        assertThat(found.getAddress().getCity()).isEqualTo(order1.getAddress().getCity());
+
+        verifyFindByIdIsCalledOnce(order1.getId());
+    }
+
+    @Test
+    void whenFindOrderByInvalidId_thenExceptionShouldBeThrown() {
+        Long invalidOrderId = 0L;
+
+        assertThrows(OrderNotFoundException.class, () -> service.findOrderById(invalidOrderId));
+
+        verifyFindByIdIsCalledOnce(invalidOrderId);
     }
 
     @Test
@@ -247,7 +296,6 @@ class OrderServiceTest {
         verifySaveIsCalledOnce(order1);
     }
 
-
     @Test
     void whenUpdateOrderStatus_thenOrderShouldBeUpdated() {
         Address address2 = new Address("city2", "address2", 10, 11);
@@ -310,6 +358,9 @@ class OrderServiceTest {
         verify(repository, times(2)).save(Mockito.any());
     }
 
+    private void verifyFindByIdIsCalledOnce(Long orderId) {
+        verify(repository, times(1)).findById(orderId);
+    }
 
 }
 

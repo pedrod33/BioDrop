@@ -30,7 +30,7 @@ public class ClientRestController {
         return service.findAll();
     }
 
-    @GetMapping("/client")
+    @GetMapping("/")
     public Client findClientById(@RequestParam Long clientId) {
         return service.findById(clientId);
     }
