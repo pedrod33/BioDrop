@@ -7,6 +7,7 @@ import pt.deliveries.deliveries_engine.Exception.VehicleTypeIsUsedException;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,5 +35,9 @@ public class VehicleServiceImpl{
 
     public Vehicle findById(Vehicle vehicle){
         return null;
+    }
+
+    public List<Vehicle> findAllVehicles() {
+        return repository.findAll();
     }
 }
