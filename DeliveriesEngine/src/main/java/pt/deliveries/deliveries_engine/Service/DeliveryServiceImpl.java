@@ -7,6 +7,7 @@ import pt.deliveries.deliveries_engine.Exception.*;
 import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.Model.Delivery;
 import pt.deliveries.deliveries_engine.Pojo.CreateDeliveryPojo;
+import pt.deliveries.deliveries_engine.Repository.BusinessInitiativeRepository;
 import pt.deliveries.deliveries_engine.Repository.CourierRepository;
 import pt.deliveries.deliveries_engine.Repository.DeliveryRepository;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
@@ -30,38 +31,34 @@ public class DeliveryServiceImpl {
     @Autowired
     private CourierRepository courierRepository;
 
-    public Delivery create(CreateDeliveryPojo deliveryPojo) {
+    @Autowired
+    BusinessInitiativeRepository businessRepository;
+
+    public Delivery create(long clientId, long orderId, CreateDeliveryPojo deliveryPojo) {
         Delivery delivery = new Delivery();
-        this.canCreate(deliveryPojo);
         List<Courier> availableCouriers = courierRepository.findCouriersByStatus(0);
         Courier selected_courier = availableCouriers.get(0);
         delivery.setCourier(selected_courier);
-        if(deliveryPojo.getVehicle_id()==-1){
-            logger.log(Level.INFO, "was null");
-            logger.log(Level.INFO, selected_courier.getVehicle().toString());
-            delivery.setVehicle(selected_courier.getVehicle()); }
-        else{
-            logger.log(Level.INFO, "was not null");
-            delivery.setVehicle(vehicleRepository.findById(deliveryPojo.getVehicle_id())); }
-        delivery.setOrder_id(deliveryPojo.getOrder_id());
+        delivery.setClientId(clientId);
+        delivery.setOrder_id(orderId);
+        delivery.setLatClient(delivery.getLatClient());
+        delivery.setLongClient(delivery.getLongClient());
+        delivery.setLatStore(delivery.getLatStore());
+        delivery.setLongStore(delivery.getLongStore());
         selected_courier.setStatus(1);
         courierRepository.save(selected_courier);
         return deliveryRepository.save(delivery);
     }
 
-    public boolean canCreate(CreateDeliveryPojo createPojo) {
-
-        logger.log(Level.INFO, String.valueOf(vehicleRepository.findById(createPojo.getVehicle_id())));
-        if(createPojo.getVehicle_id()!=-1
-            && vehicleRepository.findById(createPojo.getVehicle_id())==null){
-            throw new VehicleTypeDoesNotExistException("This vehicle type does not exist!");
-        }
-
-        if(deliveryRepository.findDeliveryByOrderId(createPojo.getOrder_id())!=null){
+    public boolean canCreate(long orderId, long clientId, CreateDeliveryPojo createPojo) {
+        if(deliveryRepository.findDeliveryByOrderId(orderId)!=null){
             throw new OrderIdAlreadyUsedException("This order id was already used on another delivery!");
         }
-        if(!deliveryRepository.existsOrderFromDeliveryById(createPojo.getOrder_id())){
+        if(!businessRepository.existsOrder(orderId)){
             throw new OrderIdDoesNotExistException("There is no order with these values!");
+        }
+        if(!businessRepository.existsClient(clientId)){
+            throw new ClientDoesNotExistException("There is no client with these values!");
         }
         List<Courier> allAvailable = courierRepository.findCouriersByStatus(0);
         if(allAvailable.isEmpty()){

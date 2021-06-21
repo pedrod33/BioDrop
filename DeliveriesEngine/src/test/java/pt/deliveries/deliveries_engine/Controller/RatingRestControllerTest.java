@@ -45,7 +45,7 @@ public class RatingRestControllerTest {
         courier.setId(1L);
         vehicle = new Vehicle("car");
         vehicle.setId(1L);
-        delivery = new Delivery(courier, 1L);
+        delivery = new Delivery(courier, 1L,3,40,5,60, 1L);
         delivery.setId(1L);
         rating = new Rating();
         rating.setDelivery(delivery);

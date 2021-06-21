@@ -1,5 +1,7 @@
 package pt.deliveries.deliveries_engine.Pojo;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
@@ -7,29 +9,47 @@ import java.io.Serializable;
 public class CreateDeliveryPojo implements Serializable {
 
     @NotBlank
-    private long order_id;
+    @Min(value=-90)
+    @Max(value=90)
+    private double latStore;
 
-    private long vehicle_id;
+    @NotBlank
+    @Min(value=-180)
+    @Max(value=180)
+    private double longStore;
+
+    @NotBlank
+    @Min(value=-90)
+    @Max(value=90)
+    private double latClient;
+
+    @NotBlank
+    @Min(value=-180)
+    @Max(value=180)
+    private double longClient;
 
     public CreateDeliveryPojo(){}
 
-    public CreateDeliveryPojo(Long order_id){
-        this.order_id = order_id;
-        this.vehicle_id = -1;
+    public CreateDeliveryPojo(double latStore, double longStore, double latClient, double longClient) {
+        this.latStore = latStore;
+        this.longStore = longStore;
+        this.latClient = latClient;
+        this.longClient = longClient;
     }
 
-
-    public CreateDeliveryPojo(long order_id, long vehicle_id){
-        this.order_id = order_id;
-        this.vehicle_id = vehicle_id;
+    public double getLatStore() {
+        return latStore;
     }
 
-    public Long getOrder_id() {
-        return order_id;
+    public double getLongStore() {
+        return longStore;
     }
 
+    public double getLatClient() {
+        return latClient;
+    }
 
-    public long getVehicle_id() {
-        return vehicle_id;
+    public double getLongClient() {
+        return longClient;
     }
 }

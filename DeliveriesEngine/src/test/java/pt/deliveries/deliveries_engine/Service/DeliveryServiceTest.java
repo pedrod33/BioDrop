@@ -60,7 +60,7 @@ public class DeliveryServiceTest {
             , v2
         );
         c1.setId(1L);
-        delivery = new Delivery(c1, 1L);
+        delivery = new Delivery(c1, 1L,3,40,5,60, 1L);
         //vehicle exists
         when(vehicleRepository.findById(1L)).thenReturn(v1);
         when(vehicleRepository.findById(2L)).thenReturn(v2);
@@ -81,14 +81,14 @@ public class DeliveryServiceTest {
     //create
     @Test
     void whenVehicleInValid_thenReturnFalse_create(){
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 3L);
-        assertThrows(VehicleTypeDoesNotExistException.class, () -> deliveryService.create(cdp));
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(2, 2, 2, 3);
+        assertThrows(VehicleTypeDoesNotExistException.class, () -> deliveryService.create(1L, 1L, cdp));
     }
 
     @Test
     void whenOrderInValid_thenReturnFalse_create(){
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L);
-        assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.create(cdp));
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1, 1, 2, 2);
+        assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.create(1L, 1L, cdp));
 
     }
 
@@ -96,47 +96,42 @@ public class DeliveryServiceTest {
     void whenCourierInValid_thenReturnFalse_create(){
         when(courierRepository.findCouriersByStatus(Mockito.anyInt())).thenReturn(new ArrayList<>());
 
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 1L);
-        assertThrows(CourierTakenException.class, () -> deliveryService.create(cdp));
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1,1,2, 1);
+        assertThrows(CourierTakenException.class, () -> deliveryService.create(1L, 1L, cdp));
 
     }
 
     @Test
     void whenCourierInValidNoVehicle_thenReturnException_create(){
         when(courierRepository.findCouriersByStatus(Mockito.anyInt())).thenReturn(new ArrayList<>());
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo( 2L);
-        assertThrows(CourierTakenException.class, () -> deliveryService.create(cdp));
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo( 1,1,4,2);
+        assertThrows(CourierTakenException.class, () -> deliveryService.create(1L, 1L, cdp));
     }
 
     @Test
     void whenOrderInValidNoVehicle_thenReturnException_create(){
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo( 1L);
-        assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.create(cdp));
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo( 1, 1,1,1);
+        assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.create(1L, 2L, cdp));
     }
 
     @Test
     void whenOrderValidNoVehicle_thenReturnWithCourierVehicle_create(){
         when(courierRepository.findCouriersByStatus(0)).thenReturn(new ArrayList<>(Arrays.asList(c1)));
         when(deliveryRepository.save(Mockito.any())).thenReturn(delivery);
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo( 2L);
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo( 1,1,1,2);
         delivery.setOrder_id(2L);
-        delivery.setVehicle(v2);
-        Delivery delivery_res = deliveryService.create(cdp);
+        Delivery delivery_res = deliveryService.create(1L, 1L, cdp);
         assertThat(delivery_res.getOrder_id()).isEqualTo(2L);
-        logger.log(Level.INFO, String.valueOf(delivery_res.getId()));
-        assertThat(delivery_res.getVehicle().getId()).isEqualTo(c1.getVehicle().getId());
     }
 
     @Test
     void whenOrderValidWithVehicle_thenReturnVehicle_create(){
         when(courierRepository.findCouriersByStatus(0)).thenReturn(new ArrayList<>(Arrays.asList(c1)));
         when(deliveryRepository.save(Mockito.any())).thenReturn(delivery);
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 2L);
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1,1, 2, 2);
         delivery.setOrder_id(2L);
-        delivery.setVehicle(v2);
-        Delivery delivery_res = deliveryService.create(cdp);
+        Delivery delivery_res = deliveryService.create(1L,1L,cdp);
         assertThat(delivery_res.getOrder_id()).isEqualTo(2L);
-        assertThat(delivery_res.getVehicle().getId()).isEqualTo(cdp.getVehicle_id());
     }
 
     //find delivery by order id
@@ -154,36 +149,32 @@ public class DeliveryServiceTest {
     //find all
     @Test
     void whenFindAll_thenReturnAllElements(){
-        delivery.setVehicle(delivery.getCourier().getVehicle());
         Vehicle v1 = new Vehicle("bike");
         v1.setId(2L);
         Delivery delivery1= new Delivery();
         delivery1.setOrder_id(2L);
-        delivery1.setVehicle(v1);
         delivery1.setCourier(c1);
         List<Delivery> allDeliveries = new ArrayList<>(Arrays.asList(delivery, delivery1));
         when(deliveryRepository.findAll()).thenReturn(allDeliveries);
         List<Delivery> res = deliveryRepository.findAll();
         assertThat(res.size()).isEqualTo(2);
-        assertThat(res.get(0).getVehicle().getType()).isEqualTo("bike");
-        assertThat(res.get(1).getVehicle().getType()).isEqualTo("bike");
+        assertThat(res.get(0).getCourier().getVehicle().getType()).isEqualTo("bike");
+        assertThat(res.get(1).getCourier().getVehicle().getType()).isEqualTo("bike");
     }
 
     @Test
     void whenFindAll_thenReturnEmpty(){
-        delivery.setVehicle(delivery.getCourier().getVehicle());
         Vehicle v1 = new Vehicle("bike");
         v1.setId(2L);
         Delivery delivery1= new Delivery();
         delivery1.setOrder_id(2L);
-        delivery1.setVehicle(v1);
         delivery1.setCourier(c1);
         List<Delivery> allDeliveries = new ArrayList<>(Arrays.asList(delivery, delivery1));
         when(deliveryRepository.findAll()).thenReturn(allDeliveries);
         List<Delivery> res = deliveryRepository.findAll();
         assertThat(res.size()).isEqualTo(2);
-        assertThat(res.get(0).getVehicle().getType()).isEqualTo("bike");
-        assertThat(res.get(1).getVehicle().getType()).isEqualTo("bike");
+        assertThat(res.get(0).getCourier().getVehicle().getType()).isEqualTo("bike");
+        assertThat(res.get(1).getCourier().getVehicle().getType()).isEqualTo("bike");
     }
 
     //findById

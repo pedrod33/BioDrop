@@ -53,9 +53,8 @@ public class RatingServiceTest {
                 , new Vehicle("car")
         );
         c1.setId(1L);
-        delivery = new Delivery(c1, 1L);
+        delivery = new Delivery(c1, 1L,3,40,5,60, 1L);
         delivery.setOrder_id(2L);
-        delivery.setVehicle(v2);
         when(deliveryRepository.findDeliveryByOrderId(1L)).thenReturn(delivery);
         when(deliveryRepository.existsOrderFromDeliveryById(1L)).thenReturn(true);
         when(ratingRepository.getClientById(1L)).thenReturn(true);

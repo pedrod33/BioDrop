@@ -50,66 +50,28 @@ public class DeliveryRestControllerTest {
         courier = new Courier("Marco Alves",
             "marcoA@gmail.com","12345678","M",931231233L,
             new Supervisor("carlos@gmail.com","12345678", "Carlos"),
-            new Vehicle("car")
+            vehicle
         );
         courier.setId(1L);
         vehicle = new Vehicle("car");
         vehicle.setId(1L);
-        delivery = new Delivery(courier, 1L);
+        delivery = new Delivery(courier, 1L,3,40,5,60, 1L);
     }
 
     //create
     @Test
-    void createDeliveryInvalidVehicleType() throws Exception {
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L);
-        doThrow(VehicleTypeDoesNotExistException.class).when(service).canCreate(Mockito.any());
+    void createDeliveryNoCouriersAvailable() throws Exception {
+        CreateDeliveryPojo cdp = new CreateDeliveryPojo(3, 40, 5, 60);
+        doThrow(CourierTakenException.class).when(service).canCreate(eq(1L), eq(1L), Mockito.any());
 
         mvc.perform((post("/deliveries-api/deliveries/create")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(cdp))))
-                .andExpect(status().isNotFound())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof VehicleTypeDoesNotExistException));
+                .andExpect(status().isImUsed())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CourierTakenException));
 
-        verify(service, times(1)).canCreate(Mockito.any());
+        verify(service, times(1)).canCreate(Mockito.anyLong(), Mockito.anyLong(), Mockito.any());
     }
 
-    @Test
-    void createDeliveryValidCredentials() throws Exception {
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L);
-        when(service.canCreate(Mockito.any())).thenReturn(true);
-        when(service.create(Mockito.any())).thenReturn(delivery);
-
-        mvc.perform((post("/deliveries-api/deliveries/create")
-                .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(cdp))))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.status", is(0)))
-                .andExpect(jsonPath("$.courier.name", is("Marco Alves")));
-    }
-
-    @Test
-    void createDeliveryInvalidOrder() throws Exception{
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 1L);
-        doThrow(OrderIdDoesNotExistException.class).when(service).canCreate(Mockito.any());
-
-        mvc.perform((post("/deliveries-api/deliveries/create")
-                .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(cdp))))
-                .andExpect(status().isNotFound())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof OrderIdDoesNotExistException));
-
-        verify(service, times(1)).canCreate(Mockito.any());
-    }
-
-    @Test
-    void createDeliveryInvalidCourier() throws Exception{
-        CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L);
-        doThrow(CourierIdDoesNotExistException.class).when(service).canCreate(Mockito.any());
-
-        mvc.perform((post("/deliveries-api/deliveries/create")
-                .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(cdp))))
-                .andExpect(status().isNotFound())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof CourierIdDoesNotExistException));
-
-        verify(service, times(1)).canCreate(Mockito.any());
-    }
 
     //find by order id
     @Test
@@ -138,16 +100,14 @@ public class DeliveryRestControllerTest {
         v1.setId(2L);
         Delivery delivery1= new Delivery();
         delivery1.setOrder_id(2L);
-        delivery1.setVehicle(v1);
         delivery1.setCourier(courier);
-        delivery.setVehicle(delivery.getCourier().getVehicle());
         List<Delivery> allDeliveries = new ArrayList<>(Arrays.asList(delivery, delivery1));
         when(service.findAllDeliveries()).thenReturn(allDeliveries);
         mvc.perform((get("/deliveries-api/deliveries/findAll")))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(2)))
-            .andExpect(jsonPath("$.[1].vehicle.type", is("bike")))
-            .andExpect(jsonPath("$.[0].vehicle.type", is("car")));
+            .andExpect(jsonPath("$.[1].courier.vehicle.type", is("bike")))
+            .andExpect(jsonPath("$.[0].courier.vehicle.type", is("car")));
     }
 
     @Test
