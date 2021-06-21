@@ -28,9 +28,14 @@ public class VehicleRestController {
         logger.log(Level.INFO, created.toString());
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
-    
+    //TODO:tests
     @GetMapping("/all")
     public ResponseEntity<List<Vehicle>> findAllVehicles(){
         return new ResponseEntity<>(service.findAllVehicles(), HttpStatus.OK);
+    }
+    //TODO:tests
+    @GetMapping("/")
+    public ResponseEntity<Vehicle> findVehicleById(@RequestParam long id){
+        return new ResponseEntity<>(service.findVehicleById(id), HttpStatus.OK);
     }
 }

@@ -3,6 +3,7 @@ package pt.deliveries.deliveries_engine.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.deliveries.deliveries_engine.Exception.VehicleTypeDoesNotExistException;
 import pt.deliveries.deliveries_engine.Exception.VehicleTypeIsUsedException;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
@@ -39,5 +40,13 @@ public class VehicleServiceImpl{
 
     public List<Vehicle> findAllVehicles() {
         return repository.findAll();
+    }
+
+    public Vehicle findVehicleById(long id) {
+        Vehicle res = repository.findById(id);
+        if(res==null){
+            throw new VehicleTypeDoesNotExistException("This vehicle does not exist");
+        }
+        return res;
     }
 }
