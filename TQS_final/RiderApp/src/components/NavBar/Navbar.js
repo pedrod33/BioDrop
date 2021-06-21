@@ -1,6 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '../Button/Button';
 import './Navbar.css';
 
 function Navbar() {
@@ -37,33 +36,15 @@ function Navbar() {
                         <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
                     </div>
                     <ul className={click ? 'nav-menu active' : 'nav-menu'}>
-        
+                        <li className='nav-item'>
+                            <Link to='/Rider'
+                                className='nav-links'
+                                onClick={closeMobileMenu}
+                            >
+                                Rider
+                            </Link>
+                        </li>
 
-                        <li className='nav-item'>
-                            <Link to='/Profile'
-                                className='nav-links'
-                                onClick={closeMobileMenu}
-                            >
-                             Profile
-                            </Link>
-                        </li>
-                        <li className='nav-item'>
-                            <Link to='/Stores'
-                                className='nav-links'
-                                onClick={closeMobileMenu}
-                            >
-                              Stores
-                            </Link>
-                        </li>
-                        <li className='nav-item'>
-                            <Link to='/Cart'
-                                className='nav-links'
-                                onClick={closeMobileMenu}
-                            >
-                                <i className="material-icons"> shopping_cart</i>
-                              
-                            </Link>
-                        </li>
                     </ul>
      
                 </div>

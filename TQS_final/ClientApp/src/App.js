@@ -2,19 +2,17 @@ import React, { Component } from 'react';
 import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import Home from './components/Home';
-import Rider from './Rider/Rider';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
 import './custom.css'
-
-import Album from './components/storelist';
-import Admin from './components/Admin/Admin';
-import shop from './components/ShoppingCart/shop';
-
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './index.css';
+import Cart from './components/CartV2/Cart';
+import Products from './components/CartV2/Products';
+import Stores from './components/Stores/Stores';
+import Profile from './components/Profile/Profile';
+import Orders from './components/Profile/Orders';
+import ProfileSettings from './components/Profile/ProfileSettings';
+import Pending from './components/Profile/Pending';
 
 class App extends Component {
   static displayName = App.name;
@@ -25,10 +23,13 @@ class App extends Component {
       <Layout>
 
             <Route exact path='/' component={Home} />
-            <Route exact path='/stores' component={Album} />
-            <Route exact path='/Admin' component={Admin} />
-            <Route exact path='/Shopping' component={shop} />
-            <Route exact path='/Rider' component={Rider} />
+            <Route exact path='/Profile' component={Profile} />
+            <Route exact path='/Product' component={Products}/>
+            <Route exact path='/Stores' component={Stores} />
+            <Route exact path='/Cart' component={Cart} />
+            <Route exact path='/Order' component={Orders} />
+            <Route exact path='/Settings' component={ProfileSettings} />
+            <Route exact path='/Pending' component={Pending} />
 
               </Layout>
        
