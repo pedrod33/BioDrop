@@ -12,26 +12,26 @@ import java.util.logging.Logger;
 
 @Service
 @Transactional
-public class VehicleServiceImpl implements VehicleService{
+public class VehicleServiceImpl{
+
+    Logger logger = Logger.getLogger(VehicleServiceImpl.class.getName());
 
     @Autowired
     VehicleRepository repository;
 
-    @Override
     public Vehicle create(String vehicleType) {
         Vehicle vehicle = new Vehicle(vehicleType);
         return repository.save(vehicle);
     }
 
-    @Override
     public boolean exists(String vehicle) {
+        logger.log(Level.INFO, vehicle);
         if(repository.findByType(vehicle)!=null){
             throw new VehicleTypeIsUsedException("This type of vehicle already exists");
         }
         return false;
     }
 
-    @Override
     public Vehicle findById(Vehicle vehicle){
         return null;
     }

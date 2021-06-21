@@ -1,5 +1,7 @@
 package pt.deliveries.deliveries_engine.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ public class Courier {
     private final int FREE = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id", nullable = false)
     private Supervisor supervisor;
 
@@ -42,6 +45,7 @@ public class Courier {
 
 
     @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Set<Delivery> deliveries;
 
     public Courier( String name, String email, String password, String gender, Long phoneNumber, Supervisor supervisor, Vehicle vehicle) {

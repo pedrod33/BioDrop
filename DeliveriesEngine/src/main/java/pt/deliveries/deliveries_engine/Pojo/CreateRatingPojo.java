@@ -16,9 +16,17 @@ public class CreateRatingPojo implements Serializable {
 
     @NotBlank
     private long order_id;
+
+    public CreateRatingPojo() {};
+
     public CreateRatingPojo(int score, String description, long order_id){
         this.score = score;
         this.description = description;
+        this.order_id = order_id;
+    }
+
+    public CreateRatingPojo(int score, long order_id){
+        this.score = score;
         this.order_id = order_id;
     }
 

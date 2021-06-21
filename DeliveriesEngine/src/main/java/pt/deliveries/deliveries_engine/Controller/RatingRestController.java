@@ -15,7 +15,7 @@ public class RatingRestController {
     @Autowired
     RatingServiceImpl ratingService;
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<Rating> addRatingToDelivery(@RequestBody CreateRatingPojo ratingPojo, @RequestParam long client_id){
         Rating rating = ratingService.createRating(ratingPojo, client_id);
         return new ResponseEntity<>(rating, HttpStatus.CREATED);

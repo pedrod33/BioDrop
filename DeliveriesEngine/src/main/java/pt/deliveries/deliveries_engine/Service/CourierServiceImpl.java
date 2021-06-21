@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 @Service
 @Transactional
-public class CourierServiceImpl implements CourierService{
+public class CourierServiceImpl{
 
     Logger logger = Logger.getLogger(CourierServiceImpl.class.getName());
 
@@ -44,11 +44,6 @@ public class CourierServiceImpl implements CourierService{
         courier.setVehicle(vehicleRepository.findById(courierPojo.getVehicle_id()).orElse(null));
         courier.setSupervisor(supervisorRepository.findById(courierPojo.getSupervisor_id()).orElse(null));
         return courierRepository.save(courier);
-    }
-
-    @Override
-    public boolean exists(RegisterCourierPojo courier) {
-        return false;
     }
 
     public boolean canRegister(RegisterCourierPojo courierPojo){

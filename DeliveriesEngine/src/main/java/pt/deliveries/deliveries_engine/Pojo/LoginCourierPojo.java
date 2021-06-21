@@ -8,10 +8,12 @@ import java.io.Serializable;
 public class LoginCourierPojo implements Serializable {
 
     @NotBlank @Email
-    private final String email;
+    private String email;
 
     @NotBlank
-    private final String password;
+    private String password;
+
+    public LoginCourierPojo() {};
 
     public LoginCourierPojo(String email, String password) {
         this.email = email;

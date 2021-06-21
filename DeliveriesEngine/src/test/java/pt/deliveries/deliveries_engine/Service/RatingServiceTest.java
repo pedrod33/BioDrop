@@ -71,10 +71,29 @@ public class RatingServiceTest {
         CreateRatingPojo ratingPojo = new CreateRatingPojo(5, "description", 3L);
         assertThrows(DeliveryDoesNotExistException.class, () -> ratingService.createRating(ratingPojo, 1L));
     }
+
+    @Test
+    public void createRatingInvalidOrderIdNoDesc_returnsException(){
+        delivery.setStatus(2);
+        CreateRatingPojo ratingPojo = new CreateRatingPojo(5,  3L);
+        assertThrows(DeliveryDoesNotExistException.class, () -> ratingService.createRating(ratingPojo, 1L));
+    }
+
     @Test
     public void createRatingInvalid_returnsException(){
         delivery.setStatus(2);
         CreateRatingPojo ratingPojo = new CreateRatingPojo(5, "description", 1L);
+        this.rating.setScore(ratingPojo.getScore());
+        this.rating.setDescription(ratingPojo.getDescription());
+        Rating rating = ratingService.createRating(ratingPojo, 1L);
+        assertThat(rating.getDescription()).isEqualTo(ratingPojo.getDescription());
+        assertThat(rating.getScore()).isEqualTo(ratingPojo.getScore());
+    }
+
+    @Test
+    public void createRatingInvalidNoDesc_returnsException(){
+        delivery.setStatus(2);
+        CreateRatingPojo ratingPojo = new CreateRatingPojo(5, 1L);
         this.rating.setScore(ratingPojo.getScore());
         this.rating.setDescription(ratingPojo.getDescription());
         Rating rating = ratingService.createRating(ratingPojo, 1L);
@@ -90,9 +109,23 @@ public class RatingServiceTest {
     }
 
     @Test
+    public void createRatingNotCompletedDeliveryNoDesc_returnsException(){
+        delivery.setStatus(1);
+        CreateRatingPojo ratingPojo = new CreateRatingPojo(5, 1L);
+        assertThrows(DeliveryHasNotBeenDeliveredException.class, () -> ratingService.createRating(ratingPojo, 1L));
+    }
+
+    @Test
     public void createRatingInvalidClientId_returnsException(){
         delivery.setStatus(2);
         CreateRatingPojo ratingPojo = new CreateRatingPojo(5, "description", 1L);
+        assertThrows(ClientDoesNotExistException.class, () -> ratingService.createRating(ratingPojo, 2L));
+    }
+
+    @Test
+    public void createRatingInvalidClientIdNoDesc_returnsException(){
+        delivery.setStatus(2);
+        CreateRatingPojo ratingPojo = new CreateRatingPojo(5, 1L);
         assertThrows(ClientDoesNotExistException.class, () -> ratingService.createRating(ratingPojo, 2L));
     }
 }

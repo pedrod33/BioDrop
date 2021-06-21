@@ -11,12 +11,11 @@ import pt.deliveries.deliveries_engine.Repository.SupervisorRepository;
 
 @Service
 @Transactional
-public class SupervisorServiceImpl implements SupervisorService{
+public class SupervisorServiceImpl{
 
     @Autowired
     private SupervisorRepository repository;
 
-    @Override
     public Supervisor create(RegisterSupervisorPojo supervisorPojo) {
         Supervisor supervisor = new Supervisor();
         supervisor.setEmail(supervisorPojo.getEmail());
@@ -25,7 +24,6 @@ public class SupervisorServiceImpl implements SupervisorService{
         return repository.save(supervisor);
     }
 
-    @Override
     public boolean existsRegister(RegisterSupervisorPojo supervisorPojo) {
         if (repository.findByEmail(supervisorPojo.getEmail()) == null) {
             return false;
@@ -33,7 +31,6 @@ public class SupervisorServiceImpl implements SupervisorService{
         throw new SupervisorEmailIsUsedException("This email is already being used!");
     }
 
-    @Override
     public boolean credentialValidity(RegisterSupervisorPojo supervisorPojo) {
         if (repository.findByEmailAndPassword(supervisorPojo.getEmail(), supervisorPojo.getPassword()) == null) {
             throw new SupervisorMailAndPasswordDoesNotMatchException("This password does not match the email!");
