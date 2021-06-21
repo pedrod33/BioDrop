@@ -19,7 +19,7 @@ export default function Orders() {
 		if (orders !== null) setOrderList(orders); */
         var client = JSON.parse(sessionStorage.getItem("client"));
 
-        ClientService.fetchOrderByUserId(client.id).then(
+        ClientService.fetchClientByUserId(client.id).then(
 			(response) => {
 
 				if (response.status === 200) {

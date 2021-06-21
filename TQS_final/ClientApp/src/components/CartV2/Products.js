@@ -14,7 +14,6 @@ class Products extends Component {
     componentDidMount() {
 		ClientService.fetchProductsInStore(this.props.match.params.id).then(
 			(response) => {
-				console.log(response);
 
 				if (response.status === 200) {
 					this.setState({
@@ -27,7 +26,7 @@ class Products extends Component {
 	}
 
 
-
+    //TODO: mudar amount
 	addToCart(item) {
         var client = JSON.parse(sessionStorage.getItem("client"));
 
