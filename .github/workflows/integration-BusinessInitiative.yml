@@ -1,4 +1,4 @@
-name: Build-BusinessInitiative
+name: integration-BusinessInitiative
 on:
   push:
     branches:
