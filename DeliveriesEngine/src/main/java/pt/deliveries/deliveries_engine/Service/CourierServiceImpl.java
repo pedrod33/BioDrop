@@ -37,7 +37,9 @@ public class CourierServiceImpl{
 
         Courier courier = new Courier();
         courier.setEmail(courierPojo.getEmail());
-        courier.setGender(courierPojo.getGender());
+        if(courierPojo.getGender()!=null){
+            courier.setGender(courierPojo.getGender());
+        }
         courier.setName(courierPojo.getName());
         courier.setPassword(courierPojo.getPassword());
         courier.setPhoneNumber(courierPojo.getPhoneNumber());

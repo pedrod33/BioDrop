@@ -8,6 +8,7 @@ import pt.deliveries.deliveries_engine.Model.Rating;
 import pt.deliveries.deliveries_engine.Pojo.CreateRatingPojo;
 import pt.deliveries.deliveries_engine.Service.RatingServiceImpl;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/deliveries-api/ratings")
 public class RatingRestController {

@@ -10,6 +10,7 @@ import pt.deliveries.deliveries_engine.Service.DeliveryServiceImpl;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/deliveries-api/deliveries")
 public class DeliveryRestController {
