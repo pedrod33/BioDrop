@@ -33,4 +33,4 @@ jobs:
         run: cd TQS_final/ClientApp && npm run build
 
       - name: Copy files
-        run: cd TQS_final/ClientApp && cp -R build/* /home/frontend/html
+        run: cd TQS_final/ClientApp && cp -R build/* /home/biodrop/html/client
