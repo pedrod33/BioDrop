@@ -10,6 +10,6 @@ public interface AddressService {
 
     List<Address> findAllAddresses();
 
-    Client saveClientAddress(AddressSaveForClientPOJO address, Long clientId);
+    Client updateClientAddress(AddressSaveForClientPOJO address, Long clientId);
 
 }

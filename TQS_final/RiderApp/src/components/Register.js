@@ -42,7 +42,7 @@ class Register extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { email: '', password: '', fName: '', lName: '', phone: '', sex: '', status: '' };
+        this.state = { email: '', password: '', fName: '', lName: '', phone: '', sex: '', status: '', options: [] };
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
         this.handleChangeFname = this.handleChangeFname.bind(this);
@@ -52,16 +52,24 @@ class Register extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentDidMount() {
+        fetch('https://localhost:8089/deliveries-api/vehicle/all')
+            .then(response => response.json())
+            .then(data => this.setState({ /*options: data */}));
+    }
+
     handleSubmit(event) {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            mode: 'cors',
             body: JSON.stringify({
                 "name": this.state.fName,
                 "email": this.state.email,
                 "password": this.state.password,
                 "gender": this.state.sex,
                 "phoneNumber": this.state.phone,
+                "supervisor_id": "1",
                 "vehicle_id": "2"
             })
         };

@@ -16,7 +16,6 @@ export class Layout extends Component {
         <Navbar />
             
             <Container>
-              
           {this.props.children}
             </Container>
           

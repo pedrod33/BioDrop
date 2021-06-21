@@ -80,9 +80,9 @@ public class AddressRestController_WithMockServiceTest {
         goodClient.setAddresses(new HashSet<>(Collections.singleton(address1)));
 
         Long clientId = 1L;
-        when( service.saveClientAddress( Mockito.any(), eq(clientId) )).thenReturn( goodClient );
+        when( service.updateClientAddress( Mockito.any(), eq(clientId) )).thenReturn( goodClient );
 
-        mvc.perform(put("/businesses-api/addresses/save-address?clientId=1").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(address1)))
+        mvc.perform(put("/businesses-api/addresses/update-client-address?clientId=1").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(address1)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is(1)))
@@ -97,7 +97,7 @@ public class AddressRestController_WithMockServiceTest {
                 .andExpect(jsonPath("gender", is("M")))
                 .andExpect(jsonPath("phoneNumber", is("96000000")));
 
-        verify(service, times(1)).saveClientAddress(Mockito.any(), eq(clientId));
+        verify(service, times(1)).updateClientAddress(Mockito.any(), eq(clientId));
     }
 
     @Test
@@ -106,12 +106,12 @@ public class AddressRestController_WithMockServiceTest {
         address1.setId(1L);
 
         Long wrongClientId = 0L;
-        when( service.saveClientAddress( Mockito.any(), eq(wrongClientId) )).thenThrow(ClientNotFoundException.class);
+        when( service.updateClientAddress( Mockito.any(), eq(wrongClientId) )).thenThrow(ClientNotFoundException.class);
 
-        mvc.perform(put("/businesses-api/addresses/save-address?clientId=0").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(address1)))
+        mvc.perform(put("/businesses-api/addresses/update-client-address?clientId=0").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(address1)))
                 .andExpect(status().isNotFound());
 
-        verify(service, times(1)).saveClientAddress(Mockito.any(), eq(wrongClientId));
+        verify(service, times(1)).updateClientAddress(Mockito.any(), eq(wrongClientId));
     }
 
 }

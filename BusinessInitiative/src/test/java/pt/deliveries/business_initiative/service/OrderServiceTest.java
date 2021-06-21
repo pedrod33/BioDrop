@@ -172,7 +172,7 @@ class OrderServiceTest {
         order1.setId(3L);
 
 
-        Order saved = service.save(3L, 1L, 10);
+        Order saved = service.updateProductsOrder(3L, 1L, 10);
 
 
         assertThat(saved.getId()).isEqualTo(order1.getId());
@@ -204,7 +204,7 @@ class OrderServiceTest {
 
         goodClient1.setOrders(new HashSet<>(Collections.singleton(order1)));
 
-        Order saved = service.save(4L, 3L, 10);
+        Order saved = service.updateProductsOrder(4L, 3L, 10);
 
 
         assertThat(saved.getId()).isEqualTo(order1.getId());
@@ -236,7 +236,7 @@ class OrderServiceTest {
 
         goodClient1.setOrders(new HashSet<>(Collections.singleton(order1)));
 
-        Order saved = service.save(4L, 2L, 10);
+        Order saved = service.updateProductsOrder(4L, 2L, 10);
 
 
         assertThat(saved.getId()).isEqualTo(order1.getId());
