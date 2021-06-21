@@ -3,10 +3,9 @@
     "",
     "\\src",
     "\\src\\components",
-    "\\src\\components\\Button",
     "\\src\\components\\NavBar",
     "\\src\\Rider"
   ],
-  "SelectedNode": "\\src\\Rider\\Rider.js",
+  "SelectedNode": "\\src\\components\\Register.js",
   "PreviewInSolutionExplorer": false
 }
