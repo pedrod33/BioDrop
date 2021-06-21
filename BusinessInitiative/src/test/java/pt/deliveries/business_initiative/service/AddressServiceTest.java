@@ -96,7 +96,7 @@ public class AddressServiceTest {
         goodClient3.setAddresses(new HashSet<>(Collections.singleton(address2)));
 
 
-        Client saved = service.saveClientAddress(address2POJO, goodClient3.getId());
+        Client saved = service.updateClientAddress(address2POJO, goodClient3.getId());
 
 
         assertThat(saved.getId()).isEqualTo(goodClient3.getId());

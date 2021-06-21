@@ -24,7 +24,7 @@ public class Client {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(cascade=CascadeType.ALL)
     private Set<Address> addresses = new HashSet<>();
 
     @OneToMany(mappedBy="client")
