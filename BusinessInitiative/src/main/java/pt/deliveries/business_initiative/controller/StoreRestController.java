@@ -12,6 +12,7 @@ import pt.deliveries.business_initiative.service.StoreServiceImpl;
 import java.util.List;
 import java.util.Set;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/businesses-api/stores")
 public class StoreRestController {

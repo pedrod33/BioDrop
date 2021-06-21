@@ -1,53 +1,85 @@
-﻿import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { addToCart } from '../actions/cartActions'
+﻿import React, { Component } from "react";
 
- class Products extends Component{
-    
-    handleClick = (id)=>{
-        this.props.addToCart(id); 
-    }
+import ClientService from "../../services/client.service";
 
-    render(){
-        let itemList = this.props.items.map(item=>{
-            return(
-                <div className="card" key={item.id}>
-                        <div style={{width:'auto', height:'100px'}}>
-                            <img className="item-img" src={item.img} alt={item.title}
-                                style={{width:'auto', height:'100px'}}/>
-                            <span className="card-title">{item.title}</span>
-                            <span to="/" className="btn-floating halfway-fab waves-effect waves-light red" onClick={()=>{this.handleClick(item.id)}}><i className="material-icons">add</i></span>
-                        </div>
+class Products extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			store: null,
+			products: [],
+		};
+	}
 
-                        <div className="card-content">
-                            <p>{item.desc}</p>
-                            <p><b>Price: {item.price}$</b></p>
-                        </div>
-                 </div>
+    componentDidMount() {
+		ClientService.fetchProductsInStore(this.props.match.params.id).then(
+			(response) => {
 
-            )
-        })
+				if (response.status === 200) {
+					this.setState({
+						store: null,
+						products: response.stores,
+					});
+				} else console.log(response.message);
+			}
+		);
+	}
 
-        return(
-            <div className="container">
-                <h3 className="center">Our items</h3>
-                <div className="box">
-                    {itemList}
-                </div>
-            </div>
-        )
-    }
+
+    //TODO: mudar amount
+	addToCart(item) {
+        var client = JSON.parse(sessionStorage.getItem("client"));
+
+        ClientService.addOrderToCart(client.id, item.id, 10).then(
+			(response) => {
+
+				if (response.status === 200) {
+					console.log("Produto adicionado")
+				} else console.log(response.message);
+			}
+		); 
+	};
+
+
+	render() {
+		let itemList = this.state.products.map((item) => {
+			return (
+				<div className="card" key={item.id}>
+					<div>
+						<img
+							className="item-img"
+							src={"https://source.unsplash.com/random"}
+							alt={item.title}
+							style={{ width: "auto", height: "200px" }}
+						/>
+						<span className="card-title">{item.name}</span>
+						<span
+							to="/"
+							className="btn-floating halfway-fab waves-effect waves-light red"
+							onClick={() => {
+								this.addToCart(item);
+							}}
+						>
+							<i className="material-icons">add</i>
+						</span>
+					</div>
+
+					<div className="card-content">
+						<p>
+							<b>Price: {item.price}$</b>
+						</p>
+					</div>
+				</div>
+			);
+		});
+
+		return (
+			<div className="container">
+				<h3 className="center">Our items</h3>
+				<div className="box"> {itemList} </div>
+			</div>
+		);
+	}
 }
-const mapStateToProps = (state)=>{
-    return {
-      items: state.items
-    }
-  }
-const mapDispatchToProps= (dispatch)=>{
-    
-    return{
-        addToCart: (id)=>{dispatch(addToCart(id))}
-    }
-}
 
-export default connect(mapStateToProps,mapDispatchToProps)(Products)
+export default Products;
