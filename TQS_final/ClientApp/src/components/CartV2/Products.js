@@ -1,5 +1,4 @@
 ﻿import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import ClientService from "../../services/client.service";
 
@@ -31,18 +30,15 @@ class Products extends Component {
 
 	addToCart(item) {
         var client = JSON.parse(sessionStorage.getItem("client"));
-        
-        console.log(client)
-        console.log(client.id)
 
         ClientService.addOrderToCart(client.id, item.id, 10).then(
 			(response) => {
 
 				if (response.status === 200) {
-					console.log("produto adicionado")
+					console.log("Produto adicionado")
 				} else console.log(response.message);
 			}
-		);
+		); 
 	};
 
 

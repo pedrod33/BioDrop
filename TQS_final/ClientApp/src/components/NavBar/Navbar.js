@@ -4,27 +4,17 @@ import "./Navbar.css";
 
 function Navbar() {
 	const [click, setClick] = useState(false);
-	const [button, setButton] = useState(true);
 	const [logged, setLogged] = useState(false);
 
 	const handleClick = () => setClick(!click);
 	const closeMobileMenu = () => setClick(false);
 
-	const showButton = () => {
-		if (window.innerWidth <= 960) {
-			setButton(false);
-		} else {
-			setButton(true);
-		}
-	};
 
     const logout = () => {
         sessionStorage.removeItem("client");
     }
 
 	useEffect(() => {
-		showButton();
-
 		const interval = setInterval(() => {
 			if (sessionStorage.getItem("client") !== null) setLogged(true);
 			else setLogged(false);
@@ -33,7 +23,6 @@ function Navbar() {
 		return () => clearInterval(interval);
 	}, []);
 
-	window.addEventListener("resize", showButton);
 
 	return (
 		<>

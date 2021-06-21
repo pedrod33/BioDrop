@@ -51,7 +51,6 @@ export default function Stores(props) {
 
 	useEffect(() => {
 		ClientService.fetchAllStores().then((response) => {
-			console.log(response);
 
 			if (response.status === 200) {
 				setStores(response.stores);

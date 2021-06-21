@@ -1,5 +1,5 @@
 class ClientService {
-	async getUserById(userId) {
+	/* async getUserById(userId) {
 		//var url = urlAPI + 'api/users/' + userId;
 		var url = "http://localhost:8090/businesses-api/clients/allClients";
 		console.log(url);
@@ -9,6 +9,18 @@ class ClientService {
 		console.log(res);
 
 		return res.json();
+	} */
+
+    async fetchOrderByUserId(clientId) {
+		var url = "http://localhost:8090/businesses-api/clients/client?clientId=" + clientId;
+
+		var res = await fetch(url);
+		var json = await res.json();
+
+
+        if (res.status === 404)
+			return { status: res.status, message: json.message };
+		else return { status: 200, client: json };
 	}
 
 	async login(emailInput, passwordInput) {
@@ -30,8 +42,10 @@ class ClientService {
 
 		if (json.status === 403)
 			return { status: json.status, message: json.message };
-		else sessionStorage.setItem("client", JSON.stringify(json));
-		return { status: 200, client: json };
+		else {
+            sessionStorage.setItem("client", JSON.stringify(json));
+		    return { status: 200, client: json };
+        }
 	}
 
 	async register(
@@ -101,7 +115,7 @@ class ClientService {
         productId,
         amount
 	) {
-		var url = "http://localhost:8090/businesses-api/orders/updateOrder?clientId=" + clientId + "&productId=" + productId + "&amount=" + amount;
+		var url = "http://localhost:8090/businesses-api/orders/updateProductsOrder?clientId=" + clientId + "&productId=" + productId + "&amount=" + amount;
 
 		var res = await fetch(url, {
 			method: "PUT",
@@ -111,12 +125,12 @@ class ClientService {
 		});
 		var json = await res.json();
 
-
-		if (json.status === 226) {
+        console.log(json)
+		if (res.status === 200) {
             sessionStorage.setItem("order",  JSON.stringify(json))
-			return { status: json.status, message: json.message };
+			return { status: res.status, order: json };
         }
-		else return { status: 201, client: json };
+		else return { status: res.status, message: json };
 	}
 
 }

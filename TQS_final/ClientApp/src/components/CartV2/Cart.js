@@ -1,77 +1,83 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Title from '../Profile/Title';
-import { Button } from 'bootstrap';
-
-// Generate Order Data
-function createData(id, name, shipTo, quantity,amount) {
-  return { id,  name, shipTo, quantity,  amount };
-}
-
-const rows = [
-  createData(0, 'Batata', 'Porto, PT',3,  20.40),
-  createData(1,  'Couve', 'Porto, PT',4,  6.99),
-  createData(2,  'Batata', 'Porto, PT',5,  10.81),
-  createData(3,'Cenoura', 'Porto, PT',6,  4.39),
-  createData(4,  'Abacaxi', 'Porto, PT',7, 2.79),
-];
-
-function preventDefault(event) {
-  event.preventDefault();
-}
-
-const useStyles = makeStyles((theme) => ({
-  seeMore: {
-    marginTop: theme.spacing(3),
-  },
-}));
+import React, { useState, useEffect } from "react";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Title from "../Profile/Title";
+// import ClientService from "../../services/client.service";
 
 export default function Cart() {
-  const classes = useStyles();
-  return (
-    <React.Fragment>
-      <Title>Shopping Cart</Title>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-             
-         
-            <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell align="right">Quantity</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
-           
-            <TableCell align="right"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-           
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell align="right">{row.quantity}</TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
-              <TableCell align="right"></TableCell>
-            </TableRow>
-          ))}    
-        </TableBody>
+	const [productsList, setProductsList] = useState(null);
 
-      </Table>
-      <button style={{fontWeight: 'bold',
-                                    fontSize: '0.75rem',
-                                    color: 'white',
-                                    backgroundColor: 'grey',
-                                    borderRadius: 8,
-                                    padding: '3px 10px',
-                                    display: 'inline-block',
-                                    backgroundColor: 'black',
-                                    marginTop:20}}>checkout</button>
-    </React.Fragment>
-  );
+	useEffect(() => {
+		var orders = JSON.parse(sessionStorage.getItem("order"));
+
+		if (orders !== null) setProductsList(orders.orderProducts);
+	}, []);
+
+	function calculatePrice() {
+        if( productsList !== null) {
+  
+            var totalPrice = 0;
+            for(var x=0; x < productsList.length; x++) {
+                totalPrice += productsList[x].amount * productsList[x].product.price
+            }
+
+            return totalPrice;
+        }
+    }
+
+	return (
+		<React.Fragment>
+			<Title>Shopping Cart</Title>
+			<Table size="small">
+				<TableHead>
+					<TableRow>
+						<TableCell>Product</TableCell>
+						<TableCell>Origin</TableCell>
+						<TableCell align="right">Quantity</TableCell>
+						<TableCell align="right">Price</TableCell>
+					</TableRow>
+				</TableHead>
+				{productsList !== null && (
+					<TableBody>
+						{productsList.map((prod) => (
+							<TableRow key={prod.product.id}>
+								<TableCell>{prod.product.name}</TableCell>
+								<TableCell>{prod.product.origin}</TableCell>
+								<TableCell align="right">
+									{prod.amount}
+								</TableCell>
+								<TableCell align="right">
+									{/* {calculatePrice(prod.product.price, prod.amount)}$ */}
+									{prod.product.price}$
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				)}
+			</Table>
+
+			<div>
+                
+                <p>Price: {calculatePrice()}$</p>
+
+				<button
+					style={{
+						fontWeight: "bold",
+						fontSize: "0.75rem",
+						color: "white",
+						backgroundColor: "grey",
+						borderRadius: 8,
+						padding: "3px 10px",
+						display: "inline-block",
+						marginTop: 20,
+					}}
+				>
+					checkout
+				</button>
+			</div>
+		</React.Fragment>
+	);
 }
