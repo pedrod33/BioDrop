@@ -2,6 +2,8 @@ package pt.deliveries.business_initiative.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pt.deliveries.business_initiative.exception.AddressNotFoundException;
+import pt.deliveries.business_initiative.exception.ClientNotFoundException;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Client;
 import pt.deliveries.business_initiative.pojo.AddressSaveForClientPOJO;
@@ -33,7 +35,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Client saveClientAddress(AddressSaveForClientPOJO addressPOJO, Long clientId) {
+    public Client updateClientAddress(AddressSaveForClientPOJO addressPOJO, Long clientId) {
         Address address = new Address();
         address.setCity(addressPOJO.getCity());
         address.setCompleteAddress(addressPOJO.getCompleteAddress());

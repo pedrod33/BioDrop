@@ -1,50 +1,148 @@
 package pt.deliveries.business_initiative.controller;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import pt.deliveries.business_initiative.JsonUtil;
 import pt.deliveries.business_initiative.model.Client;
+import pt.deliveries.business_initiative.pojo.ClientRegistrationPOJO;
 import pt.deliveries.business_initiative.repository.ClientRepository;
-
-import java.io.IOException;
-import java.util.List;
+import pt.deliveries.business_initiative.service.ClientServiceImpl;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = BusinessInitiativeApplication.class)
-//@AutoConfigureMockMvc
+import static io.restassured.RestAssured.given;
 
-//@TestPropertySource(locations = "classpath:application-integrationtest.properties")
-public class ClientRestControllerIT {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Testcontainers
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+class ClientRestControllerIT {
 
-    @Autowired
-    private MockMvc mvc;
+    @Container
+    public static MySQLContainer<?> container = new MySQLContainer<>("mysql:5.6")
+            .withDatabaseName("business-mysql-test")
+            .withUsername("tqs-test")
+            .withPassword("password-test");
 
-    @Autowired
-    private ClientRepository repository;
 
-    @BeforeEach
-    public void setUpDb() {
-        //repository.save(new Client(1L, "cunha", "cunha@ua.pt", "1234", "address", "M", "96000000"));
+    @DynamicPropertySource
+    static void properties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", container::getJdbcUrl);
+        registry.add("spring.datasource.password", container::getPassword);
+        registry.add("spring.datasource.username", container::getUsername);
     }
 
-    @AfterEach
-    public void resetDb() {
-        repository.deleteAll();
+     /*@BeforeEach
+    void tearDown() {
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "client");
     }
 
-    //@Test
-    public void whenValidRegisterInput_thenCreateClient() throws IOException, Exception {
-        Client cunha = new Client("cunha", "cunha@ua.pt", "1234", null, "M", "96000000");
+      */
 
-        mvc.perform(post("/businesses-api/clients/register").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(cunha)));
+    @Test
+    //@Transactional
+    @Order(1)
+    void contextLoads() {
+ /*
+        Client goodClient1 = new Client("cunha1", "cunha1@ua.pt", "1234", null, "M", "96000001");
+        Client goodClient2 = new Client("cunha2", "cunha2@ua.pt", "1234", null, "M", "96000002");
+        Client goodClient3 = new Client("cunha3", "cunha3@ua.pt", "1234", null, "M", "96000003");
 
-        List<Client> found = repository.findAll();
-        assertThat(found).extracting(Client::getName).containsOnly("cunha");
+        service.save(goodClient1);
+        service.save(goodClient2);
+        service.save(goodClient3);
+  */
+        //List<Client> clients = repository.findAll();
+        /*assertThat(clients.get(0).getName()).isEqualTo("cunha1");
+        assertThat(clients.get(1).getName()).isEqualTo("cunha2");
+        assertThat(clients.get(2).getName()).isEqualTo("cunha3");
+         */
+        System.out.println("Context loads!");
+    }
+
+    /*@Test
+    @Order(2)
+    void whenValidRegisterInput_thenStatus201( ) throws Exception {
+        ClientRegistrationPOJO goodClientPOJO = new ClientRegistrationPOJO("cunha", "cunha@ua.pt", "1234", "M", "96000000");
+
+
+        String responseString = given()
+                .port(8090)
+                .header("Content-Type", "application/json")
+                .body(goodClientPOJO)
+                .post("/businesses-api/clients/register")
+                .then()
+                .assertThat()
+                .statusCode(201)
+                .contentType(ContentType.JSON)
+                .and()
+                .body("name", is("cunha"))
+                .and()
+                .body("email", is("cunha@ua.pt"))
+                .and()
+                .body("password", is("1234"))
+                .and()
+                .body("phoneNumber", is("96000000"))
+                .and()
+                .extract()
+                .asString();
+
+        System.out.println(responseString);
+    }
+
+     */
+
+    @Test
+    @Order(2)
+    void given3Clients_whenFindAllClients_thenReturnAllClients() throws Exception {
+        /*Client goodClient1 = new Client("cunha1", "cunha1@ua.pt", "1234", null, "M", "96000001");
+        Client goodClient2 = new Client("cunha2", "cunha2@ua.pt", "1234", null, "M", "96000002");
+        Client goodClient3 = new Client("cunha3", "cunha3@ua.pt", "1234", null, "M", "96000003");
+
+        service.save(goodClient1);
+        service.save(goodClient2);
+        service.save(goodClient3);
+
+         */
+
+
+        String responseString = given()
+                .port(8090)
+                .header("Content-Type", "application/json")
+                .get("/businesses-api/clients/allClients")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+
+                .and()
+                .extract()
+                .asString();
+
+        System.out.println(
+                responseString
+        );
+
+
     }
 
     /*
@@ -127,6 +225,6 @@ public class ClientRestControllerIT {
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(2))))
                 .andExpect(jsonPath("$[0].name", is("diogo")))
                 .andExpect(jsonPath("$[1].name", is("cunha")));
-    }*/
-
+    }
+    */
 }

@@ -3,10 +3,7 @@ package pt.deliveries.business_initiative.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pt.deliveries.business_initiative.exception.ClientHasNoOrdersWaiting;
-import pt.deliveries.business_initiative.model.Client;
-import pt.deliveries.business_initiative.model.Order;
-import pt.deliveries.business_initiative.model.Order_Product;
-import pt.deliveries.business_initiative.model.Product;
+import pt.deliveries.business_initiative.model.*;
 import pt.deliveries.business_initiative.repository.OrderRepository;
 
 import java.util.Collections;
@@ -32,6 +29,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private Order_ProductServiceImpl orderProductService;
 
+    @Autowired
+    private AddressServiceImpl addressService;
+
     private static final Logger logger
             = Logger.getLogger(
             OrderServiceImpl.class.getName());
@@ -45,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order save(Long clientId, Long productId, Integer amount) {
+    public Order updateProductsOrder(Long clientId, Long productId, Integer amount) {
 
         Client client = clientService.findById(clientId);
         Product prod = productService.findById(productId);
@@ -138,6 +138,51 @@ public class OrderServiceImpl implements OrderService {
         } else {
             logger.log(Level.INFO, "Updating order status ...");
             clientCurrentOrder.setStatus(orderStatus);
+        }
+
+        repository.save(clientCurrentOrder);
+        logger.log(Level.INFO, "Order status updated and saved");
+        return clientCurrentOrder;
+    }
+
+    @Override
+    public Order updateAddressOrder(Long clientId, Long addressId, Integer amount) {
+        Client client = clientService.findById(clientId);
+
+        logger.log(Level.INFO, "Looking for client orders ...");
+        Order clientCurrentOrder = null;
+        logger.log(Level.INFO, client.getOrders().toString());
+
+
+        // Verify if client has orders created and if he does find those who are waiting
+        for (Order order : client.getOrders()) {
+            logger.log(Level.INFO, order.toString());
+
+            if (order.getStatus().equals(WAITING)) {
+                clientCurrentOrder = order;
+                logger.log(Level.INFO, "Order waiting found");
+
+                //Address address = addressService.findById(addressId);
+                for(Address x : client.getAddresses()) {
+                    if( x.getId().equals(addressId)) {
+                        clientCurrentOrder.setAddress(x);
+                    }
+                }
+            }
+        }
+
+
+        // In case the client doesn't have any orders yet
+        if ( clientCurrentOrder == null ) {
+            logger.log(Level.INFO, "Client doesnt have any orders waiting, cant update  ...");
+            throw new ClientHasNoOrdersWaiting("Client doesnt have any orders waiting");
+        } else {
+            logger.log(Level.INFO, "Updating order status ...");
+            for(Address x : client.getAddresses()) {
+                if( x.getId().equals(addressId)) {
+                    clientCurrentOrder.setAddress(x);
+                }
+            }
         }
 
         repository.save(clientCurrentOrder);
