@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/businesses-api/clients")
 public class ClientRestController {
@@ -27,6 +28,11 @@ public class ClientRestController {
     @GetMapping("/allClients")
     public List<Client> findAllClients() {
         return service.findAll();
+    }
+
+    @GetMapping("/client")
+    public Client findClientById(@RequestParam Long clientId) {
+        return service.findById(clientId);
     }
 
     @PostMapping(value = "/register")
