@@ -30,8 +30,7 @@ jobs:
               --health-timeout=5s
               --health-retries=3
 
-    services:
-          mysql:
+          mysql2:
             image: mysql:5.6
             env:
               MYSQL_ROOT_PASSWORD: password
