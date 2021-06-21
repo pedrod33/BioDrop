@@ -34,10 +34,6 @@ public class VehicleServiceImpl{
         return false;
     }
 
-    public Vehicle findById(Vehicle vehicle){
-        return null;
-    }
-
     public List<Vehicle> findAllVehicles() {
         return repository.findAll();
     }

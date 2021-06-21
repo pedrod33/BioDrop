@@ -36,7 +36,7 @@ public class RatingRestControllerTest {
     Courier courier;
     Rating rating;
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         courier = new Courier("Marco Alves",
                 "marcoA@gmail.com","12345678","M",931231233L,
                 new Supervisor("carlos@gmail.com","12345678", "Carlos"),
@@ -55,7 +55,7 @@ public class RatingRestControllerTest {
     }
 
     @Test
-    public void createRatingValidContent_ReturnsRating() throws Exception{
+    void createRatingValidContent_ReturnsRating() throws Exception{
         CreateRatingPojo ratingPojo = new CreateRatingPojo(5, "descricao", 1L);
         when(ratingService.createRating(Mockito.any(), Mockito.anyLong())).thenReturn(rating);
         rating.setDescription(ratingPojo.getDescription());
@@ -68,7 +68,7 @@ public class RatingRestControllerTest {
     }
 
     @Test
-    public void createRatingValidContentWithoutDescription_ReturnsRating() throws Exception{
+    void createRatingValidContentWithoutDescription_ReturnsRating() throws Exception{
         CreateRatingPojo ratingPojo = new CreateRatingPojo(5,  1L);
         when(ratingService.createRating(Mockito.any(), Mockito.anyLong())).thenReturn(rating);
         mvc.perform((post("/deliveries-api/ratings/?client_id=1")

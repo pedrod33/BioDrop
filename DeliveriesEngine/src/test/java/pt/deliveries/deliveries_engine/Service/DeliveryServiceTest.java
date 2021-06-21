@@ -50,7 +50,7 @@ public class DeliveryServiceTest {
     private Vehicle v2;
     private Delivery delivery;
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         v1 = new Vehicle("car");
         v1.setId(1L);
         v2 = new Vehicle("bike");
@@ -80,20 +80,20 @@ public class DeliveryServiceTest {
 
     //create
     @Test
-    public void whenVehicleInValid_thenReturnFalse_create(){
+    void whenVehicleInValid_thenReturnFalse_create(){
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 3L);
         assertThrows(VehicleTypeDoesNotExistException.class, () -> deliveryService.create(cdp));
     }
 
     @Test
-    public void whenOrderInValid_thenReturnFalse_create(){
+    void whenOrderInValid_thenReturnFalse_create(){
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L);
         assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.create(cdp));
 
     }
 
     @Test
-    public void whenCourierInValid_thenReturnFalse_create(){
+    void whenCourierInValid_thenReturnFalse_create(){
         when(courierRepository.findCouriersByStatus(Mockito.anyInt())).thenReturn(new ArrayList<>());
 
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 1L);
@@ -102,20 +102,20 @@ public class DeliveryServiceTest {
     }
 
     @Test
-    public void whenCourierInValidNoVehicle_thenReturnException_create(){
+    void whenCourierInValidNoVehicle_thenReturnException_create(){
         when(courierRepository.findCouriersByStatus(Mockito.anyInt())).thenReturn(new ArrayList<>());
         CreateDeliveryPojo cdp = new CreateDeliveryPojo( 2L);
         assertThrows(CourierTakenException.class, () -> deliveryService.create(cdp));
     }
 
     @Test
-    public void whenOrderInValidNoVehicle_thenReturnException_create(){
+    void whenOrderInValidNoVehicle_thenReturnException_create(){
         CreateDeliveryPojo cdp = new CreateDeliveryPojo( 1L);
         assertThrows(OrderIdAlreadyUsedException.class, () -> deliveryService.create(cdp));
     }
 
     @Test
-    public void whenOrderValidNoVehicle_thenReturnWithCourierVehicle_create(){
+    void whenOrderValidNoVehicle_thenReturnWithCourierVehicle_create(){
         when(courierRepository.findCouriersByStatus(0)).thenReturn(new ArrayList<>(Arrays.asList(c1)));
         when(deliveryRepository.save(Mockito.any())).thenReturn(delivery);
         CreateDeliveryPojo cdp = new CreateDeliveryPojo( 2L);
@@ -128,7 +128,7 @@ public class DeliveryServiceTest {
     }
 
     @Test
-    public void whenOrderValidWithVehicle_thenReturnVehicle_create(){
+    void whenOrderValidWithVehicle_thenReturnVehicle_create(){
         when(courierRepository.findCouriersByStatus(0)).thenReturn(new ArrayList<>(Arrays.asList(c1)));
         when(deliveryRepository.save(Mockito.any())).thenReturn(delivery);
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 2L);
@@ -141,19 +141,19 @@ public class DeliveryServiceTest {
 
     //find delivery by order id
     @Test
-    public void whenOrderIdIsValid_thenReturnDelivery_findByOrderId(){
+    void whenOrderIdIsValid_thenReturnDelivery_findByOrderId(){
         Delivery delivery = deliveryService.getDeliveryByOrderId(1L);
         assertThat(delivery.getOrder_id()).isEqualTo(1L);
     }
 
     @Test
-    public void whenOrderIdIsInvalid_thenReturnDelivery_findByOrderId(){
+    void whenOrderIdIsInvalid_thenReturnDelivery_findByOrderId(){
         assertThrows(OrderIdDoesNotExistException.class, () -> deliveryService.getDeliveryByOrderId(2L));
     }
 
     //find all
     @Test
-    public void whenFindAll_thenReturnAllElements(){
+    void whenFindAll_thenReturnAllElements(){
         delivery.setVehicle(delivery.getCourier().getVehicle());
         Vehicle v1 = new Vehicle("bike");
         v1.setId(2L);
@@ -170,7 +170,7 @@ public class DeliveryServiceTest {
     }
 
     @Test
-    public void whenFindAll_thenReturnEmpty(){
+    void whenFindAll_thenReturnEmpty(){
         delivery.setVehicle(delivery.getCourier().getVehicle());
         Vehicle v1 = new Vehicle("bike");
         v1.setId(2L);
@@ -188,12 +188,12 @@ public class DeliveryServiceTest {
 
     //findById
     @Test
-    public void whenFindByInvalidId_ReturnException(){
+    void whenFindByInvalidId_ReturnException(){
         assertThrows(DeliveryDoesNotExistException.class, () -> deliveryService.findDeliveryById(2L));
     }
 
     @Test
-    public void whenFindById_ReturnDelivery(){
+    void whenFindById_ReturnDelivery(){
         when(deliveryRepository.findById(1L)).thenReturn(delivery);
         Delivery delivery_result = deliveryService.findDeliveryById(1L);
         assertThat(delivery_result.getOrder_id()).isEqualTo(delivery.getOrder_id());

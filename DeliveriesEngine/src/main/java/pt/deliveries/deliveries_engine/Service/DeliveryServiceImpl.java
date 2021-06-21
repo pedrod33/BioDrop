@@ -64,7 +64,7 @@ public class DeliveryServiceImpl {
             throw new OrderIdDoesNotExistException("There is no order with these values!");
         }
         List<Courier> allAvailable = courierRepository.findCouriersByStatus(0);
-        if(allAvailable.size()==0){
+        if(allAvailable.isEmpty()){
             throw new CourierTakenException("No Courier Available Right Now");
         }
         return true;

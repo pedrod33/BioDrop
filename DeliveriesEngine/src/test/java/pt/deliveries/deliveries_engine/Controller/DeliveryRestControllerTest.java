@@ -46,7 +46,7 @@ public class DeliveryRestControllerTest {
     Courier courier;
 
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         courier = new Courier("Marco Alves",
             "marcoA@gmail.com","12345678","M",931231233L,
             new Supervisor("carlos@gmail.com","12345678", "Carlos"),
@@ -60,7 +60,7 @@ public class DeliveryRestControllerTest {
 
     //create
     @Test
-    public void createDeliveryInvalidVehicleType() throws Exception {
+    void createDeliveryInvalidVehicleType() throws Exception {
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 2L);
         doThrow(VehicleTypeDoesNotExistException.class).when(service).canCreate(Mockito.any());
 
@@ -73,7 +73,7 @@ public class DeliveryRestControllerTest {
     }
 
     @Test
-    public void createDeliveryValidCredentials() throws Exception {
+    void createDeliveryValidCredentials() throws Exception {
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L);
         when(service.canCreate(Mockito.any())).thenReturn(true);
         when(service.create(Mockito.any())).thenReturn(delivery);
@@ -86,7 +86,7 @@ public class DeliveryRestControllerTest {
     }
 
     @Test
-    public void createDeliveryInvalidOrder() throws Exception{
+    void createDeliveryInvalidOrder() throws Exception{
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(2L, 1L);
         doThrow(OrderIdDoesNotExistException.class).when(service).canCreate(Mockito.any());
 
@@ -99,7 +99,7 @@ public class DeliveryRestControllerTest {
     }
 
     @Test
-    public void createDeliveryInvalidCourier() throws Exception{
+    void createDeliveryInvalidCourier() throws Exception{
         CreateDeliveryPojo cdp = new CreateDeliveryPojo(1L, 1L);
         doThrow(CourierIdDoesNotExistException.class).when(service).canCreate(Mockito.any());
 
@@ -113,7 +113,7 @@ public class DeliveryRestControllerTest {
 
     //find by order id
     @Test
-    public void findByOrderIdValidId() throws Exception{
+    void findByOrderIdValidId() throws Exception{
         when(service.getDeliveryByOrderId(1L)).thenReturn(delivery);
 
         mvc.perform((get("/deliveries-api/deliveries/findByOrder_id?order_id=1")))
@@ -123,7 +123,7 @@ public class DeliveryRestControllerTest {
     }
 
     @Test
-    public void findByOrderIdInvalidId() throws Exception{
+    void findByOrderIdInvalidId() throws Exception{
         doThrow(OrderIdDoesNotExistException.class).when(service).getDeliveryByOrderId(2L);
 
         mvc.perform((get("/deliveries-api/deliveries/findByOrder_id?order_id=2")))
@@ -133,7 +133,7 @@ public class DeliveryRestControllerTest {
 
     //find all
     @Test
-    public void findAll_returnsAllElements() throws Exception{
+    void findAll_returnsAllElements() throws Exception{
         Vehicle v1 = new Vehicle("bike");
         v1.setId(2L);
         Delivery delivery1= new Delivery();
@@ -151,7 +151,7 @@ public class DeliveryRestControllerTest {
     }
 
     @Test
-    public void findAll_returnsEmpty() throws Exception{
+    void findAll_returnsEmpty() throws Exception{
         List<Delivery> allDeliveries = new ArrayList<>();
         when(service.findAllDeliveries()).thenReturn(allDeliveries);
         mvc.perform((get("/deliveries-api/deliveries/findAll")))
@@ -160,7 +160,7 @@ public class DeliveryRestControllerTest {
     }
 
     @Test
-    public void findByValidId_returnsDelivery() throws Exception{
+    void findByValidId_returnsDelivery() throws Exception{
         when(service.findDeliveryById(1L)).thenReturn(delivery);
         mvc.perform((get("/deliveries-api/deliveries/findById?id=1")))
             .andExpect(status().isOk())
@@ -168,7 +168,7 @@ public class DeliveryRestControllerTest {
     }
 
     @Test
-    public void findByInvalidId_returnsException() throws Exception{
+    void findByInvalidId_returnsException() throws Exception{
         doThrow(DeliveryDoesNotExistException.class).when(service).findDeliveryById(2L);
 
         mvc.perform((get("/deliveries-api/deliveries/findById?id=2")))
