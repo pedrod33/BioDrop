@@ -11,7 +11,6 @@ import pt.deliveries.deliveries_engine.Exception.SupervisorEmailIsUsedException;
 import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Pojo.RegisterSupervisorPojo;
 import pt.deliveries.deliveries_engine.Repository.SupervisorRepository;
-import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;

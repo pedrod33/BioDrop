@@ -34,11 +34,11 @@ public class VehicleServiceTest {
 
     @Test
     void whenExistingType_thenReturnTrue_exists(){
-        assertThrows(VehicleTypeIsUsedException.class, () -> vehicleService.exists(v1));
+        assertThrows(VehicleTypeIsUsedException.class, () -> vehicleService.exists(v1.getType()));
     }
     @Test
     void whenNonExistingType_thenReturnFalse_exists(){
-        boolean doesCourierTypeMatch = vehicleService.exists(new Vehicle("bike"));
+        boolean doesCourierTypeMatch = vehicleService.exists("bike");
         assertThat(doesCourierTypeMatch).isFalse();
     }
 }

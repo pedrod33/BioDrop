@@ -4,9 +4,9 @@ import pt.deliveries.deliveries_engine.Model.Courier;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
 
 public interface VehicleService {
-    Vehicle create(Vehicle vehicle);
+    Vehicle create(String vehicle);
 
-    boolean exists(Vehicle vehicle);
+    boolean exists(String vehicle);
 
     Vehicle findById(Vehicle vehicle);
 }
