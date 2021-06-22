@@ -33,7 +33,7 @@ jobs:
         run: cd TQS_final/ClientApp && npm run build
 
       - name: Copy files
-        run: cd TQS_final/ClientApp && cp -R build/* /home/biodrop/html/client.webdock.io/
+        run: cd TQS_final/ClientApp && sudo -S biodrop | cp -R build/* /home/biodrop/html/client.webdock.io/
         
 #rider front 
       - name: Install dependencies
@@ -43,4 +43,4 @@ jobs:
         run: cd TQS_final/RiderApp && npm run build
 
       - name: Copy files
-        run: cd TQS_final/RiderApp && cp -R build/* /home/biodrop/html/rider.webdock.io/
+        run: cd TQS_final/RiderApp && sudo -S biodrop | cp -R build/* /home/biodrop/html/rider.webdock.io/
