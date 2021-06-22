@@ -49,7 +49,7 @@ jobs:
           docker stop deliveries-engine 2>/dev/null
           docker rm deliveries-engine 2>/dev/null
           docker build -t deliveries-engine .
-          docker run -p 8089:8089 --name deliveries-engine --link deliveries-mysql:mysql deliveries-engine --restart unless-stopped
+          docker run -d -p 8089:8089 --name deliveries-engine --link deliveries-mysql:mysql deliveries-engine --restart unless-stopped
 
 
 
