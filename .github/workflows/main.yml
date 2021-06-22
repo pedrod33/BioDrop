@@ -27,13 +27,25 @@ jobs:
 
       - name: Setup BusinessInitiative
         run: |
-          export MYSQL_DB="jdbc:mysql://business-mysql:3306/business-mysql"
           cd BusinessInitiative
+          export MYSQL_DB="jdbc:mysql://business-mysql:3306/business-mysql"
           ./mvnw package -DskipTests
           docker stop business-initiative 2>/dev/null
           docker rm business-initiative 2>/dev/null
           docker build -t business-initiative .
-          docker run -d -p 8090:8090 --name business-initiative --link business-mysql:mysql business-initiative
+          docker run -d -p 8090:8090 --name business-initiative --link business-mysql:mysql business-initiative --restart unless-stopped
+
+
+
+#      - name: Setup BusinessInitiative
+#        run: |
+#          export MYSQL_DB="jdbc:mysql://business-mysql:3306/business-mysql"
+#          cd BusinessInitiative
+#          ./mvnw package -DskipTests
+#          docker stop business-initiative 2>/dev/null
+#          docker rm business-initiative 2>/dev/null
+#          docker build -t business-initiative .
+#          docker run -d -p 8090:8090 --name business-initiative --link business-mysql:mysql business-initiative
 
 #      - name: Setup DeliveriesEngine database
 #        run: |
