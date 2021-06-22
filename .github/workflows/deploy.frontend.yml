@@ -3,7 +3,7 @@ name: deploy-frontend
 
 on:
   push:
-    branches: [ main, front-deploy ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
