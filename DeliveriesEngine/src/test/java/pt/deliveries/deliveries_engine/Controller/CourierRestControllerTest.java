@@ -45,7 +45,7 @@ class CourierRestControllerTest {
     private LoginCourierPojo lcp1;
     @BeforeEach
     void setUp(){
-        rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
+        rcp1 = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
         v1 = new Vehicle("car");
         v1.setId(1L);
         courier = new Courier("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, new Supervisor("carlos@gmail.com","12345678", "Carlos"), new Vehicle("car"));
