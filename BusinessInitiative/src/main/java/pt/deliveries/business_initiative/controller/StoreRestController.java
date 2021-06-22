@@ -21,6 +21,10 @@ public class StoreRestController {
     private StoreServiceImpl service;
 
 
+    @GetMapping("/")
+    public Store findById(@RequestParam long id){
+        return service.findById(id);
+    }
     @GetMapping("/allStores")
     public List<Store> findAllStores() {
         return service.findAllStores();

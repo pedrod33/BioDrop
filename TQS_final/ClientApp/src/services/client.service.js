@@ -179,7 +179,6 @@ class ClientService {
 			clientId +
 			"&orderStatus=" +
 			newStatus;
-        console.log(url)
 
 		var res = await fetch(url, {
 			method: "PUT",
@@ -226,6 +225,64 @@ class ClientService {
 			return { status: json.status, message: json.message };
 		else return { status: 200, order: json };
 	}
+
+
+    async fetchStoreById(storeId) {
+        
+		var url =
+			"http://localhost:8090/businesses-api/stores/?id=" +
+			storeId;
+		console.log("antes do await")
+		var res = await fetch(url);
+		var json = await res.json();
+		console.log(json);
+		console.log(res);
+		if (res.status === 200) {
+			return { status: 200, store: json };
+		} else {
+			return { status: 404, message: json.message };
+		}
+	}
+
+    async createDelivery(clientId, storeId, clientAddress) {
+        var order = JSON.parse(sessionStorage.getItem("order"))
+
+		var url = "http://localhost:8089/deliveries-api/deliveries/create?clientId=" + clientId + "&orderId=" + order.id;
+
+
+        this.fetchStoreById(storeId).then( (result) => {
+
+            let locations = {
+                latStore: result.store.address.latitude,
+                longStore: result.store.address.longitude,
+                latClient: clientAddress.latitude,
+                longClient: clientAddress.longitude,
+            };
+
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(locations),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then( (res) => {
+                console.log(res)
+                var json = res.json()
+                    
+                console.log(json)
+                if (json.status !== 201)
+                    return { status: json.status, message: json.message };
+                else {
+                    //sessionStorage.setItem("client", JSON.stringify(json));
+                    return { status: 201, client: json };
+                }
+                
+            })
+
+
+		})
+	}
+
 }
 
 export default new ClientService();
