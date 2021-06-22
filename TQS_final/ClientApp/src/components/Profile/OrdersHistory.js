@@ -24,8 +24,8 @@ export default function OrdesHistory() {
 				var filteredOrders = [];
 				for (var x = 0; x < orders.length; x++)
 					if (
-						orders[x].status === "Done" ||
-						orders[x].status === "Canceled"
+						orders[x].status === "done" ||
+						orders[x].status === "canceled"
 					)
 						filteredOrders.push(orders[x]);
 

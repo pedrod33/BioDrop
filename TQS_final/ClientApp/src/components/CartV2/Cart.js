@@ -59,9 +59,30 @@ export default function Cart() {
 	};
 	const handleShow = () => setShow(true);
 
+	const handleCloseWithConfirmation = () => {
+		var client = JSON.parse(sessionStorage.getItem("client"));
+
+        console.log("handleCloseWithConfirmation")
+
+		ClientService.updateOrderStatus(client.id, "waiting_for_rider").then(
+			(response) => {
+				if (response.status === 200) {
+					setShow(false);
+					setSelectedAddress(null);
+                    setProductsList(null);
+				} else console.log(response.message);
+			}
+		);
+	};
+
 	const changeSelectedAddress = (address) => {
-		console.log("select");
-		if (address !== selectedAddress) setSelectedAddress(address);
+		if (address !== selectedAddress) {
+            setSelectedAddress(address);
+
+            /* var orderStored = JSON.parse(sessionStorage.getItem("order"));
+            orderStored.address = address;
+            sessionStorage.setItem("order", JSON.stringify(orderStored)) */
+        }
 	};
 
 	function updateClientAddress() {
@@ -219,7 +240,10 @@ export default function Cart() {
 							</div>
 
 							{createAddress === true && (
-								<div className="row" style={{marginTop: '20px'}}>
+								<div
+									className="row"
+									style={{ marginTop: "20px" }}
+								>
 									<div
 										style={{
 											flex: 1,
@@ -314,8 +338,12 @@ export default function Cart() {
 										</div>
 									</div>
 									<div
-										style={{ textAlign: "center", justifyContent: 'center', alignSelf: 'center' }}
-                                        className="col-3"
+										style={{
+											textAlign: "center",
+											justifyContent: "center",
+											alignSelf: "center",
+										}}
+										className="col-3"
 									>
 										<button
 											onClick={() => {
@@ -333,7 +361,10 @@ export default function Cart() {
 								Close
 							</button>
 							{selectedAddress !== null && (
-								<button variant="primary" onClick={handleClose}>
+								<button
+									variant="primary"
+									onClick={handleCloseWithConfirmation}
+								>
 									Confirm
 								</button>
 							)}

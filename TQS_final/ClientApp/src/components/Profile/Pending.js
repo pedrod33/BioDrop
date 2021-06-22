@@ -51,7 +51,7 @@ export default function Pending() {
 						{orderList.length !== 0 &&
 							orderList.map((order) => {
 								return (
-									order.status === "waiting" && (
+									(order.status === "waiting" || order.status === "waiting_for_rider") && (
 										<TableRow key={order.id}>
 											<TableCell>{orderNo++}</TableCell>
 											{order.address === null ? (

@@ -13,7 +13,7 @@ class ClientService {
 
 	async fetchClientByUserId(clientId) {
 		var url =
-			"http://localhost:8090/businesses-api/clients/client?clientId=" +
+			"http://localhost:8090/businesses-api/clients/?clientId=" +
 			clientId;
 
 		var res = await fetch(url);
@@ -139,22 +139,27 @@ class ClientService {
 		} else return { status: res.status, message: json };
 	}
 
-	async updateClientAddress(clientId, cityInput, completeAddressInput, latitudeInput, longitudeInput) {
+	async updateClientAddress(
+		clientId,
+		cityInput,
+		completeAddressInput,
+		latitudeInput,
+		longitudeInput
+	) {
 		var url =
 			"http://localhost:8090/businesses-api/addresses/update-client-address?clientId=" +
 			clientId;
 
-
-        let addressInput = {
-            city: cityInput,
-            completeAddress: completeAddressInput,
-            latitude: latitudeInput,
-            longitude: longitudeInput,
-        };
+		let addressInput = {
+			city: cityInput,
+			completeAddress: completeAddressInput,
+			latitude: latitudeInput,
+			longitude: longitudeInput,
+		};
 
 		var res = await fetch(url, {
 			method: "PUT",
-            body: JSON.stringify(addressInput),
+			body: JSON.stringify(addressInput),
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -164,6 +169,29 @@ class ClientService {
 		console.log(json);
 		if (res.status === 200) {
 			sessionStorage.setItem("client", JSON.stringify(json));
+			return { status: res.status, client: json };
+		} else return { status: res.status, message: json };
+	}
+
+	async updateOrderStatus(clientId, newStatus) {
+		var url =
+			"http://localhost:8090/businesses-api/orders/updateStatus?clientId=" +
+			clientId +
+			"&orderStatus=" +
+			newStatus;
+        console.log(url)
+
+		var res = await fetch(url, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		var json = await res.json();
+
+		console.log(json);
+		if (res.status === 200) {
+			sessionStorage.setItem("cart", null);
 			return { status: res.status, client: json };
 		} else return { status: res.status, message: json };
 	}
