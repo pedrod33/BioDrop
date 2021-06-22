@@ -11,6 +11,7 @@ import pt.deliveries.business_initiative.JsonUtil;
 import pt.deliveries.business_initiative.exception.ClientEmailOrPasswordIncorrectException;
 import pt.deliveries.business_initiative.exception.OrderNotFoundException;
 import pt.deliveries.business_initiative.model.*;
+import pt.deliveries.business_initiative.pojo.AddressPOJO;
 import pt.deliveries.business_initiative.service.OrderServiceImpl;
 
 import java.util.*;
@@ -266,7 +267,8 @@ class OrderRestController_WithMockServiceTest {
         goodClient1.setOrders(clientOrders);
 
 
-        when( service.updateOrderAddress(goodClient1.getId(), address1 ) ).thenReturn( order1 );
+        AddressPOJO addressPOJO = new AddressPOJO("city1", "address1", 10, 11);
+        when( service.updateOrderAddress(goodClient1.getId(), addressPOJO ) ).thenReturn( order1 );
 
 
         mvc.perform(put("/businesses-api/orders/updateOrderAddress?clientId=1").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(address1)))
@@ -285,7 +287,7 @@ class OrderRestController_WithMockServiceTest {
                 .andExpect(jsonPath("orderProducts.[0].amount", is(10)))
                 .andExpect(jsonPath("status", is("done")));
 
-        verify(service, times(1)).updateOrderAddress(goodClient1.getId(),address1 );
+        verify(service, times(1)).updateOrderAddress(goodClient1.getId(), addressPOJO );
     }
 }
 

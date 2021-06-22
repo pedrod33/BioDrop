@@ -6,6 +6,7 @@ import pt.deliveries.business_initiative.exception.ClientHasNoOrdersWaiting;
 import pt.deliveries.business_initiative.exception.ClientNotFoundException;
 import pt.deliveries.business_initiative.exception.OrderNotFoundException;
 import pt.deliveries.business_initiative.model.*;
+import pt.deliveries.business_initiative.pojo.AddressPOJO;
 import pt.deliveries.business_initiative.repository.OrderRepository;
 
 import java.util.Collections;
@@ -156,7 +157,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order updateOrderAddress(Long clientId, Address addresss) {
+    public Order updateOrderAddress(Long clientId, AddressPOJO addressPOJO) {
+
+        Address address = new Address();
+        address.setCity(addressPOJO.getCity());
+        address.setCompleteAddress(addressPOJO.getCompleteAddress());
+        address.setLatitude(addressPOJO.getLatitude());
+        address.setLongitude(addressPOJO.getLongitude());
+
         Client client = clientService.findById(clientId);
 
         logger.log(Level.INFO, "Looking for client orders ...");
@@ -181,7 +189,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ClientHasNoOrdersWaiting("Client doest have any orders waiting");
         } else {
             logger.log(Level.INFO, "Updating order address ...");
-            clientCurrentOrder.setAddress(addresss);
+            clientCurrentOrder.setAddress(address);
         }
 
         repository.save(clientCurrentOrder);

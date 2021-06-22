@@ -12,6 +12,7 @@ import pt.deliveries.business_initiative.exception.ClientEmailOrPhoneNumberInUse
 import pt.deliveries.business_initiative.exception.ClientHasNoOrdersWaiting;
 import pt.deliveries.business_initiative.exception.OrderNotFoundException;
 import pt.deliveries.business_initiative.model.*;
+import pt.deliveries.business_initiative.pojo.AddressPOJO;
 import pt.deliveries.business_initiative.repository.OrderRepository;
 
 import java.util.*;
@@ -48,6 +49,9 @@ class OrderServiceTest {
         address1.setId(1L);
         address2.setId(2L);
         address3.setId(3L);
+
+        AddressPOJO address2POJO = new AddressPOJO("city2", "address2", 10, 11);
+
 
         Client goodClient1 = new Client("cunha1", "cunha@ua.pt", "1234", null, "M", "96000001");
         Client goodClient2 = new Client("cunha2", "cunha@ua.pt", "1234", null, "M", "96000002");
@@ -113,7 +117,7 @@ class OrderServiceTest {
         when( productService.findById(alreadyExistingProduct.getId()) ).thenReturn( alreadyExistingProduct );
 
 
-        when( service.updateOrderAddress(4L, address2)).thenReturn( order2 );
+        when( service.updateOrderAddress(4L, address2POJO)).thenReturn( order2 );
     }
 
     @Test
@@ -297,14 +301,14 @@ class OrderServiceTest {
 
         assertThat(saved.getId()).isEqualTo(order2.getId());
         assertThat(saved.getStatus()).isEqualTo(newStatus);
-        assertThat(saved.getAddress().getId()).isEqualTo(order2.getAddress().getId());
+        assertThat(saved.getAddress().getCompleteAddress()).isEqualTo(order2.getAddress().getCompleteAddress());
         assertThat(saved.getAddress().getCity()).isEqualTo(order2.getAddress().getCity());
 
         verifySaveIsCalledOnce(order2);
     }
 
     @Test
-    void whenUpdateInvalidOrderStatus_thenOrderShouldBeUpdated() {
+    void whenUpdateInvalidOrderStatus_thenOrderShouldNotBeUpdated() {
         Address address1 = new Address("city3", "address3", 10, 11);
         address1.setId(3L);
         Client goodClient1 = new Client("cunha3", "cunha@ua.pt", "1234", null, "M", "96000003");
@@ -322,6 +326,8 @@ class OrderServiceTest {
 
     @Test
     void whenUpdateOrderAddress_thenOrderShouldBeUpdated() {
+        AddressPOJO address2POJO = new AddressPOJO("city2", "address2", 10, 11);
+
         Address address2 = new Address("city2", "address2", 10, 11);
         address2.setId(2L);
 
@@ -341,11 +347,11 @@ class OrderServiceTest {
 
         goodClient4.setOrders(new HashSet<>(Collections.singleton(order2)));
 
-        Order saved = service.updateOrderAddress(4L, address2);
+        Order saved = service.updateOrderAddress(4L, address2POJO);
 
 
         assertThat(saved.getId()).isEqualTo(order2.getId());
-        assertThat(saved.getAddress().getId()).isEqualTo(order2.getAddress().getId());
+        assertThat(saved.getAddress().getCompleteAddress()).isEqualTo(order2.getAddress().getCompleteAddress());
         assertThat(saved.getAddress().getCity()).isEqualTo(order2.getAddress().getCity());
 
         verifySaveIsCalledOnce(order2);

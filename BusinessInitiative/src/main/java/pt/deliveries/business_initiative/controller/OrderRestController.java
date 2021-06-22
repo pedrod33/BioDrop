@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Order;
+import pt.deliveries.business_initiative.pojo.AddressPOJO;
 import pt.deliveries.business_initiative.service.OrderServiceImpl;
 
 import java.util.List;
@@ -49,8 +50,8 @@ public class OrderRestController {
     }
 
     @PutMapping(value = "/updateOrderAddress")
-    public ResponseEntity<Order> updateOrderAddress(@RequestBody Address address, @RequestParam Long clientId) {
-        Order saved = service.updateOrderAddress(clientId, address);
+    public ResponseEntity<Order> updateOrderAddress(@RequestBody AddressPOJO addressPOJO, @RequestParam Long clientId) {
+        Order saved = service.updateOrderAddress(clientId, addressPOJO);
 
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(saved, status);

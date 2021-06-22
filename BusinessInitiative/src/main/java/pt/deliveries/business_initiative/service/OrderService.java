@@ -2,6 +2,7 @@ package pt.deliveries.business_initiative.service;
 
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Order;
+import pt.deliveries.business_initiative.pojo.AddressPOJO;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface OrderService {
 
     Order updateStatus(Long clientId, String status);
 
-    Order updateOrderAddress(Long clientId, Address addressId);
+    Order updateOrderAddress(Long clientId, AddressPOJO address);
 }
