@@ -3,10 +3,9 @@ package pt.deliveries.deliveries_engine.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pt.deliveries.deliveries_engine.Exception.CourierEmailAndPasswordDoNotMatchException;
-import pt.deliveries.deliveries_engine.Exception.CourierEmailOrPhoneNumberInUseException;
-import pt.deliveries.deliveries_engine.Exception.SupervisorOrVehicleTypeAssociationException;
+import pt.deliveries.deliveries_engine.Exception.*;
 import pt.deliveries.deliveries_engine.Model.Courier;
+import pt.deliveries.deliveries_engine.Model.Supervisor;
 import pt.deliveries.deliveries_engine.Pojo.LoginCourierPojo;
 import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
 import pt.deliveries.deliveries_engine.Repository.CourierRepository;
@@ -38,6 +37,8 @@ public class CourierServiceImpl{
 
         Courier courier = new Courier();
         courier.setEmail(courierPojo.getEmail());
+        List<Supervisor> supervisorList = supervisorRepository.findAll();
+        courier.setSupervisor(supervisorList.get(0));
         if(courierPojo.getGender()!=null){
             courier.setGender(courierPojo.getGender());
         }
@@ -45,21 +46,22 @@ public class CourierServiceImpl{
         courier.setPassword(courierPojo.getPassword());
         courier.setPhoneNumber(courierPojo.getPhoneNumber());
         courier.setVehicle(vehicleRepository.findById(courierPojo.getVehicle_id()).orElse(null));
-        courier.setSupervisor(supervisorRepository.findById(courierPojo.getSupervisor_id()).orElse(null));
         return courierRepository.save(courier);
     }
 
     public boolean canRegister(RegisterCourierPojo courierPojo){
+        if(supervisorRepository.findAll().isEmpty()){
+            throw new SupervisorsUnavailableException("No supervisors");
+        }
         this.checkIfEmailOrPhoneNumberAlreadyExistInDB(courierPojo);
-        this.checkIfFKsArePresent(courierPojo.getVehicle_id(), courierPojo.getSupervisor_id());
+        this.checkIfFKsArePresent(courierPojo.getVehicle_id());
         logger.log(Level.INFO, "gets true");
         return true;
 
     }
 
-    private boolean checkIfFKsArePresent(Long vehicle_id, Long supervisor_id){
-        if(vehicleRepository.findById(vehicle_id).isPresent()
-        && supervisorRepository.findById(supervisor_id).isPresent()){
+    private boolean checkIfFKsArePresent(Long vehicle_id){
+        if(vehicleRepository.findById(vehicle_id).isPresent()){
             return true;
         }
         logger.log(Level.INFO, "cant register fks");

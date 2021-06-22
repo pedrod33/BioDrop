@@ -19,6 +19,8 @@ import pt.deliveries.deliveries_engine.Repository.CourierRepository;
 import pt.deliveries.deliveries_engine.Repository.SupervisorRepository;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,99 +63,52 @@ public class CourierServiceTest {
         when(vehicleRepository.findById(Mockito.anyLong())).thenReturn(null);
         when(vehicleRepository.findById(1L)).thenReturn(v1);
         s1.setId(1L);
-        when(supervisorRepository.findById(Mockito.anyLong())).thenReturn(null);
-        when(supervisorRepository.findById(1L)).thenReturn(s1);
+        when(supervisorRepository.findAll()).thenReturn(new ArrayList<Supervisor>(Arrays.asList(s1)));
     }
-
-    @Test
-    void whenExistingEmailPhoneNumberVID_SID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 1L);
-        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
-    }
-
+    //TODO:tests to supervisor findall
     @Test
     void whenExistingEmailPhoneNumberVID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L, 2L);
-        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
-    }
-
-    @Test
-    void whenExistingEmailPhoneNumberSID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L, 1L);
-        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
-    }
-
-    @Test
-    void whenExistingEmailSIDVID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231234L, 1L, 1L);
-        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
-    }
-
-    @Test
-    void whenExistingPhoneNumberSIDVID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 1L, 1L);
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 1L);
         assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingEmailPhoneNumber_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L, 2L);
-        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
-    }
-    @Test
-    void whenExistingEmailSID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231234L, 1L, 1L);
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231233L, 2L);
         assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingEmailVID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231234L, 1L, 2L);
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231234L, 1L);
         assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
     @Test
     void whenExistingPhoneNumberVID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 1L, 2L);
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 1L);
         assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
     }
 
-    @Test
-    void whenExistingPhoneNumberSID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 2L, 1L);
-        assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
-    }
 
-    @Test
-    void whenExistingSIDVID_thenReturnTrue_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231234L, 1L, 1L);
-        assertThrows(SupervisorOrVehicleTypeAssociationException.class, () -> courierService.canRegister(rcp));
-
-    }
 
     @Test
     void whenExistingEmail_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231236L, 12L, 12L);
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marcoA@gmail.com","12345678","M",931231236L, 12L);
         assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
 
     }
 
     @Test
     void whenExistingPhoneNumber_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 12L, 12L);
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231233L, 12L);
         assertThrows(CourierEmailOrPhoneNumberInUseException.class, () -> courierService.canRegister(rcp));
 
     }
 
     @Test
     void whenExistingVID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231234L, 1L, 12L);
-        assertThrows(SupervisorOrVehicleTypeAssociationException.class, () -> courierService.canRegister(rcp));
-    }
-
-    @Test
-    void whenExistingSID_thenReturnFalse_canRegister(){
-        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231239L, 12L, 1L);
+        RegisterCourierPojo rcp = new RegisterCourierPojo("Marco Alves","marco@gmail.com","12345678","M",931231234L, 1L);
         assertThrows(SupervisorOrVehicleTypeAssociationException.class, () -> courierService.canRegister(rcp));
     }
 
