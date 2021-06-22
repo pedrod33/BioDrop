@@ -20,8 +20,8 @@ class App extends Component {
   
       <Layout>
              <Route exact path='/' component={Home } />
-              <Route exact path='/Rider' component={Rider} />
-              <Route exact path='/Register' component={Register} />
+              <Route exact path='/rider' component={Rider} />
+              <Route exact path='/register' component={Register} />
               </Layout>
        
 
