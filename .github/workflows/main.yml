@@ -28,7 +28,7 @@ jobs:
       - name: Setup BusinessInitiative
         run: |
           cd BusinessInitiative
-          echo biodrop | sudo -S kill -9 $(sudo lsof -t -i:8090)
+          echo biodrop | sudo -S kill -9 $(echo biodrop | sudo -S lsof -t -i:8090)
           nohup ./mvnw spring-boot:run > app.log 2>&1 &
           echo $! > run.pid
 
