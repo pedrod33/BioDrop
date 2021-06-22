@@ -1,0 +1,46 @@
+
+name: deploy-frontend
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+#client front 
+      - name: Install dependencies
+        run: cd TQS_final/ClientApp && npm install
+
+      - name: Build Project
+        run: cd TQS_final/ClientApp && npm run build
+
+      - name: Copy files
+        run: cd TQS_final/ClientApp && echo biodrop | sudo -S cp -R build/* /home/biodrop/html/client.webdock.io/
+        
+#rider front 
+      - name: Install dependencies
+        run: cd TQS_final/RiderApp && npm install
+
+      - name: Build Project
+        run: cd TQS_final/RiderApp && npm run build
+
+      - name: Copy files
+        run: cd TQS_final/RiderApp && echo biodrop | sudo -S cp -R build/* /home/biodrop/html/rider.webdock.io/
