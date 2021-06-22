@@ -68,8 +68,12 @@ class Home extends Component {
                     return response.json();
 
                 }
+                return null;
             })
             .then((res) => {
+                if (res === null) {
+                    return;
+                }
                 console.log(res);
                 let json = JSON.stringify(res);
                 sessionStorage.setItem("courier", json);

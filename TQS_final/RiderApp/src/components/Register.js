@@ -69,19 +69,28 @@ class Register extends Component {
                 "password": this.state.password,
                 "gender": this.state.sex,
                 "phoneNumber": this.state.phone,
-                "supervisor_id": "1",
-                "vehicle_id": "2"
+                "supervisor_id": "2",
+                "vehicle_id": "1"
             })
         };
         fetch('http://localhost:8089/deliveries-api/courier/register', requestOptions)
             .then((response) => {
-                this.setState({ status: response.status })
                 if (response.status === 201) {
-                    console.log("fez isto")
-                    this.props.history.push('/Rider')
+                    return response.json();
                 }
-
+                return null;
             })
+            .then((res) => {
+                if (res === null) {
+                    return;
+                }
+                console.log(res);
+                let json = JSON.stringify(res);
+                sessionStorage.setItem("courier", json);
+                let courier = JSON.parse(sessionStorage.getItem("courier"))
+                console.log(courier.email);
+                this.props.history.push('/Rider')
+            });
 
         event.preventDefault();
     }
