@@ -9,6 +9,7 @@ import pt.deliveries.deliveries_engine.Pojo.LoginCourierPojo;
 import pt.deliveries.deliveries_engine.Pojo.RegisterCourierPojo;
 import pt.deliveries.deliveries_engine.Service.CourierServiceImpl;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,5 +34,11 @@ public class CourierRestController {
             Courier verificationCourier = service.verifyLogin(loginCourierPojo);
             return new ResponseEntity<>(verificationCourier, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Courier>> getAll(){
+        List<Courier> all_courier = service.getAllCouriers();
+        return new ResponseEntity<>(all_courier, HttpStatus.OK);
     }
 }

@@ -1,5 +1,7 @@
 package pt.deliveries.deliveries_engine.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
@@ -36,6 +38,7 @@ public class Delivery {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "courier_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Courier courier;
 
     public Delivery(Courier courier, Long order_id, double latStore, double longStore, double latClient, double longClient, Long clientId) {

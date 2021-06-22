@@ -58,12 +58,12 @@ public class DeliveryServiceImpl {
         if(deliveryRepository.findDeliveryByOrderId(orderId)!=null){
             throw new OrderIdAlreadyUsedException("This order id was already used on another delivery!");
         }
-        if(!businessRepository.existsOrder(orderId)){
-            throw new OrderIdDoesNotExistException("There is no order with these values!");
-        }
-        if(!businessRepository.existsClient(clientId)){
-            throw new ClientDoesNotExistException("There is no client with these values!");
-        }
+        //if(!businessRepository.existsOrder(orderId)){
+        //    throw new OrderIdDoesNotExistException("There is no order with these values!");
+        //}
+        //if(!businessRepository.existsClient(clientId)){
+        //    throw new ClientDoesNotExistException("There is no client with these values!");
+        //}
         List<Courier> allAvailable = courierRepository.findCouriersByStatus(0);
         if(allAvailable.isEmpty()){
             throw new CourierTakenException("No Courier Available Right Now");

@@ -13,6 +13,7 @@ import pt.deliveries.deliveries_engine.Repository.CourierRepository;
 import pt.deliveries.deliveries_engine.Repository.SupervisorRepository;
 import pt.deliveries.deliveries_engine.Repository.VehicleRepository;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,5 +82,9 @@ public class CourierServiceImpl{
             return courierInDB;
         }
         throw new CourierEmailAndPasswordDoNotMatchException("Email and Password credentials do not match!");
+    }
+
+    public List<Courier> getAllCouriers() {
+        return courierRepository.findAll();
     }
 }
