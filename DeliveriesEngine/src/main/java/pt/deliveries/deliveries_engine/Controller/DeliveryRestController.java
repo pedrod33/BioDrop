@@ -10,7 +10,7 @@ import pt.deliveries.deliveries_engine.Service.DeliveryServiceImpl;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/deliveries-api/deliveries")
 public class DeliveryRestController {
@@ -25,18 +25,23 @@ public class DeliveryRestController {
         return new ResponseEntity<>(delivery, HttpStatus.CREATED);
     }
 
-    @GetMapping("findByOrder_id")
+    @GetMapping("/findByOrder_id")
     public ResponseEntity<Delivery> getDeliveryByOrderId(@RequestParam long order_id){
         return new ResponseEntity<>(deliveryService.getDeliveryByOrderId(order_id), HttpStatus.OK);
     }
 
-    @GetMapping("findAll")
+    @GetMapping("/findAll")
     public ResponseEntity<List<Delivery>> getAllDeliveries(){
         return new ResponseEntity<>(deliveryService.findAllDeliveries(), HttpStatus.OK);
     }
 
-    @GetMapping("findById")
+    @GetMapping("/findById")
     public ResponseEntity<Delivery> getDeliveryById(@RequestParam long id){
         return new ResponseEntity<>(deliveryService.findDeliveryById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/client/updateStatus")
+    public ResponseEntity<Delivery> updateDeliveryByOrderId(@RequestParam long orderId, @RequestParam long courierId){
+        return new ResponseEntity<>(deliveryService.updateDeliveryStatus(orderId, courierId), HttpStatus.OK);
     }
 }

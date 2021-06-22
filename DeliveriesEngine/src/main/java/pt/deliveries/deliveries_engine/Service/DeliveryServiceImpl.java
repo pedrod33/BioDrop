@@ -21,6 +21,10 @@ import java.util.logging.Logger;
 @Transactional
 public class DeliveryServiceImpl {
 
+    private final int ACCEPTED = 0;
+    private final int PICKED_UP = 1;
+    private final int DELIVERED = 2;
+
     Logger logger = Logger.getLogger(DeliveryServiceImpl.class.getName());
     @Autowired
     private DeliveryRepository deliveryRepository;
@@ -85,5 +89,24 @@ public class DeliveryServiceImpl {
             throw new DeliveryDoesNotExistException("There is no delivery with this information");
         }
         return delivery;
+    }
+
+
+    //TODO:tests
+    public Delivery updateDeliveryStatus(long orderId, long courierId) {
+        Delivery delivery = deliveryRepository.findDeliveryByOrderId(orderId);
+        if(delivery==null){
+            throw new OrderIdDoesNotExistException("There is no order for ");
+        }
+        if (delivery.getStatus()==ACCEPTED) {
+            delivery.setStatus(PICKED_UP);
+        }
+        else if(delivery.getStatus()==PICKED_UP) {
+            delivery.setStatus(DELIVERED);
+        }
+        else{
+            throw new DeliveryWithOrderIdHasBeenProcessedException("The status for this delivery cannot e updated!");
+        }
+        return deliveryRepository.save(delivery);
     }
 }

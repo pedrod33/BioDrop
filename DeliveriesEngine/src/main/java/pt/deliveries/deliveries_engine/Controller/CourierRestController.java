@@ -11,7 +11,7 @@ import pt.deliveries.deliveries_engine.Service.CourierServiceImpl;
 
 import java.util.logging.Logger;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/deliveries-api/courier")
 public class CourierRestController {

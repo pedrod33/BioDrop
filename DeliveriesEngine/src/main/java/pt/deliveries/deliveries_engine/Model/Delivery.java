@@ -6,9 +6,7 @@ import javax.persistence.*;
 @Table(name = "delivery")
 public class Delivery {
 
-    private final int ACCEPTED = 0;
-    private final int PICKED_UP = 1;
-    private final int DELIVERED = 2;
+
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,7 +39,7 @@ public class Delivery {
     private Courier courier;
 
     public Delivery(Courier courier, Long order_id, double latStore, double longStore, double latClient, double longClient, Long clientId) {
-        this.status = this.ACCEPTED;
+        this.status = 0;
         this.courier = courier;
         this.orderId = order_id;
         this.latStore = latStore;
@@ -51,7 +49,7 @@ public class Delivery {
         this.clientId = clientId;
     }
 
-    public Delivery() {this.status = this.ACCEPTED;}
+    public Delivery() {this.status = 0;}
 
     public Long getClientId() {
         return clientId;
