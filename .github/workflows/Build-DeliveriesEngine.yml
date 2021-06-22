@@ -36,6 +36,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      
+      - name: setup database env variable
+        run: |
+          export MYSQL_DB="jdbc:mysql://localhost:3306/deliveries-mysql"      
+
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
         with:
@@ -55,4 +60,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           DB_PORT: 3306 
-        run: cd DeliveriesEngine && mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar  
+        run: |
+          cd DeliveriesEngine 
+          export MYSQL_DB="jdbc:mysql://localhost:3306/deliveries-mysql"
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar  

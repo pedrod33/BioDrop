@@ -27,12 +27,12 @@ public class VehicleRestControllerTest {
     VehicleServiceImpl service;
 
     @Test
-    public void createVehicle() throws Exception {
+    void createVehicle() throws Exception {
         Vehicle vehicle = new Vehicle("car");
-        when(service.exists(vehicle)).thenReturn(false);
+        when(service.exists(vehicle.getType())).thenReturn(false);
         vehicle.setId(1L);
         when(service.create(Mockito.any())).thenReturn(vehicle);
-        mvc.perform((post("/deliveries-api/vehicle/create")
+        mvc.perform((post("/deliveries-api/vehicle/create/?type=car")
                 .contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(vehicle))))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.type", is(vehicle.getType())));

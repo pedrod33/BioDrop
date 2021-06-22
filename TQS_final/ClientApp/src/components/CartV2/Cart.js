@@ -58,33 +58,35 @@ export default function Cart() {
 	const handleCloseWithConfirmation = () => {
 		var client = JSON.parse(sessionStorage.getItem("client"));
 
-        console.log("handleCloseWithConfirmation")
-        console.log(selectedAddress)
+		console.log("handleCloseWithConfirmation");
+		console.log(selectedAddress);
 
-        if( selectedAddress != null) {
-            ClientService.updateAddressOrder(selectedAddress, client.id).then( (response1) => {
-
-                if( response1.status === 200) {
-                    ClientService.updateOrderStatus(client.id, "waiting_for_rider").then(
-                        (response) => {
-                            if (response.status === 200) {
-                                setShow(false);
-                                setSelectedAddress(null);
-                                setProductsList(null);
-                            } else console.log(response.message);
-                        }
-                    );
-                } else {
-                    console.log(response1.message)
-                }
-            })
-        }
+		if (selectedAddress != null) {
+			ClientService.updateAddressOrder(selectedAddress, client.id).then(
+				(response1) => {
+					if (response1.status === 200) {
+						ClientService.updateOrderStatus(
+							client.id,
+							"waiting_for_rider"
+						).then((response) => {
+							if (response.status === 200) {
+								setShow(false);
+								setSelectedAddress(null);
+								setProductsList(null);
+							} else console.log(response.message);
+						});
+					} else {
+						console.log(response1.message);
+					}
+				}
+			);
+		}
 	};
 
 	const changeSelectedAddress = (address) => {
 		if (address !== selectedAddress) {
-            setSelectedAddress(address);
-        }
+			setSelectedAddress(address);
+		}
 	};
 
 	function updateClientAddress() {
@@ -138,29 +140,44 @@ export default function Cart() {
 				)}
 			</Table>
 
+			{productsList === null && (
+				<p
+					style={{
+						textAlign: "center",
+						marginTop: "20px",
+						marginBottom: "70px",
+					}}
+				>
+					Add new products to the cart
+				</p>
+			)}
+
 			<div
 				style={{ marginTop: 20, maringBottom: 0, textAlign: "center" }}
 			>
-				<p>Delivery: {productsList !== null ? "5" : ""} $</p>
-				<p>Total Price: {calculatePrice()}$</p>
+				{productsList !== null && (
+					<>
+						<p>Delivery: {productsList !== null ? "5" : ""} $</p>
+						<p>Total Price: {calculatePrice()}$</p>
 
-				<button
-					onClick={() => {
-						handleShow();
-					}}
-					style={{
-						fontWeight: "bold",
-						fontSize: "0.75rem",
-						color: "white",
-						backgroundColor: "grey",
-						borderRadius: 8,
-						padding: "3px 10px",
-						display: "inline-block",
-						marginTop: 20,
-					}}
-				>
-					checkout
-				</button>
+						<button
+							onClick={() => {
+								handleShow();
+							}}
+							style={{
+								fontWeight: "bold",
+								fontSize: "0.75rem",
+								color: "white",
+								backgroundColor: "green",
+								borderRadius: 8,
+								padding: "8px 10px",
+								textAlign: "center",
+							}}
+						>
+							checkout
+						</button>
+					</>
+				)}
 			</div>
 
 			{client !== null && (
@@ -234,6 +251,18 @@ export default function Cart() {
 									onClick={() =>
 										setCreateAddress(!createAddress)
 									}
+									style={{
+										fontWeight: "bold",
+										fontSize: "0.75rem",
+										color: "white",
+										backgroundColor:
+											createAddress === true
+												? "red"
+												: "gray",
+										borderRadius: 8,
+										padding: "8px 10px",
+										textAlign: "center",
+									}}
 								>
 									{createAddress === true
 										? "Close"
@@ -348,6 +377,15 @@ export default function Cart() {
 										className="col-3"
 									>
 										<button
+											style={{
+												fontWeight: "bold",
+												fontSize: "0.75rem",
+												color: "white",
+												backgroundColor: "green",
+												borderRadius: 8,
+												padding: "8px 10px",
+												textAlign: "center",
+											}}
 											onClick={() => {
 												updateClientAddress();
 											}}
@@ -359,11 +397,32 @@ export default function Cart() {
 							)}
 						</Modal.Body>
 						<Modal.Footer>
-							<button variant="secondary" onClick={handleClose}>
+							<button
+								variant="secondary"
+								onClick={handleClose}
+								style={{
+									fontWeight: "bold",
+									fontSize: "0.75rem",
+									color: "white",
+									backgroundColor: "red",
+									borderRadius: 8,
+									padding: "8px 10px",
+									textAlign: "center",
+								}}
+							>
 								Close
 							</button>
 							{selectedAddress !== null && (
 								<button
+									style={{
+										fontWeight: "bold",
+										fontSize: "0.75rem",
+										color: "white",
+										backgroundColor: "green",
+										borderRadius: 8,
+										padding: "8px 10px",
+										textAlign: "center",
+									}}
 									variant="primary"
 									onClick={handleCloseWithConfirmation}
 								>

@@ -1,4 +1,4 @@
-name: Build-BusinessInitiative
+name: integration-BusinessInitiative
 on:
   push:
     branches:
@@ -24,6 +24,21 @@ jobs:
               MYSQL_PASSWORD: password
             ports: 
               - 3306:3306
+            options: >-
+              --health-cmd="mysqladmin ping"
+              --health-interval=10s
+              --health-timeout=5s
+              --health-retries=3
+
+          mysql2:
+            image: mysql:5.6
+            env:
+              MYSQL_ROOT_PASSWORD: password
+              MYSQL_DATABASE: business-mysql-test
+              MYSQL_USER: tqs
+              MYSQL_PASSWORD: password
+            ports: 
+              - 33060:33060
             options: >-
               --health-cmd="mysqladmin ping"
               --health-interval=10s
@@ -64,6 +79,7 @@ jobs:
         run: |
           cd BusinessInitiative
           export MYSQL_DB="jdbc:mysql://deliveries-mysql:3306/deliveries-mysql"
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar  
+          mvn integration-test 
+  
 
 

@@ -53,11 +53,16 @@ export default function OrdesHistory() {
 					<TableBody>
 						{orderList.map((order) => {
 							numOrders++;
+							console.log("order");
 							console.log(order);
 							return (
 								<TableRow key={order.id}>
 									<TableCell>{numOrders++}</TableCell>
-									<TableCell>{order.address}</TableCell>
+									<TableCell>
+										{order.address.city +
+											" - " +
+											order.address.completeAddress}
+									</TableCell>
 									<TableCell align="right">
 										{order.status}
 									</TableCell>
