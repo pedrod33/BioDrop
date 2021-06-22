@@ -2,6 +2,7 @@ package pt.deliveries.business_initiative.service;
 
 import pt.deliveries.business_initiative.model.Address;
 import pt.deliveries.business_initiative.model.Order;
+import pt.deliveries.business_initiative.pojo.AddressPOJO;
 
 import java.util.List;
 
@@ -9,10 +10,11 @@ public interface OrderService {
 
     List<Order> findAllOrders();
 
+    Order findOrderById(Long orderId);
+
     Order updateProductsOrder(Long clientId, Long productId, Integer amount);
 
     Order updateStatus(Long clientId, String status);
 
-    Order updateAddressOrder(Long clientId, Long addressId, Integer amount);
-
+    Order updateOrderAddress(Long clientId, AddressPOJO address);
 }

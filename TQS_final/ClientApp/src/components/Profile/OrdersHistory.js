@@ -24,8 +24,8 @@ export default function OrdesHistory() {
 				var filteredOrders = [];
 				for (var x = 0; x < orders.length; x++)
 					if (
-						orders[x].status === "Done" ||
-						orders[x].status === "Canceled"
+						orders[x].status === "done" ||
+						orders[x].status === "canceled"
 					)
 						filteredOrders.push(orders[x]);
 
@@ -53,11 +53,16 @@ export default function OrdesHistory() {
 					<TableBody>
 						{orderList.map((order) => {
 							numOrders++;
+							console.log("order");
 							console.log(order);
 							return (
 								<TableRow key={order.id}>
 									<TableCell>{numOrders++}</TableCell>
-									<TableCell>{order.address}</TableCell>
+									<TableCell>
+										{order.address.city +
+											" - " +
+											order.address.completeAddress}
+									</TableCell>
 									<TableCell align="right">
 										{order.status}
 									</TableCell>
