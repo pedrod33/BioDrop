@@ -77,6 +77,22 @@ class RiderService {
 		else return { status: 201, client: json };
 	}
 
+
+
+	async fetchAllOrdersByStatus(status) {
+		var url = "http://localhost:8090/businesses-api/orders/findByStatus?status=" + status;
+
+		var res = await fetch(url);
+
+		if (res.status === 200) {
+			var json = await res.json();
+			sessionStorage.setItem("orders", JSON.stringify(json));
+			return { status: 200, orders: json };
+		} else {
+			return { status: 201, message: "Erro fetch all stores" };
+		}
+	}
+
 	/* async fetchAllStores() {
 		var url = "http://localhost:8090/businesses-api/stores/allStores";
 

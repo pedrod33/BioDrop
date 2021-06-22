@@ -50,6 +50,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> findAllOrdersByStatus(String status) {
+        logger.log(Level.INFO, "Finding order by status ...");
+
+        return repository.findAllByStatus(status);
+    }
+
+    @Override
     public Order findOrderById(Long orderId) {
         logger.log(Level.INFO, "Finding order by id ...");
 

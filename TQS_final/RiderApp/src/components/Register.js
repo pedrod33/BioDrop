@@ -90,40 +90,6 @@ class Register extends Component {
 				console.log(response);
 				console.log(response.status);
 
-<<<<<<< HEAD
-    handleSubmit(event) {
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            mode: "cors",
-            body: JSON.stringify({
-                name: this.state.fName,
-                email: this.state.email,
-                password: this.state.password,
-                gender: this.state.sex,
-                phoneNumber: this.state.phone,
-                supervisor_id: "1",
-                vehicle_id: "2",
-            }),
-        };
-        fetch(
-            "http://localhost:8089/deliveries-api/courier/register",
-            requestOptions
-        ).then((response) => { 
-            this.setState({ status: response.status })
-            
-            console.log(this.state.status);
-            if (this.state.status === 201) {
-                this.props.history.push("/Rider");
-            } else {
-                this.props.history.push("/");
-            }
-
-        });
-        
-        event.preventDefault();
-    }
-=======
 				if (response.status === 201) {
 					this.props.history.push("/");
 				} else {
@@ -133,7 +99,6 @@ class Register extends Component {
 
 		event.preventDefault();
 	}
->>>>>>> 6d8d4e25fd97758537fc740c8b8c520a2995c786
 
 	handleChangeEmail(event) {
 		this.setState({ email: event.target.value });

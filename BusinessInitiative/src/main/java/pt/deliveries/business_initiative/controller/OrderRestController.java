@@ -26,6 +26,12 @@ public class OrderRestController {
         return service.findAllOrders();
     }
 
+    @GetMapping("/findByStatus")
+    public List<Order> findOrdersByStatus(@RequestParam String status) {
+        return service.findAllOrdersByStatus(status);
+    }
+
+
     @GetMapping("/")
     public ResponseEntity<Order> findOrderById(@RequestParam Long orderId) {
         Order found = service.findOrderById(orderId);

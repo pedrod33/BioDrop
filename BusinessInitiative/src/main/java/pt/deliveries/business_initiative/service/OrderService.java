@@ -10,6 +10,8 @@ public interface OrderService {
 
     List<Order> findAllOrders();
 
+    List<Order> findAllOrdersByStatus(String status);
+
     Order findOrderById(Long orderId);
 
     Order updateProductsOrder(Long clientId, Long productId, Integer amount);
