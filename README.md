@@ -1,4 +1,39 @@
-# TQS_Final
+# TQS BioDrop
+
+## Introduction
+BioDrop is a vegetable delivery service, it has two main target users:
+* Rider who accesses the application to deliver products
+* Client who accesses the application to place product orders
+## team members
+| NMec|  Roles | Name | email |
+|--:|---|---|---|
+| 91359 | DevOps Master | Juan Lessa | juanvlessa@ua.pt |
+| 93310 | Product Owner | Gonçalo Pereira | example@ua.pt |
+| 93103 | Team Leader | Pedro Tavares | example@ua.pt |
+| 87456 | Quality Assurance | José Carlos | example@ua.pt |
+| 95278 | Quality Assurance | Diogo Cunha | example@ua.pt |
+## project resources
+* [BusinessInitiative](https://github.com/pedrod33/BioDrop/tree/develop/BusinessInitiative): Springboot Application
+* [DeliveriesEngine](https://github.com/pedrod33/BioDrop/tree/develop/DeliveriesEngine): Springboot Application
+* [ClientApp](https://github.com/pedrod33/BioDrop/tree/develop/TQS_final/ClientApp): Reactjs Website
+* [RiderApp](https://github.com/pedrod33/BioDrop/tree/develop/TQS_final/RiderApp): Reactjs Website
+## Hosts
+| Service |  VM address |
+|--|---|
+| BusinessInitiative |  http://192.168.160.229:8090 |
+| DeliveriesEngine | http://192.168.160.229:8089 |
+| ClientApp | http://192.168.160.229:81 |
+| RiderApp | http://192.168.160.229:82 |
+  
+**Note**: to access the addresses you need to be connected to the [UA](https://www.ua.pt) network.
+## API documentation
+
+## Static analysis
+
+## CI/CD environment
+we developed a CI pipeline running in all branches. The CI workflow run unit tests and do Sonarcloud verify. An integration workflow is also part of our CI pipeline, all pull requests for the Main and Develop branches must run integration tests.  
+For CD we also created actions. when front-end is updated at branch main one [action](https://github.com/pedrod33/BioDrop/blob/develop/.github/workflows/deploy.frontend.yml) uses one runner to build react app, and serve website in VM using XGINX. When the backend is updated at branch main one [action](https://github.com/pedrod33/BioDrop/blob/develop/.github/workflows/main.yml) uses one runner to build and up backend docker container with updated code.
+
 
 
 # Docker mysql container (deliver engine)
