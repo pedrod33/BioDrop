@@ -66,8 +66,7 @@ export default function Cart() {
 				(response1) => {
 					if (response1.status === 200) {
 						ClientService.updateOrderStatus(
-							client.id,
-							"waiting_for_rider"
+							client.id, "waiting_for_rider"
 						).then((response) => {
 							if (response.status === 200) {
 								setShow(false);

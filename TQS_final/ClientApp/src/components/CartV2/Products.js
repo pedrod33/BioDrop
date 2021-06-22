@@ -1,6 +1,8 @@
 ﻿import React, { Component } from "react";
 
 import ClientService from "../../services/client.service";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Card from "react-bootstrap/Card";
 
 class Products extends Component {
 	constructor(props) {
@@ -8,13 +10,13 @@ class Products extends Component {
 		this.state = {
 			store: null,
 			products: [],
+            quantity: 1
 		};
 	}
 
-    componentDidMount() {
+	componentDidMount() {
 		ClientService.fetchProductsInStore(this.props.match.params.id).then(
 			(response) => {
-
 				if (response.status === 200) {
 					this.setState({
 						store: null,
@@ -25,51 +27,65 @@ class Products extends Component {
 		);
 	}
 
-
-    //TODO: mudar amount
+	//TODO: mudar amount
 	addToCart(item) {
-        var client = JSON.parse(sessionStorage.getItem("client"));
+		var client = JSON.parse(sessionStorage.getItem("client"));
 
-        ClientService.addOrderToCart(client.id, item.id, 10).then(
+        var quantity = document.getElementById("qnty").value
+
+		ClientService.addOrderToCart(client.id, item.id, quantity).then(
 			(response) => {
-
 				if (response.status === 200) {
-					console.log("Produto adicionado")
+					console.log("Produto adicionado");
 				} else console.log(response.message);
 			}
-		); 
-	};
+		);
+	}
 
+   /*  handleChange(event) {
+        console.log(event.target.value)
 
+        this.setState({quantity: event.target.value});
+      }
+ */
 	render() {
 		let itemList = this.state.products.map((item) => {
 			return (
-				<div className="card" key={item.id}>
-					<div>
-						<img
-							className="item-img"
-							src={"https://source.unsplash.com/random"}
-							alt={item.title}
-							style={{ width: "auto", height: "200px" }}
-						/>
-						<span className="card-title">{item.name}</span>
-						<span
-							to="/"
-							className="btn-floating halfway-fab waves-effect waves-light red"
-							onClick={() => {
-								this.addToCart(item);
-							}}
-						>
-							<i className="material-icons">add</i>
-						</span>
-					</div>
+				<Card style={{ width: "18rem" }} key={item.id}>
+					<Card.Img
+						variant="top"
+						src={process.env.PUBLIC_URL + "images/carrot.jpg"}
+					/>
+					<Card.Body>
+						<Card.Title>{item.name}</Card.Title>
+						<Card.Text>
+							Origin: {item.origin} <br /> Price: {item.price}$
+							/kg
+						</Card.Text>
+						<div className="row">
+							<button
+								variant="primary"
+								style={{
+									fontWeight: "bold",
+									fontSize: "0.75rem",
+									color: "white",
+									backgroundColor: "green",
+									borderRadius: 8,
+									padding: "8px 10px",
+									textAlign: "center",
+								}}
+								onClick={() => {
+									this.addToCart(item);
+								}}
+							>
+								Add to cart
+							</button>
 
-					<div className="card-content">
-						<p>
-							<b>Price: {item.price}$</b>
-						</p>
-					</div>
-				</div>
+                            <p style={{marginLeft: '30px', marginTop: '10px'}}>Qnt:    </p>
+							<input type="number" placeholder="1" id="qnty" style={{ width: '30%', height: '90%', alignSelf: 'center'}} />
+						</div>
+					</Card.Body>
+				</Card>
 			);
 		});
 
@@ -83,3 +99,34 @@ class Products extends Component {
 }
 
 export default Products;
+
+{
+	/* <div className="card" key={item.id}>
+					<div>
+						<div>
+							<img
+								className="item-img"
+								src={"https://source.unsplash.com/random"}
+								alt={item.title}
+								style={{ width: "298px", height: "300px" }}
+							/>
+						</div>
+					</div>
+
+					<div className="row" style={{width: '100%'}}>
+						<span className="card-title">{item.name}</span>
+						<span
+							to="/"
+							className="btn-floating halfway-fab waves-effect waves-light red"
+							onClick={() => {
+								this.addToCart(item);
+							}}
+						>
+							<i className="material-icons">add</i>
+						</span>
+						<p>
+							<b>Price: {item.price}$</b>
+						</p>
+					</div>
+				</div> */
+}
