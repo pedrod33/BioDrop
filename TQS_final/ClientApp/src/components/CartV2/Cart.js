@@ -5,10 +5,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Title from "../Profile/Title";
-// import ClientService from "../../services/client.service";
-import { makeStyles } from "@material-ui/core/styles";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
 import ClientService from "../../services/client.service";
 import Modal from "react-bootstrap/Modal";
 
@@ -63,25 +59,31 @@ export default function Cart() {
 		var client = JSON.parse(sessionStorage.getItem("client"));
 
         console.log("handleCloseWithConfirmation")
+        console.log(selectedAddress)
 
-		ClientService.updateOrderStatus(client.id, "waiting_for_rider").then(
-			(response) => {
-				if (response.status === 200) {
-					setShow(false);
-					setSelectedAddress(null);
-                    setProductsList(null);
-				} else console.log(response.message);
-			}
-		);
+        if( selectedAddress != null) {
+            ClientService.updateAddressOrder(selectedAddress, client.id).then( (response1) => {
+
+                if( response1.status === 200) {
+                    ClientService.updateOrderStatus(client.id, "waiting_for_rider").then(
+                        (response) => {
+                            if (response.status === 200) {
+                                setShow(false);
+                                setSelectedAddress(null);
+                                setProductsList(null);
+                            } else console.log(response.message);
+                        }
+                    );
+                } else {
+                    console.log(response1.message)
+                }
+            })
+        }
 	};
 
 	const changeSelectedAddress = (address) => {
 		if (address !== selectedAddress) {
             setSelectedAddress(address);
-
-            /* var orderStored = JSON.parse(sessionStorage.getItem("order"));
-            orderStored.address = address;
-            sessionStorage.setItem("order", JSON.stringify(orderStored)) */
         }
 	};
 

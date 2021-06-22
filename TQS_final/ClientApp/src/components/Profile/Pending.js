@@ -24,15 +24,13 @@ export default function Pending() {
 	}, []);
 
 	function changeDetailsVisibility() {
-		//setDetailsVisibility(!detailsVisibility);
+		setDetailsVisibility(!detailsVisibility);
 	}
 
 	var orderNo = 1;
 	return (
 		<React.Fragment>
 			<Title>Pending Orders</Title>
-
-			<div></div>
 
 			<div>
 				<Table size="small">
@@ -50,17 +48,14 @@ export default function Pending() {
 					<TableBody>
 						{orderList.length !== 0 &&
 							orderList.map((order) => {
+
 								return (
 									(order.status === "waiting" || order.status === "waiting_for_rider") && (
 										<TableRow key={order.id}>
 											<TableCell>{orderNo++}</TableCell>
-											{order.address === null ? (
-												<TableCell>-</TableCell>
-											) : (
-												<TableCell>
-													{order.address}
-												</TableCell>
-											)}
+                                            <TableCell>
+                                                {order.address.city + " - " + order.address.completeAddress}
+                                            </TableCell>
 											<TableCell align="right">
 												rider
 											</TableCell>
@@ -74,9 +69,6 @@ export default function Pending() {
 												<button
 													onClick={() => {
 														changeDetailsVisibility();
-														setDetailsVisibility(
-															!detailsVisibility
-														);
 													}}
 												>
 													+
@@ -86,6 +78,7 @@ export default function Pending() {
 									)
 								);
 							})}
+                            
 					</TableBody>
 				</Table>
 				{detailsVisibility === true && (

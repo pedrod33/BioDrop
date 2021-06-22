@@ -15,6 +15,5 @@ public interface OrderService {
 
     Order updateStatus(Long clientId, String status);
 
-    Order updateAddressOrder(Long clientId, Long addressId, Integer amount);
-
+    Order updateOrderAddress(Long clientId, Address addressId);
 }

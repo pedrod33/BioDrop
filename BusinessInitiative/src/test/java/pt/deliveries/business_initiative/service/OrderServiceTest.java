@@ -111,6 +111,8 @@ class OrderServiceTest {
 
         when( productService.findById(alreadyExistingProduct.getId()) ).thenReturn( alreadyExistingProduct );
 
+
+        when( service.updateOrderAddress(4L, address2)).thenReturn( order2 );
     }
 
     @Test
@@ -345,6 +347,37 @@ class OrderServiceTest {
         }
     }
 
+
+    @Test
+    void whenUpdateOrderAddress_thenOrderShouldBeUpdated() {
+        Address address2 = new Address("city2", "address2", 10, 11);
+        address2.setId(2L);
+
+        Client goodClient4 = new Client("cunha4", "cunha@ua.pt", "1234", null, "M", "96000004");
+        goodClient4.setId(4L);
+        goodClient4.setAddresses(new HashSet<>(Collections.singleton(address2)));
+
+        Product prod2 = new Product("prod2", "origin2", 10, "path", 100 );
+        prod2.setId(2L);
+
+        Order_Product orderProduct2 = new Order_Product(null, prod2, 11);
+        orderProduct2.setId(2L);
+
+        Set<Order_Product> orderProductSet2 = new HashSet<>(Collections.singletonList(orderProduct2));
+        Order order2 = new Order(address2, orderProductSet2, goodClient4, "waiting");
+        order2.setId(2L);
+
+        goodClient4.setOrders(new HashSet<>(Collections.singleton(order2)));
+
+        Order saved = service.updateOrderAddress(4L, address2);
+
+
+        assertThat(saved.getId()).isEqualTo(order2.getId());
+        assertThat(saved.getAddress().getId()).isEqualTo(order2.getAddress().getId());
+        assertThat(saved.getAddress().getCity()).isEqualTo(order2.getAddress().getCity());
+
+        verifySaveIsCalledOnce(order2);
+    }
 
     private void verifyFindAllIsCalledOnce() {
         verify(repository, times(1)).findAll();
