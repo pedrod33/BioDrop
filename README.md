@@ -8,10 +8,10 @@ BioDrop is a vegetable delivery service, it has two main target users:
 | NMec|  Roles | Name | email |
 |--:|---|---|---|
 | 91359 | DevOps Master | Juan Lessa | juanvlessa@ua.pt |
-| 93310 | Product Owner | Gonçalo Pereira | example@ua.pt |
-| 93103 | Team Leader | Pedro Tavares | example@ua.pt |
-| 87456 | Quality Assurance | José Carlos | example@ua.pt |
-| 95278 | Quality Assurance | Diogo Cunha | example@ua.pt |
+| 93310 | Product Owner | Gonçalo Pereira | pereira.goncalo@ua.pt |
+| 93103 | Team Leader | Pedro Tavares | pedrod33@ua.pt |
+| 87456 | Quality Assurance | José Carlos | jose.carlos94@ua.pt |
+| 95278 | Quality Assurance | Diogo Cunha | dgcunha@ua.pt |
 ## project resources
 * [BusinessInitiative](https://github.com/pedrod33/BioDrop/tree/develop/BusinessInitiative): Springboot Application
 * [DeliveriesEngine](https://github.com/pedrod33/BioDrop/tree/develop/DeliveriesEngine): Springboot Application
@@ -29,6 +29,9 @@ BioDrop is a vegetable delivery service, it has two main target users:
 ## API documentation
 
 ## Static analysis
+We used Sonarqube services to generate such analysis
+* [deliveriesEngine static analysis](https://sonarcloud.io/dashboard?id=deliveriesEnginesonarcloudkey_BioDrop)
+* [BusinessInitiative static analysis](https://sonarcloud.io/dashboard?id=pedrod33_BioDrop)
 
 ## CI/CD environment
 we developed a CI pipeline running in all branches. The CI workflow run unit tests and do Sonarcloud verify. An integration workflow is also part of our CI pipeline, all pull requests for the Main and Develop branches must run integration tests.  
