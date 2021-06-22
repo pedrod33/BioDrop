@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 @Service
 @Transactional
 public class DeliveryServiceImpl {
-
+    private final int PENDING = 4;
     private final int ACCEPTED = 0;
     private final int PICKED_UP = 1;
     private final int DELIVERED = 2;
@@ -49,7 +49,7 @@ public class DeliveryServiceImpl {
         delivery.setLongClient(delivery.getLongClient());
         delivery.setLatStore(delivery.getLatStore());
         delivery.setLongStore(delivery.getLongStore());
-        selected_courier.setStatus(1);
+        selected_courier.setStatus(0);
         courierRepository.save(selected_courier);
         return deliveryRepository.save(delivery);
     }
@@ -71,6 +71,9 @@ public class DeliveryServiceImpl {
         return true;
     }
 
+    public Delivery decline(long courierId, long orderId){
+        return null;
+    }
     public Delivery getDeliveryByOrderId(long order_id) {
         Delivery delivery = deliveryRepository.findDeliveryByOrderId(order_id);
         if(delivery==null){
@@ -91,18 +94,32 @@ public class DeliveryServiceImpl {
         return delivery;
     }
 
+    public Delivery findDeliveryByCourierIdToBeAccepted(long id){
+        Courier courier = courierRepository.findById(id);
+        courier.setStatus(1);
+        courierRepository.save(courier);
+        return deliveryRepository.findTopByCourier_IdAndStatus(id, PENDING);
+    }
 
     //TODO:tests
     public Delivery updateDeliveryStatus(long orderId, long courierId) {
         Delivery delivery = deliveryRepository.findDeliveryByOrderId(orderId);
         if(delivery==null){
-            throw new OrderIdDoesNotExistException("There is no order for ");
+            throw new OrderIdDoesNotExistException("There is no order to be updated");
         }
         if (delivery.getStatus()==ACCEPTED) {
             delivery.setStatus(PICKED_UP);
         }
         else if(delivery.getStatus()==PICKED_UP) {
             delivery.setStatus(DELIVERED);
+            Delivery saved = deliveryRepository.save(delivery);
+            Courier c = courierRepository.findById(delivery.getCourier().getId().longValue());
+            c.setStatus(0);
+            courierRepository.save(c);
+            return saved;
+        }
+        else if(delivery.getStatus()==PENDING){
+            delivery.setStatus(ACCEPTED);
         }
         else{
             throw new DeliveryWithOrderIdHasBeenProcessedException("The status for this delivery cannot e updated!");

@@ -53,6 +53,10 @@ class Rider extends Component {
                 //    }).setLngLat([position.coords.longitude, position.coords.latitude])
                 //   .addTo(map);
 
+                setInterval(() => {
+                    console.log('Interval triggered');
+                  }, 1000);
+                  
                 const directions = new MapboxDirections({
                     accessToken: mapboxgl.accessToken,
                     unit: "metric",

@@ -12,7 +12,7 @@ import pt.deliveries.business_initiative.service.OrderServiceImpl;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 @RestController
 @RequestMapping("/businesses-api/orders")
 public class OrderRestController {

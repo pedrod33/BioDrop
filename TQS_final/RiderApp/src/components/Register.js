@@ -88,14 +88,18 @@ class Register extends Component {
         fetch(
             "http://localhost:8089/deliveries-api/courier/register",
             requestOptions
-        ).then((response) => this.setState({ status: response.status }));
-        console.log(this.state.status);
-        if (this.state.status === 201) {
-            this.props.history.push("/Rider");
-        } else {
-            this.props.history.push("/");
-        }
+        ).then((response) => { 
+            this.setState({ status: response.status })
+            
+            console.log(this.state.status);
+            if (this.state.status === 201) {
+                this.props.history.push("/Rider");
+            } else {
+                this.props.history.push("/");
+            }
 
+        });
+        
         event.preventDefault();
     }
 

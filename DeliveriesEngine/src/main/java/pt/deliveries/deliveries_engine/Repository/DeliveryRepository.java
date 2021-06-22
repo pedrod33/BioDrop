@@ -12,4 +12,5 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     List<Delivery> findAll();
     Delivery findDeliveryByOrderId(long id);
     boolean existsOrderFromDeliveryById(Long id);
+    Delivery findTopByCourier_IdAndStatus(long id, int status);
 }

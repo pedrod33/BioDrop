@@ -85,7 +85,7 @@ export default function Stores(props) {
 									<Card className={classes.card}>
 										<CardMedia
 											className={classes.cardMedia}
-											image="https://source.unsplash.com/random"
+											image={process.env.PUBLIC_URL + "images/continente.png"}
 											title="Image title"
 										/>
 										<CardContent
