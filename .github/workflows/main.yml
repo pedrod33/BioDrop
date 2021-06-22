@@ -36,29 +36,21 @@ jobs:
           docker run -d -p 8090:8090 --name business-initiative --link business-mysql:mysql business-initiative --restart unless-stopped
 
 
+      - name: Setup DeliveriesEngine database
+        run: |
+          docker stop deliveries-mysql 2>/dev/null
+          docker start deliveries-mysql
 
-#      - name: Setup BusinessInitiative
-#        run: |
-#          export MYSQL_DB="jdbc:mysql://business-mysql:3306/business-mysql"
-#          cd BusinessInitiative
-#          ./mvnw package -DskipTests
-#          docker stop business-initiative 2>/dev/null
-#          docker rm business-initiative 2>/dev/null
-#          docker build -t business-initiative .
-#          docker run -d -p 8090:8090 --name business-initiative --link business-mysql:mysql business-initiative
+      - name: Setup DeliveriesEngine
+        run: |
+          export MYSQL_DB="jdbc:mysql://deliveries-mysql:3305/deliveries-mysql"
+          cd DeliveriesEngine
+          ./mvnw package -DskipTests
+          docker stop deliveries-engine 2>/dev/null
+          docker rm deliveries-engine 2>/dev/null
+          docker build -t deliveries-engine
+          docker run -p 8089:8089 --name deliveries-engine --link deliveries-mysql:mysql deliveries-engine --restart unless-stopped
 
-#      - name: Setup DeliveriesEngine database
-#        run: |
-#          docker stop deliveries-mysql 2>/dev/null
-#          docker start deliveries-mysql
-#
-#      - name: Setup DeliveriesEngine
-#        run: |
-#          export MYSQL_DB="jdbc:mysql://deliveries-mysql:3305/deliveries-mysql"
-#          cd DeliveriesEngine
-#          echo biodrop | sudo -S kill -9 $(sudo lsof -t -i:8089)
-#          nohup ./mvnw spring-boot:run > app.log 2>&1 &
-#          echo $! > run.pid
 
 
 
