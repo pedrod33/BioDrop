@@ -1,7 +1,6 @@
 
 name: deploy-frontend
 
-name: Deploy
 on:
   push:
     branches: [ main, cd-front ]
