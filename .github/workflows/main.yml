@@ -29,7 +29,7 @@ jobs:
         run: |
           cd BusinessInitiative
           kill -9 $(lsof -t -i:8090) 2>/dev/null
-          nohup ./mvnw spring-boot:run > app.log 2>&1 &
+          nohup ./mvnw spring-boot:run > app.log 2>&1 & 2>/dev/null
           echo $! > run.pid
 
 
