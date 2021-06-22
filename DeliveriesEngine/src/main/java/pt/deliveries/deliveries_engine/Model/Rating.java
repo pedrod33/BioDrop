@@ -2,6 +2,8 @@ package pt.deliveries.deliveries_engine.Model;
 
 import javax.persistence.*;
 
+@Entity
+@Table(name = "rating")
 public class Rating {
 
     @Id

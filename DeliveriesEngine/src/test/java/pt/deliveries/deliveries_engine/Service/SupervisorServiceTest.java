@@ -27,13 +27,13 @@ public class SupervisorServiceTest {
     Supervisor s1;
     RegisterSupervisorPojo rsp1 = new RegisterSupervisorPojo("supervisor1@gmail.com","12345678","Manuel Torres");
     @BeforeEach
-    public void setUp(){
+    void setUp(){
         s1 = new Supervisor("supervisor@gmail.com", "12345678", "Carlos Silva");
         when(supervisorRepository. findByEmail(s1.getEmail())).thenReturn(s1);
     }
 
     @Test
-    public void givenSupervisorPojo_create(){
+    void givenSupervisorPojo_create(){
         Supervisor s2 = new Supervisor();
         s2.setPassword(rsp1.getPassword());
         s2.setName(rsp1.getName());
@@ -46,14 +46,14 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    public void givenPojoEmailAlreadyExists_returnTrue_existsRegister(){
+    void givenPojoEmailAlreadyExists_returnTrue_existsRegister(){
         RegisterSupervisorPojo rsp2 = new RegisterSupervisorPojo("supervisor@gmail.com","12345678","Manuel Torres");
         assertThrows(SupervisorEmailIsUsedException.class, () -> supervisorService.existsRegister(rsp2));
 
     }
 
     @Test
-    public void givenPojoEmailDoesNotExist_returnFalse_existsRegister(){
+    void givenPojoEmailDoesNotExist_returnFalse_existsRegister(){
         RegisterSupervisorPojo rsp2 = new RegisterSupervisorPojo("supervisor@gmail.com","12345678","Manuel Torres");
         assertThrows(SupervisorEmailIsUsedException.class, () -> supervisorService.existsRegister(rsp2));
     }
