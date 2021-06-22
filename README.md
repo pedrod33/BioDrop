@@ -1,5 +1,5 @@
 # TQS BioDrop
-
+This project was created within the scope of the [Software Testing and Quality](https://www.ua.pt/pt/uc/8109) discipline.
 ## Introduction
 BioDrop is a vegetable delivery service, it has two main target users:
 * Rider who accesses the application to deliver products
@@ -37,13 +37,12 @@ We used Sonarqube services to generate such analysis
 we developed a CI pipeline running in all branches. The CI workflow run unit tests and do Sonarcloud verify. An integration workflow is also part of our CI pipeline, all pull requests for the Main and Develop branches must run integration tests.  
 For CD we also created actions. when front-end is updated at branch main one [action](https://github.com/pedrod33/BioDrop/blob/develop/.github/workflows/deploy.frontend.yml) uses one runner to build react app, and serve website in VM using XGINX. When the backend is updated at branch main one [action](https://github.com/pedrod33/BioDrop/blob/develop/.github/workflows/main.yml) uses one runner to build and up backend docker container with updated code.
 
-
-
-# Docker mysql container (deliver engine)
+# INFRA
+## Docker mysql container (deliver engine)
 * $ docker run --name deliveries-mysql -p 330X:330X -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=deliveries-mysql -e MYSQL_USER=tqs -e MYSQL_PASSWORD=password -d mysql:5.6
 
 
-# Spring boot container (deliver engine)
+## Spring boot container (deliver engine)
 * $ ./mvnw package -DskipTests
 
 * $ docker build -t deliveries-engine .
@@ -54,7 +53,7 @@ For CD we also created actions. when front-end is updated at branch main one [ac
 # -----------------
 
 
-# Docker mysql container (business initiative)
+## Docker mysql container (business initiative)
 * $ docker run --name business-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=business-mysql -e MYSQL_USER=tqs -e MYSQL_PASSWORD=password -d mysql:5.6
 
 
