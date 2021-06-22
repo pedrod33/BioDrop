@@ -5,7 +5,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Title from "./Title";
-import CourierService from "../services/courier.service";
 
 export default function Historic() {
 	const [orderList, setOrderList] = useState([]);
@@ -25,22 +24,6 @@ export default function Historic() {
 
 		var courier = JSON.parse(sessionStorage.getItem("courier"));
 
-		CourierService.fetchCourierById(courier.id).then((response) => {
-			if (response.status === 200) {
-				var orders = response.courier.orders;
-				var filteredOrders = [];
-				for (var x = 0; x < orders.length; x++)
-					if (
-						orders[x].status === "Done" ||
-						orders[x].status === "Canceled"
-					)
-						filteredOrders.push(orders[x]);
-
-				console.log(filteredOrders);
-
-				if (filteredOrders.length !== 0) setOrderList(filteredOrders);
-			} else console.log(response.message);
-		});
 	}, []);
 
 	var numOrders = 0;

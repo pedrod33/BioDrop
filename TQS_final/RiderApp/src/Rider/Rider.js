@@ -22,13 +22,24 @@ class Rider extends Component {
     constructor(props) {
         super(props);
         this.mapContainer = React.createRef();
-        
+        this.state = { status: '', deliveries: [] };
     }
 
     componentDidMount() {
 
         if (sessionStorage.getItem("courier")) {
-            console.log("há um cpurier -> " + sessionStorage["courier"])
+            console.log("há um courier -> " + sessionStorage["courier"]);
+            var courier = JSON.parse(sessionStorage.getItem("courier"));
+
+            fetch('http://localhost:8089/deliveries-api/deliveries/findAll')
+                .then((response) => {
+                    this.setState({ status: response.status, deliveries: response.items })
+                    if (response.status === 201) {
+                        console.log(this.state.deliveries)
+                    }
+
+                })
+
         } else {
             console.log("n há nada")
         }

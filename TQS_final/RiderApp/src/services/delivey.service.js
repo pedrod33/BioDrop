@@ -1,4 +1,4 @@
-class CourierService {
+class DeliveryService {
 
 	/*async fetchCourierById(courierId) {
 		var url =
@@ -16,13 +16,8 @@ class CourierService {
 		}
 	}*/
 
-	async login(emailInput, passwordInput) {
-		var url = "http://localhost:8089/deliveries-api/courier/login";
-
-		let loginInput = {
-			email: emailInput,
-			password: passwordInput,
-		};
+	async findAll() {
+		var url = "http://localhost:8089/deliveries-api/deliveries/findAll";
 
 		var res = await fetch(url, {
 			method: "POST",
@@ -79,4 +74,4 @@ class CourierService {
 
 }
 
-export default new CourierService();
+export default new DeliveryService();
