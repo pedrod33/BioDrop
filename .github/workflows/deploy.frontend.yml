@@ -3,9 +3,9 @@ name: deploy-frontend
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, front-deploy ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
