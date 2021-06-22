@@ -13,7 +13,7 @@ class ClientService {
 
 	async fetchClientByUserId(clientId) {
 		var url =
-			"http://localhost:8090/businesses-api/clients/client?clientId=" +
+			"http://localhost:8090/businesses-api/clients/?clientId=" +
 			clientId;
 
 		var res = await fetch(url);
@@ -139,22 +139,27 @@ class ClientService {
 		} else return { status: res.status, message: json };
 	}
 
-	async updateClientAddress(clientId, cityInput, completeAddressInput, latitudeInput, longitudeInput) {
+	async updateClientAddress(
+		clientId,
+		cityInput,
+		completeAddressInput,
+		latitudeInput,
+		longitudeInput
+	) {
 		var url =
 			"http://localhost:8090/businesses-api/addresses/update-client-address?clientId=" +
 			clientId;
 
-
-        let addressInput = {
-            city: cityInput,
-            completeAddress: completeAddressInput,
-            latitude: latitudeInput,
-            longitude: longitudeInput,
-        };
+		let addressInput = {
+			city: cityInput,
+			completeAddress: completeAddressInput,
+			latitude: latitudeInput,
+			longitude: longitudeInput,
+		};
 
 		var res = await fetch(url, {
 			method: "PUT",
-            body: JSON.stringify(addressInput),
+			body: JSON.stringify(addressInput),
 			headers: {
 				"Content-Type": "application/json",
 			},
@@ -166,6 +171,60 @@ class ClientService {
 			sessionStorage.setItem("client", JSON.stringify(json));
 			return { status: res.status, client: json };
 		} else return { status: res.status, message: json };
+	}
+
+	async updateOrderStatus(clientId, newStatus) {
+		var url =
+			"http://localhost:8090/businesses-api/orders/updateStatus?clientId=" +
+			clientId +
+			"&orderStatus=" +
+			newStatus;
+        console.log(url)
+
+		var res = await fetch(url, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		var json = await res.json();
+
+		console.log(json);
+		if (res.status === 200) {
+			sessionStorage.removeItem("order");
+			return { status: res.status, client: json };
+		} else return { status: res.status, message: json };
+	}
+
+
+    async updateAddressOrder(
+		address,
+        clientId
+	) {
+		var url = "http://localhost:8090/businesses-api/orders/updateOrderAddress?clientId=" + clientId;
+
+		let addressBody = {
+			city: address.city,
+			completeAddress: address.completeAddress,
+			latitude: address.latitude,
+			longitude: address.longitude,
+		};
+
+		var res = await fetch(url, {
+			method: "PUT",
+			body: JSON.stringify(addressBody),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		var json = await res.json();
+
+		/* if(json.id) {
+            sessionStorage.setItem("user", JSON.stringify(json));
+        }  */
+		if (json.status === 226)
+			return { status: json.status, message: json.message };
+		else return { status: 200, order: json };
 	}
 }
 

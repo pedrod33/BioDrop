@@ -10,7 +10,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 import ClientService from "../services/client.service";
 
-
 const styles = (theme) => ({
 	root: {
 		minWidth: 275,
@@ -40,8 +39,8 @@ class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-            user: null
-        };
+			user: null,
+		};
 	}
 
 	login() {
@@ -53,10 +52,12 @@ class Home extends Component {
 				console.log(response);
 
 				if (response.status === 200) {
-                    //this.setState({user: response})
-                    this.props.history.push({pathname: "/stores", state: { user: response }});
-                } 
-				else console.log(response.message);
+					//this.setState({user: response})
+					this.props.history.push({
+						pathname: "/stores",
+						state: { user: response },
+					});
+				} else console.log(response.message);
 			});
 
 		return;
@@ -98,16 +99,12 @@ class Home extends Component {
 		const { classes } = this.props;
 		return (
 			<div>
-				<button onClick={() => this.login()}>login</button>
-
-				<button onClick={() => this.register()}>register</button>
-
 				<h1>
 					Welcome to <span style={{ color: "#536732" }}>BioDrop</span>
 				</h1>
 				<h4>Get your groceries deliver to you fresh!</h4>
 				<hr />
-				<Row style={{ backgroundColor: "#ABA243" }}>
+				<Row>
 					<Col>
 						<Card className={classes.root} variant="outlined">
 							<CardContent>
@@ -173,6 +170,22 @@ class Home extends Component {
 									</Form.Group>
 								</Form>
 							</CardContent>
+							<div style={{ textAlign: "center" }}>
+								<button
+									style={{
+										fontWeight: "bold",
+										fontSize: "0.75rem",
+										color: "white",
+										backgroundColor: "green",
+										borderRadius: 8,
+										padding: "8px 10px",
+										textAlign: "center",
+									}}
+									onClick={() => this.register()}
+								>
+									Register
+								</button>
+							</div>
 						</Card>
 					</Col>
 					<Col>
@@ -203,6 +216,22 @@ class Home extends Component {
 									</Form.Group>
 								</Form>
 							</CardContent>
+							<div style={{ textAlign: "center" }}>
+								<button
+									style={{
+										fontWeight: "bold",
+										fontSize: "0.75rem",
+										color: "white",
+										backgroundColor: "green",
+										borderRadius: 8,
+										padding: "8px 10px",
+										display: "inline-block",
+									}}
+									onClick={() => this.login()}
+								>
+									Login
+								</button>
+							</div>
 						</Card>
 					</Col>
 				</Row>

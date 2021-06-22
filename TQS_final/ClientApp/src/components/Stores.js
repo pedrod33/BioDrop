@@ -51,7 +51,6 @@ export default function Stores(props) {
 
 	useEffect(() => {
 		ClientService.fetchAllStores().then((response) => {
-
 			if (response.status === 200) {
 				setStores(response.stores);
 			} else console.log(response.message);
@@ -101,7 +100,8 @@ export default function Stores(props) {
 												{store.name}
 											</Typography>
 											<Typography>
-												{store.address.city} {" - "} {store.address.completeAddress}
+												{store.address.city} {" - "}{" "}
+												{store.address.completeAddress}
 											</Typography>
 										</CardContent>
 										<CardActions>
@@ -112,11 +112,22 @@ export default function Stores(props) {
 											>
 												Check Our Products
 											</Button> */}
-                                            <Link to={'/Product/'+store.id}>
-                                                <button>
-                                                    Ola
-                                                </button>
-                                            </Link>
+											<Link to={"/Product/" + store.id}>
+												<button
+													style={{
+														fontWeight: "bold",
+														fontSize: "0.75rem",
+														color: "white",
+														backgroundColor:
+															"green",
+														borderRadius: 8,
+														padding: "8px 10px",
+														textAlign: "center",
+													}}
+												>
+													Check store products
+												</button>
+											</Link>
 										</CardActions>
 									</Card>
 								</Grid>
