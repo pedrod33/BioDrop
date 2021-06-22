@@ -56,11 +56,9 @@ jobs:
 #        run: |
 #          export MYSQL_DB="jdbc:mysql://deliveries-mysql:3305/deliveries-mysql"
 #          cd DeliveriesEngine
-#          ./mvnw package -DskipTests
-#          docker stop deliveries-engine 2>/dev/null
-#          docker rm deliveries-engine 2>/dev/null
-#          docker build -t deliveries-engine .
-#          docker run -p 8089:8089 --name deliveries-engine --link deliveries-mysql:mysql deliveries-engine
+#          echo biodrop | sudo -S kill -9 $(sudo lsof -t -i:8089)
+#          nohup ./mvnw spring-boot:run > app.log 2>&1 &
+#          echo $! > run.pid
 
 
 
