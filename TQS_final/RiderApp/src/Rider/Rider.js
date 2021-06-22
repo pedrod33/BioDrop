@@ -49,7 +49,7 @@ class Rider extends Component {
                         zoom: map.getZoom().toFixed(2)
                     });
                 });
-                var marker = new mapboxgl.Marker({
+                //var marker = new mapboxgl.Marker({
                     color: "red",
                     }).setLngLat([position.coords.longitude, position.coords.latitude])
                     .addTo(map);
