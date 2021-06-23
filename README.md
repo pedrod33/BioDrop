@@ -27,6 +27,7 @@ BioDrop is a vegetable delivery service, it has two main target users:
   
 **Note**: to access the addresses you need to be connected to the [UA](https://www.ua.pt) network.
 ## API documentation
+We used swagger to create documentation of our APIs.
 
 ## Static analysis
 We used Sonarqube services to generate such analysis
