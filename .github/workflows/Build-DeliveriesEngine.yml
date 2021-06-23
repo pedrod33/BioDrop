@@ -22,7 +22,7 @@ jobs:
           MYSQL_USER: tqs
           MYSQL_PASSWORD: password
         ports: 
-          - 3306:3306
+          - 3305:3306
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
@@ -62,5 +62,5 @@ jobs:
           DB_PORT: 3306 
         run: |
           cd DeliveriesEngine 
-          export MYSQL_DB="jdbc:mysql://localhost:3306/deliveries-mysql"
+          export MYSQL_DB="jdbc:mysql://localhost:3305/deliveries-mysql"
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar  
