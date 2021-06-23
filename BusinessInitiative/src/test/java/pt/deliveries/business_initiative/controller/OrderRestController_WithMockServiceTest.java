@@ -177,10 +177,10 @@ class OrderRestController_WithMockServiceTest {
         order1.setId(1L);
 
 
-        when( service.updateProductsOrder(goodClient1.getId(), null, prod1.getId(), 1 ) ).thenReturn( order1 );
+        when( service.updateProductsOrder(goodClient1.getId(), 1L, prod1.getId(), 1 ) ).thenReturn( order1 );
 
 
-        mvc.perform(put("/businesses-api/orders/updateProductsOrder?clientId=1&productId=1&amount=1").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put("/businesses-api/orders/updateProductsOrder?clientId=1&storeId=1&productId=1&amount=1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("id", is(1)))
