@@ -33,10 +33,22 @@ class Products extends Component {
 
         var quantity = document.getElementById("qnty").value
 
-		ClientService.addOrderToCart(client.id, item.id, quantity).then(
+        if( quantity === null )
+            quantity = 1;
+
+        /* let { id } = useParams();
+        console.log("id")
+        console.log(id) */
+
+		var storeId = window.location.pathname
+		storeId = storeId.split("/")[1];
+        console.log(storeId)
+
+		ClientService.addOrderToCart(client.id, storeId, item.id, quantity).then(
 			(response) => {
 				if (response.status === 200) {
 					console.log("Produto adicionado");
+                    sessionStorage.setItem("storeId", storeId)
 				} else console.log(response.message);
 			}
 		);
@@ -99,34 +111,3 @@ class Products extends Component {
 }
 
 export default Products;
-
-{
-	/* <div className="card" key={item.id}>
-					<div>
-						<div>
-							<img
-								className="item-img"
-								src={"https://source.unsplash.com/random"}
-								alt={item.title}
-								style={{ width: "298px", height: "300px" }}
-							/>
-						</div>
-					</div>
-
-					<div className="row" style={{width: '100%'}}>
-						<span className="card-title">{item.name}</span>
-						<span
-							to="/"
-							className="btn-floating halfway-fab waves-effect waves-light red"
-							onClick={() => {
-								this.addToCart(item);
-							}}
-						>
-							<i className="material-icons">add</i>
-						</span>
-						<p>
-							<b>Price: {item.price}$</b>
-						</p>
-					</div>
-				</div> */
-}

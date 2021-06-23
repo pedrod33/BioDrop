@@ -82,7 +82,7 @@ public class DeliveryRestControllerTest {
 
         mvc.perform((get("/deliveries-api/deliveries/findByOrder_id?order_id=1")))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status", is(0)))
+                .andExpect(jsonPath("$.status", is(4)))
                 .andExpect(jsonPath("$.courier.name", is("Marco Alves")));
     }
 

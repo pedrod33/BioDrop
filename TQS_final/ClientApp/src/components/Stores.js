@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-//const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export default function Stores(props) {
 	const [stores, setStores] = useState(null);
@@ -86,7 +85,7 @@ export default function Stores(props) {
 									<Card className={classes.card}>
 										<CardMedia
 											className={classes.cardMedia}
-											image="https://source.unsplash.com/random"
+											image={process.env.PUBLIC_URL + "images/continente.png"}
 											title="Image title"
 										/>
 										<CardContent
@@ -112,7 +111,7 @@ export default function Stores(props) {
 											>
 												Check Our Products
 											</Button> */}
-											<Link to={"/Product/" + store.id}>
+											<Link to={"/" + store.id + "/Product"}>
 												<button
 													style={{
 														fontWeight: "bold",

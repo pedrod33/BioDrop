@@ -67,9 +67,9 @@ class OrderRestController_WithMockServiceTest {
 
         Set<Order_Product> orderProductSet1 = new HashSet<>(Arrays.asList(orderProduct1, orderProduct2));
         Set<Order_Product> orderProductSet2 = new HashSet<>(Collections.singletonList(orderProduct1));
-        Order order1 = new Order(address1, orderProductSet1, goodClient1, "status1");
-        Order order2 = new Order(address2, null, goodClient2, "status2");
-        Order order3 = new Order(address3, orderProductSet2, goodClient3, "status3");
+        Order order1 = new Order(address1, null, orderProductSet1, goodClient1, "status1");
+        Order order2 = new Order(address2, null, null, goodClient2, "status2");
+        Order order3 = new Order(address3, null, orderProductSet2, goodClient3, "status3");
         order1.setId(1L);
         order2.setId(2L);
         order3.setId(3L);
@@ -84,18 +84,18 @@ class OrderRestController_WithMockServiceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[0].id", is(1)))
-            .andExpect(jsonPath("$.[0].address.city", is("city1")))
+            .andExpect(jsonPath("$.[0].deliverAddress.city", is("city1")))
             .andExpect(jsonPath("$.[0].orderProducts.[0].product.name", anyOf(is("prod1"), is("prod2"))))
             .andExpect(jsonPath("$.[0].orderProducts.[0].amount", anyOf(is(10), is(11))))
             .andExpect(jsonPath("$.[0].orderProducts.[1].product.name", anyOf(is("prod1"), is("prod2"))))
             .andExpect(jsonPath("$.[0].orderProducts.[1].amount", anyOf(is(10), is(11))))
             .andExpect(jsonPath("$.[0].status", is("status1")))
             .andExpect(jsonPath("$.[1].id", is(2)))
-            .andExpect(jsonPath("$.[1].address.city", is("city2")))
+            .andExpect(jsonPath("$.[1].deliverAddress.city", is("city2")))
             .andExpect(jsonPath("$.[1].orderProducts").value(IsNull.nullValue()))
             .andExpect(jsonPath("$.[1].status", is("status2")))
             .andExpect(jsonPath("$.[2].id", is(3)))
-            .andExpect(jsonPath("$.[2].address.city", is("city3")))
+            .andExpect(jsonPath("$.[2].deliverAddress.city", is("city3")))
             .andExpect(jsonPath("$.[2].orderProducts.[0].id", is(1)))
             .andExpect(jsonPath("$.[2].orderProducts.[0].product", is(2)))
             .andExpect(jsonPath("$.[2].orderProducts.[0].amount", is(10)))
@@ -124,7 +124,7 @@ class OrderRestController_WithMockServiceTest {
         orderProduct1.setId(1L);
 
         Set<Order_Product> orderProductSet = new HashSet<>(Collections.singleton(orderProduct1));
-        Order order1 = new Order(address1, orderProductSet, goodClient1, "waiting");
+        Order order1 = new Order(address1, null, orderProductSet, goodClient1, "waiting");
         order1.setId(1L);
 
 
@@ -135,7 +135,7 @@ class OrderRestController_WithMockServiceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.address.city", is("city1")))
+                .andExpect(jsonPath("$.deliverAddress.city", is("city1")))
                 .andExpect(jsonPath("$.orderProducts.[0].product.name", is("prod1")))
                 .andExpect(jsonPath("$.orderProducts.[0].amount", is(10)))
                 .andExpect(jsonPath("$.status", is("waiting")));
@@ -173,21 +173,21 @@ class OrderRestController_WithMockServiceTest {
         orderProduct1.setId(1L);
 
         Set<Order_Product> orderProductSet1 = new HashSet<>(Collections.singleton(orderProduct1));
-        Order order1 = new Order(address1, orderProductSet1, goodClient1, "status1");
+        Order order1 = new Order(address1, null, orderProductSet1, goodClient1, "status1");
         order1.setId(1L);
 
 
-        when( service.updateProductsOrder(goodClient1.getId(), prod1.getId(), 1 ) ).thenReturn( order1 );
+        when( service.updateProductsOrder(goodClient1.getId(), 1L, prod1.getId(), 1 ) ).thenReturn( order1 );
 
 
-        mvc.perform(put("/businesses-api/orders/updateProductsOrder?clientId=1&productId=1&amount=1").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put("/businesses-api/orders/updateProductsOrder?clientId=1&storeId=1&productId=1&amount=1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("id", is(1)))
-                .andExpect(jsonPath("address.city", is("city1")))
-                .andExpect(jsonPath("address.completeAddress", is("address1")))
-                .andExpect(jsonPath("address.latitude", is(10.0)))
-                .andExpect(jsonPath("address.longitude", is(11.0)))
+                .andExpect(jsonPath("deliverAddress.city", is("city1")))
+                .andExpect(jsonPath("deliverAddress.completeAddress", is("address1")))
+                .andExpect(jsonPath("deliverAddress.latitude", is(10.0)))
+                .andExpect(jsonPath("deliverAddress.longitude", is(11.0)))
                 .andExpect(jsonPath("orderProducts.[0].product.name", is("prod1")))
                 .andExpect(jsonPath("orderProducts.[0].product.origin", is("origin1")))
                 .andExpect(jsonPath("orderProducts.[0].product.price", is(10.0)))
@@ -196,7 +196,7 @@ class OrderRestController_WithMockServiceTest {
                 .andExpect(jsonPath("orderProducts.[0].amount", is(10)))
                 .andExpect(jsonPath("status", is("status1")));
 
-        verify(service, times(1)).updateProductsOrder( goodClient1.getId(), prod1.getId(), 1 );
+        verify(service, times(1)).updateProductsOrder( goodClient1.getId(), 1L, prod1.getId(), 1 );
     }
 
     @Test
@@ -215,7 +215,7 @@ class OrderRestController_WithMockServiceTest {
         orderProduct1.setId(1L);
 
         Set<Order_Product> orderProductSet1 = new HashSet<>(Collections.singleton(orderProduct1));
-        Order order1 = new Order(address1, orderProductSet1, goodClient1, "done");
+        Order order1 = new Order(address1, null, orderProductSet1, goodClient1, "done");
         order1.setId(1L);
 
         Set<Order> clientOrders = new HashSet<>(Collections.singleton(order1));
@@ -229,10 +229,10 @@ class OrderRestController_WithMockServiceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("id", is(1)))
-                .andExpect(jsonPath("address.city", is("city1")))
-                .andExpect(jsonPath("address.completeAddress", is("address1")))
-                .andExpect(jsonPath("address.latitude", is(10.0)))
-                .andExpect(jsonPath("address.longitude", is(11.0)))
+                .andExpect(jsonPath("deliverAddress.city", is("city1")))
+                .andExpect(jsonPath("deliverAddress.completeAddress", is("address1")))
+                .andExpect(jsonPath("deliverAddress.latitude", is(10.0)))
+                .andExpect(jsonPath("deliverAddress.longitude", is(11.0)))
                 .andExpect(jsonPath("orderProducts.[0].product.name", is("prod1")))
                 .andExpect(jsonPath("orderProducts.[0].product.origin", is("origin1")))
                 .andExpect(jsonPath("orderProducts.[0].product.price", is(10.0)))
@@ -260,7 +260,7 @@ class OrderRestController_WithMockServiceTest {
         orderProduct1.setId(1L);
 
         Set<Order_Product> orderProductSet1 = new HashSet<>(Collections.singleton(orderProduct1));
-        Order order1 = new Order(address1, orderProductSet1, goodClient1, "done");
+        Order order1 = new Order(address1, null, orderProductSet1, goodClient1, "done");
         order1.setId(1L);
 
         Set<Order> clientOrders = new HashSet<>(Collections.singleton(order1));
@@ -275,10 +275,10 @@ class OrderRestController_WithMockServiceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("id", is(1)))
-                .andExpect(jsonPath("address.city", is("city1")))
-                .andExpect(jsonPath("address.completeAddress", is("address1")))
-                .andExpect(jsonPath("address.latitude", is(10.0)))
-                .andExpect(jsonPath("address.longitude", is(11.0)))
+                .andExpect(jsonPath("deliverAddress.city", is("city1")))
+                .andExpect(jsonPath("deliverAddress.completeAddress", is("address1")))
+                .andExpect(jsonPath("deliverAddress.latitude", is(10.0)))
+                .andExpect(jsonPath("deliverAddress.longitude", is(11.0)))
                 .andExpect(jsonPath("orderProducts.[0].product.name", is("prod1")))
                 .andExpect(jsonPath("orderProducts.[0].product.origin", is("origin1")))
                 .andExpect(jsonPath("orderProducts.[0].product.price", is(10.0)))
