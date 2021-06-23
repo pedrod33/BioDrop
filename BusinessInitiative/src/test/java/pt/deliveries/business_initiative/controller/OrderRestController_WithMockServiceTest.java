@@ -135,7 +135,7 @@ class OrderRestController_WithMockServiceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.address.city", is("city1")))
+                .andExpect(jsonPath("$.deliverAddress.city", is("city1")))
                 .andExpect(jsonPath("$.orderProducts.[0].product.name", is("prod1")))
                 .andExpect(jsonPath("$.orderProducts.[0].amount", is(10)))
                 .andExpect(jsonPath("$.status", is("waiting")));
