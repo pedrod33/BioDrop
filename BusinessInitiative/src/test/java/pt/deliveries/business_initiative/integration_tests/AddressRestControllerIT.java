@@ -50,6 +50,7 @@ public class AddressRestControllerIT {
         Address address1 = new Address("city1", "address1", 10, 11);
 
         Client goodClient = new Client("cunha", "cunha@ua.pt", "1234", null, "M", "96000000");
+        goodClient.setId(1L);
         goodClient.setAddresses(new HashSet<>(Collections.singleton(address1)));
 
         clientRepository.save(goodClient);
