@@ -198,6 +198,29 @@ class ClientService {
 	}
 
 
+	async updateOrderStatus2(orderId, newStatus) {
+		var url =
+			"http://localhost:8090/businesses-api/orders/updateStatus2?orderId=" +
+			orderId +
+			"&orderStatus=" +
+			newStatus;
+
+		var res = await fetch(url, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		var json = await res.json();
+
+		console.log(json);
+		if (res.status === 200) {
+			sessionStorage.removeItem("order");
+			return { status: res.status, client: json };
+		} else return { status: res.status, message: json };
+	}
+
+
     async updateAddressOrder(
 		address,
         clientId

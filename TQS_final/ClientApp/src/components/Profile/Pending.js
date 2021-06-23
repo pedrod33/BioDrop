@@ -27,17 +27,23 @@ export default function Pending() {
 		setDetailsVisibility(!detailsVisibility);
 	}
 
-	function closeDelivery(status) {
+	function closeDelivery(orderId, status, index) {
 		//setDetailsVisibility(!detailsVisibility);
-		/* ClientService.updateOrderStatus(
-			client.id, status
+
+	
+		ClientService.updateOrderStatus2(
+			orderId, status
 		).then((response) => {
 			if (response.status === 200) {
-				setShow(false);
-				setSelectedAddress(null);
-				setProductsList(null);
+				console.log(response);
+				/* let newList = orderList.splice(index,1);
+				//newList.splice(index,1)
+				setOrderList(newList);
+				console.log(newList) */
+				window.location.reload(); 
+				//setOrderList(response.client.orders);
 			} else console.log(response.message);
-		}); */
+		});
 
 	}
 
@@ -60,8 +66,8 @@ export default function Pending() {
 					</TableHead>
 
 					<TableBody>
-						{orderList.map((order) => {
-								if(order.status === "waiting" || order.status === "waiting_for_rider"){
+						{orderList.map((order, index) => {
+								if(order.status === "waiting" || order.status === "waiting_for_rider") {
 									return (
 										(order.status === "waiting" || order.status === "waiting_for_rider") && (
 											<TableRow key={order.id}>
@@ -109,14 +115,14 @@ export default function Pending() {
 											<TableCell align="right">
 												<button
 													onClick={() => {
-														closeDelivery("Delivered");
+														closeDelivery(order.id, "Delivered", index);
 													}}
 												>
 													Confirm Delivery
 												</button>
 												<button
 													onClick={() => {
-														closeDelivery("Not Delivered");
+														closeDelivery(order.id, "Not Delivered", index);
 													}}
 												>
 													Not Delivered
@@ -125,7 +131,6 @@ export default function Pending() {
 										</TableRow>
 									)	
 								}
-							
 							})}
                             
 					</TableBody>
