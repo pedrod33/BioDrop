@@ -27,7 +27,6 @@ class Products extends Component {
 		);
 	}
 
-	//TODO: mudar amount
 	addToCart(item) {
 		var client = JSON.parse(sessionStorage.getItem("client"));
 
@@ -99,34 +98,3 @@ class Products extends Component {
 }
 
 export default Products;
-
-{
-	/* <div className="card" key={item.id}>
-					<div>
-						<div>
-							<img
-								className="item-img"
-								src={"https://source.unsplash.com/random"}
-								alt={item.title}
-								style={{ width: "298px", height: "300px" }}
-							/>
-						</div>
-					</div>
-
-					<div className="row" style={{width: '100%'}}>
-						<span className="card-title">{item.name}</span>
-						<span
-							to="/"
-							className="btn-floating halfway-fab waves-effect waves-light red"
-							onClick={() => {
-								this.addToCart(item);
-							}}
-						>
-							<i className="material-icons">add</i>
-						</span>
-						<p>
-							<b>Price: {item.price}$</b>
-						</p>
-					</div>
-				</div> */
-}

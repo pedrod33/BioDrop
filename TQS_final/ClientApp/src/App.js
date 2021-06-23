@@ -13,6 +13,7 @@ import Profile from "./components/Profile/Profile";
 import OrdesHistory from "./components/Profile/OrdersHistory";
 import ProfileSettings from "./components/Profile/ProfileSettings";
 import Pending from "./components/Profile/Pending";
+import Register from "./components/Register";
 
 class App extends Component {
 	static displayName = App.name;
@@ -21,6 +22,7 @@ class App extends Component {
 		return (
 			<Layout>
 				<Route exact path="/" component={Home} />
+                <Route exact path="/register" component={Register} />
 				<Route exact path="/Profile" component={Profile} />
 				<Route exact path="/Product/:id" component={Products} />
 				<Route exact path="/Stores" component={Stores} />
