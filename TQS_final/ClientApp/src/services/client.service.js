@@ -115,9 +115,11 @@ class ClientService {
 		}
 	}
 
-	async addOrderToCart(clientId, productId, amount) {
+	async addOrderToCart(clientId, storeId, productId, amount) {
 		var url =
-			"http://localhost:8090/businesses-api/orders/updateProductsOrder?clientId=" +
+			"http://localhost:8090/businesses-api/orders/updateProductsOrder?storeId="+
+			storeId+
+			"&clientId=" +
 			clientId +
 			"&productId=" +
 			productId +

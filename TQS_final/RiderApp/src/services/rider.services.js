@@ -89,7 +89,36 @@ class RiderService {
 			sessionStorage.setItem("orders", JSON.stringify(json));
 			return { status: 200, orders: json };
 		} else {
-			return { status: 201, message: "Erro fetch all stores" };
+			return { status: 201, message: "Erro" };
+		}
+	}
+
+	async updateOrderState(orderId){
+		var url = "http://localhost:8090/businesses-api/orders/updateStatus2?orderId="+orderId+"&orderStatus=accepted";
+		console.log(url)
+		var res = await fetch(url, {
+			method: "PUT",
+			});
+
+		if (res.status === 200) {
+			var json = await res.json();
+			return { status: 200, order: json };
+		} else {
+			return { status: res.status, message: "Erro" };
+		}
+	}
+
+	async fetchAllVehicles() {
+		var url = "http://localhost:8089/deliveries-api/vehicles/all";
+
+		var res = await fetch(url);
+
+		if (res.status === 200) {
+			var json = await res.json();
+			console.log(json);
+			return { status: res.status, orders: json };
+		} else {
+			return { status: res.status, message: "Erro fetch all vehicles" };
 		}
 	}
 

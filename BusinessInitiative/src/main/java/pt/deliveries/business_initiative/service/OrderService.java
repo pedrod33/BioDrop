@@ -14,9 +14,11 @@ public interface OrderService {
 
     Order findOrderById(Long orderId);
 
-    Order updateProductsOrder(Long clientId, Long productId, Integer amount);
+    Order updateProductsOrder(Long clientId, Long storeId, Long productId, Integer amount);
 
     Order updateStatus(Long clientId, String status);
+
+    Order updateStatus2(Long orderId, String status);
 
     Order updateOrderAddress(Long clientId, AddressPOJO address);
 }

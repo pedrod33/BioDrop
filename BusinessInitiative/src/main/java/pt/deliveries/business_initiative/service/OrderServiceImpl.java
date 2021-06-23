@@ -30,6 +30,9 @@ public class OrderServiceImpl implements OrderService {
     private ProductServiceImpl productService;
 
     @Autowired
+    private StoreServiceImpl storeService;
+
+    @Autowired
     private Order_ProductServiceImpl orderProductService;
 
     @Autowired
@@ -64,10 +67,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order updateProductsOrder(Long clientId, Long productId, Integer amount) {
+    public Order updateProductsOrder(Long clientId, Long storeId, Long productId, Integer amount) {
 
         Client client = clientService.findById(clientId);
         Product prod = productService.findById(productId);
+        Store store = storeService.findById(storeId);
+
 
         logger.log(Level.INFO, "Looking for client orders ...");
         Order clientCurrentOrder = null;
@@ -86,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
         if ( clientCurrentOrder == null ) {
             logger.log(Level.INFO, "Creating new order for client ...");
 
-            clientCurrentOrder = new Order(null, null, client, WAITING);
+            clientCurrentOrder = new Order(null, store.getAddress(), null, client, WAITING);
 
 
             Order_Product orderProduct = new Order_Product(clientCurrentOrder, prod, amount);
@@ -164,6 +169,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order updateStatus2(Long orderId, String orderStatus) {
+        //Order client = clientService.findById(clientId);
+
+        logger.log(Level.INFO, "Looking for orders ...");
+        Order clientCurrentOrder = repository.findById(orderId).orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        clientCurrentOrder.setStatus(orderStatus);
+
+        repository.save(clientCurrentOrder);
+        logger.log(Level.INFO, "Order status updated and saved");
+        return clientCurrentOrder;
+    }
+
+    @Override
     public Order updateOrderAddress(Long clientId, AddressPOJO addressPOJO) {
 
         Address address = new Address();
@@ -196,7 +214,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ClientHasNoOrdersWaiting("Client doest have any orders waiting");
         } else {
             logger.log(Level.INFO, "Updating order address ...");
-            clientCurrentOrder.setAddress(address);
+            clientCurrentOrder.setDeliverAddress(address);
         }
 
         repository.save(clientCurrentOrder);

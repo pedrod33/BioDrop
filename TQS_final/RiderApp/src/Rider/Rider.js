@@ -46,20 +46,14 @@ class Rider extends Component {
   }
 
   componentDidMount() {
-    this.timer = setInterval(() => {
-      RiderService.fetchAllOrdersByStatus("waiting_for_rider").then(
-        (result) => {
-          if (result.status === 200) {
-            this.setState({ ordersWaiting: result.orders });
-          }
-        }
-      );
-    }, 5000);
 
     const { lng, lat, zoom } = this.state;
+
     const map = new mapboxgl.Map({
       container: this.mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
+      zoom: zoom
     });
 
     map.on("move", () => {
@@ -75,25 +69,44 @@ class Rider extends Component {
       unit: "metric",
       profile: "mapbox/driving",
     });
-    map.addControl(directions, "top-left");
+    map.addControl(directions, 'top-left');
 
-    var origin = this.state.lng + "," + this.state.lat;
-    directions.setOrigin(origin);
-    if( this.state.destinationCoords !== null )
-        directions.setDestination(this.state.destinationCoords[0]+","+this.state.destinationCoords[1]);
-    /* else {
-        directions.setDestination("-8.7,40.6431")
-    } */
+    // Avenida João Jacinto Magalhães, 3810-193 Aveiro, Aveiro, Portugal
+        // Avenida Araújo E Silva, 3810-049 Aveiro, Aveiro, Portugal
+
+    /* directions.setOrigin("Avenida João Jacinto Magalhães, 3810-193 Aveiro, Aveiro, Portugal");
+    directions.setDestination("Avenida Araújo E Silva, 3810-049 Aveiro, Aveiro, Portugal"); */
+    this.map = map;
+    this.directions = directions;
   }
 
-  componentDidUpdate(){
 
-      map.addControl(directions, "top-left");
-  
-      var origin = this.state.lng + "," + this.state.lat;
-      directions.setOrigin(origin);
-      if( this.state.destinationCoords !== null )
-          directions.setDestination(this.state.destinationCoords[0]+","+this.state.destinationCoords[1]);
+  settingRoute(deliver_lat, deliver_lng, pickup_lat, pickup_lng) {
+    let dest = deliver_lng+","+deliver_lat;
+    let pickup = pickup_lng+","+pickup_lat;
+    console.log(dest)
+    this.directions.setOrigin(dest);
+    this.directions.setDestination(pickup);
+  }
+
+  getDeliveries(){
+    console.log("This was done")
+    RiderService.fetchAllOrdersByStatus("waiting_for_rider").then(
+      (result) => {
+        if (result.status === 200) {
+          if( result.orders !== this.state.ordersWaiting )
+            this.setState({ ordersWaiting: result.orders });
+        } 
+      }
+    );
+  }
+  changeStates(orderId){
+    RiderService.updateOrderState(orderId)
+    .then((result)=>{
+      if (result.status === 200) {
+        console.log(result.order);
+      } 
+    })
   }
 
   render() {
@@ -116,7 +129,15 @@ class Rider extends Component {
           </div>
         )}
         <hr />
-
+        <Button
+          onClick={ () => {this.getDeliveries()}}
+          variant="success"
+          style={{
+            marginLeft: "20px",
+          }}
+        >
+          Accept
+        </Button>
 
         <div
           style={{
@@ -135,17 +156,17 @@ class Rider extends Component {
               {console.log(this.state.ordersWaiting)}
               {this.state.ordersWaiting.map((order, index) => (
                 <Card style={{ width: "18rem" }} key={index}>
-                  {console.log(order.address)}                 
 
                   <Card.Body >
-                    <Card.Title>{order.address.city} <ExploreIcon onClick={ () => this.setState({destinationCoords: [order.address.longitude, order.address.latitude]})} /></Card.Title>
+                    <Card.Title>{order.deliverAddress.city} <ExploreIcon onClick={ () => this.settingRoute(order.deliverAddress.latitude, order.deliverAddress.longitude, order.pickupAddress.latitude, order.pickupAddress.longitude)} /></Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
-                      {order.address.latitude + "," + order.address.longitude}
+                      {order.deliverAddress.latitude + "," + order.deliverAddress.longitude}
                     </Card.Subtitle>
-                    <Card.Text>{order.address.completeAddress}</Card.Text>
+                    <Card.Text>{order.deliverAddress.completeAddress}</Card.Text>
                     <div className="row">
                       <div style={{ flex: 1 }}>
                         <Button
+                          onClick={()=>{this.changeStates(order.id)}}
                           variant="success"
                           style={{
                             marginLeft: "20px",

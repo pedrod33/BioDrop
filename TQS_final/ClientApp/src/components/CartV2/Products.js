@@ -3,7 +3,6 @@
 import ClientService from "../../services/client.service";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Card from "react-bootstrap/Card";
-import { useParams } from 'react-router-dom';
 
 class Products extends Component {
 	constructor(props) {
@@ -45,7 +44,7 @@ class Products extends Component {
 		storeId = storeId.split("/")[1];
         console.log(storeId)
 
-		ClientService.addOrderToCart(client.id, item.id, quantity).then(
+		ClientService.addOrderToCart(client.id, storeId, item.id, quantity).then(
 			(response) => {
 				if (response.status === 200) {
 					console.log("Produto adicionado");

@@ -17,8 +17,12 @@ public class Order {
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
+    @JoinColumn(name = "deliver_address_id", referencedColumnName = "id")
+    private Address deliverAddress;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pickup_address_id", referencedColumnName = "id")
+    private Address  pickupAddress;
 
     @OneToMany(cascade=CascadeType.ALL)
     private Set<Order_Product> orderProducts;
@@ -34,8 +38,9 @@ public class Order {
 
     public Order() { }
 
-    public Order(Address address, Set<Order_Product> orderProducts, Client client, String status) {
-        this.address = address;
+    public Order(Address deliverAddress, Address pickupAddress, Set<Order_Product> orderProducts, Client client, String status) {
+        this.deliverAddress = deliverAddress;
+        this.pickupAddress = pickupAddress;
         this.orderProducts = orderProducts;
         this.client = client;
         this.status = status;
@@ -57,12 +62,20 @@ public class Order {
         this.client = client;
     }
 
-    public Address getAddress() {
-        return address;
+    public Address getDeliverAddress() {
+        return deliverAddress;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setDeliverAddress(Address deliverAddress) {
+        this.deliverAddress = deliverAddress;
+    }
+
+    public Address getPickupAddress() {
+        return pickupAddress;
+    }
+
+    public void setPickupAddress(Address address) {
+        this.pickupAddress = pickupAddress;
     }
 
     public String getStatus() {
@@ -85,7 +98,8 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", address=" + address +
+                ", deliverAddress=" + deliverAddress +
+                ", pickupAddress=" + pickupAddress +
                 ", orderProducts=" + orderProducts +
                 ", status='" + status + '\'' +
                 '}';
