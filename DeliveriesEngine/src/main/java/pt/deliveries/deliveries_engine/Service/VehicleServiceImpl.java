@@ -18,13 +18,14 @@ public class VehicleServiceImpl implements VehicleService{
     VehicleRepository repository;
 
     @Override
-    public Vehicle create(Vehicle vehicle) {
+    public Vehicle create(String vehicleType) {
+        Vehicle vehicle = new Vehicle(vehicleType);
         return repository.save(vehicle);
     }
 
     @Override
-    public boolean exists(Vehicle vehicle) {
-        if(repository.findByType(vehicle.getType())!=null){
+    public boolean exists(String vehicle) {
+        if(repository.findByType(vehicle)!=null){
             throw new VehicleTypeIsUsedException("This type of vehicle already exists");
         }
         return false;

@@ -6,20 +6,36 @@ import javax.persistence.*;
 @Table(name = "delivery")
 public class Delivery {
 
+    private final int ACCEPTED = 0;
+    private final int PICKED_UP = 1;
+    private final int DELIVERED = 2;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
     @Column(name = "status")
-    private String status;
+    private int status;
 
-    public Delivery(Long id, String status) {
-        this.id = id;
-        this.status = status;
+    @Column(name = "orderId", nullable = false, unique = true)
+    private Long orderId;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="vehicle_id", referencedColumnName = "id")
+    private Vehicle vehicle;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "courier_id", referencedColumnName = "id", nullable = false)
+    private Courier courier;
+
+    public Delivery(Courier courier, Long order_id) {
+        this.status = this.ACCEPTED;
+        this.courier = courier;
+        this.orderId = order_id;
     }
 
-    public Delivery() {}
+    public Delivery() {this.status = this.ACCEPTED;}
 
     public Long getId() {
         return id;
@@ -29,11 +45,35 @@ public class Delivery {
         this.id = id;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Long getOrder_id() {
+        return orderId;
+    }
+
+    public void setOrder_id(Long order_id) {
+        this.orderId = order_id;
+    }
+
+    public Courier getCourier() {
+        return courier;
+    }
+
+    public void setCourier(Courier courier) {
+        this.courier = courier;
     }
 }

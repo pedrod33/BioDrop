@@ -3,11 +3,9 @@ import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-//import Button from 'react-bootstrap/Button';
 import Row from "react-bootstrap/Row";
-import { Link } from "react-router-dom";
-
 import Form from "react-bootstrap/Form";
+import { Link } from "react-router-dom";
 
 const styles = (theme) => ({
     root: {
@@ -38,8 +36,8 @@ const styles = (theme) => ({
     },
 });
 
-class Home extends Component {
-    static displayName = Home.name;
+class Register extends Component {
+    static displayName = Register.name;
 
     constructor(props) {
         super(props);
@@ -50,26 +48,54 @@ class Home extends Component {
             lName: "",
             phone: "",
             sex: "",
+            status: "",
+            options: [],
         };
         this.handleChangeEmail = this.handleChangeEmail.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
+        this.handleChangeFname = this.handleChangeFname.bind(this);
+        this.handleChangeLname = this.handleChangeLname.bind(this);
+        this.handleChangePhone = this.handleChangePhone.bind(this);
+        this.handleChangeSex = this.handleChangeSex.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        fetch("https://localhost:8089/deliveries-api/vehicle/all")
+            .then((response) => response.json())
+            .then((data) =>
+                this.setState({
+                    /*options: data */
+                })
+            );
     }
 
     handleSubmit(event) {
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            mode: "cors",
             body: JSON.stringify({
+                name: this.state.fName,
                 email: this.state.email,
                 password: this.state.password,
+                gender: this.state.sex,
+                phoneNumber: this.state.phone,
+                supervisor_id: "1",
+                vehicle_id: "2",
             }),
         };
         fetch(
-            "http://localhost:8089/deliveries-api/supervisor/login",
+            "http://localhost:8089/deliveries-api/courier/register",
             requestOptions
-        )
-            .then((response) => response.json())
-            .then((data) => this.setState({ postId: data.id }));
+        ).then((response) => this.setState({ status: response.status }));
+        console.log(this.state.status);
+        if (this.state.status === 201) {
+            this.props.history.push("/Rider");
+        } else {
+            this.props.history.push("/");
+        }
+
         event.preventDefault();
     }
 
@@ -79,6 +105,22 @@ class Home extends Component {
 
     handleChangePassword(event) {
         this.setState({ password: event.target.value });
+    }
+
+    handleChangeFname(event) {
+        this.setState({ fName: event.target.value });
+    }
+
+    handleChangeLname(event) {
+        this.setState({ lName: event.target.value });
+    }
+
+    handleChangePhone(event) {
+        this.setState({ phone: event.target.value });
+    }
+
+    handleChangeSex(event) {
+        this.setState({ sex: event.target.value });
     }
 
     render() {
@@ -97,15 +139,17 @@ class Home extends Component {
                             <Typography
                                 variant="h3"
                                 className={classes.title}
-                                color="textSecondary"
                                 gutterBottom
                             >
-                                Login
+                                Register
                             </Typography>
-                            <Form className={classes.form}>
+                            <Form
+                                className={classes.form}
+                                onSubmit={this.handleSubmit}
+                            >
                                 <Form.Group
                                     className="mb-3"
-                                    controlId="formEmail2"
+                                    controlId="formEmail"
                                 >
                                     <Form.Label>Email</Form.Label>
                                     <Form.Control
@@ -115,13 +159,58 @@ class Home extends Component {
                                 </Form.Group>
                                 <Form.Group
                                     className="mb-3"
-                                    controlId="formPassword2"
+                                    controlId="formPassword"
                                 >
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control
                                         type="password"
                                         onChange={this.handleChangePassword}
                                     />
+                                </Form.Group>
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formNome"
+                                >
+                                    <Form.Label>First name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        rows={1}
+                                        onChange={this.handleChangeFname}
+                                    />
+                                </Form.Group>
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formApelido"
+                                >
+                                    <Form.Label>Last name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        rows={1}
+                                        onChange={this.handleChangeLname}
+                                    />
+                                </Form.Group>
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formTelefone"
+                                >
+                                    <Form.Label>Cellphone number</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        onChange={this.handleChangePhone}
+                                    />
+                                </Form.Group>
+                                <Form.Group
+                                    className="mb-3"
+                                    controlId="formSexo"
+                                >
+                                    <select
+                                        value={this.state.sex}
+                                        onChange={this.handleChangeSex}
+                                    >
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
                                 </Form.Group>
                                 <Row
                                     style={{
@@ -133,7 +222,7 @@ class Home extends Component {
                                 >
                                     <input
                                         type="submit"
-                                        value="Login"
+                                        value="Register"
                                         style={{ backgroundColor: "#FFF" }}
                                     />
                                 </Row>
@@ -151,10 +240,10 @@ class Home extends Component {
                                     color="textSecondary"
                                     gutterBottom
                                 >
-                                    Create an account:
+                                    Have an account?
                                 </Typography>
                                 <Link
-                                    to="/Register"
+                                    to="/"
                                     style={{
                                         textDecoration: "none",
                                         color: "#536732",
@@ -162,7 +251,7 @@ class Home extends Component {
                                     }}
                                     className="outline-success"
                                 >
-                                    Register
+                                    Login
                                 </Link>
                             </Row>
                         </CardContent>
@@ -172,4 +261,4 @@ class Home extends Component {
         );
     }
 }
-export default withStyles(styles)(Home);
+export default withStyles(styles)(Register);

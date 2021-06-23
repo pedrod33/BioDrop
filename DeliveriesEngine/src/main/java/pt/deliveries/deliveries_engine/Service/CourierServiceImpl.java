@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 public class CourierServiceImpl implements CourierService{
 
     Logger logger = Logger.getLogger(CourierServiceImpl.class.getName());
+
     @Autowired
     private CourierRepository courierRepository;
 
@@ -42,7 +43,6 @@ public class CourierServiceImpl implements CourierService{
         courier.setPhoneNumber(courierPojo.getPhoneNumber());
         courier.setVehicle(vehicleRepository.findById(courierPojo.getVehicle_id()).orElse(null));
         courier.setSupervisor(supervisorRepository.findById(courierPojo.getSupervisor_id()).orElse(null));
-        courierRepository.save(courier);
         return courierRepository.save(courier);
     }
 

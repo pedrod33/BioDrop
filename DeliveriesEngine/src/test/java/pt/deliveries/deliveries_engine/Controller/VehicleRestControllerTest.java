@@ -29,7 +29,7 @@ public class VehicleRestControllerTest {
     @Test
     public void createVehicle() throws Exception {
         Vehicle vehicle = new Vehicle("car");
-        when(service.exists(vehicle)).thenReturn(false);
+        when(service.exists(vehicle.getType())).thenReturn(false);
         vehicle.setId(1L);
         when(service.create(Mockito.any())).thenReturn(vehicle);
         mvc.perform((post("/deliveries-api/vehicle/create")

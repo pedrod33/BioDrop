@@ -1,10 +1,14 @@
 package pt.deliveries.deliveries_engine.Model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "courier")
 public class Courier {
+
+    private final int IN_ORDER = 1;
+    private final int FREE = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id", nullable = false)
@@ -30,9 +34,14 @@ public class Courier {
     @Column(nullable = true)
     private String gender;
 
+    @Column(nullable = false)
+    private int status;
+
     @Column(unique = true, nullable = false)
     private Long phoneNumber;
 
+    @OneToMany(mappedBy = "courier", fetch = FetchType.LAZY)
+    private Set<Delivery> deliveries;
 
     public Courier( String name, String email, String password, String gender, Long phoneNumber, Supervisor supervisor, Vehicle vehicle) {
         this.supervisor = supervisor;
@@ -42,6 +51,7 @@ public class Courier {
         this.password = password;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
+        this.status = 0;
     }
 
     public Courier() {}
@@ -110,6 +120,13 @@ public class Courier {
         this.vehicle = vehicle;
     }
 
+    public void setStatus(int status){
+        this.status = status;
+    }
+
+    public int getStatus(){
+        return this.status;
+    }
     @Override
     public String toString() {
         return "Courier{" +

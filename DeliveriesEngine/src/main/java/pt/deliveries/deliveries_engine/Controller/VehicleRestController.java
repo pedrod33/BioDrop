@@ -3,9 +3,7 @@ package pt.deliveries.deliveries_engine.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pt.deliveries.deliveries_engine.Model.Vehicle;
 import pt.deliveries.deliveries_engine.Service.VehicleServiceImpl;
 
@@ -20,10 +18,10 @@ public class VehicleRestController {
 
     private Logger logger = Logger.getLogger(CourierRestController.class.getName());
 
-    @RequestMapping("/create")
-    public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle){
-        service.exists(vehicle);
-        Vehicle created = service.create(vehicle);
+    @PostMapping("/create")
+    public ResponseEntity<Vehicle> createVehicle(@RequestBody String type){
+        service.exists(type);
+        Vehicle created = service.create(type);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 }
