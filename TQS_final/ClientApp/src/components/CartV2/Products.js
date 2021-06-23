@@ -27,7 +27,6 @@ class Products extends Component {
 		);
 	}
 
-	//TODO: mudar amount
 	addToCart(item) {
 		var client = JSON.parse(sessionStorage.getItem("client"));
 
