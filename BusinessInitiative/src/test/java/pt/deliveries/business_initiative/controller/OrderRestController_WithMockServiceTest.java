@@ -196,7 +196,7 @@ class OrderRestController_WithMockServiceTest {
                 .andExpect(jsonPath("orderProducts.[0].amount", is(10)))
                 .andExpect(jsonPath("status", is("status1")));
 
-        verify(service, times(1)).updateProductsOrder( goodClient1.getId(), null, prod1.getId(), 1 );
+        verify(service, times(1)).updateProductsOrder( goodClient1.getId(), 1L, prod1.getId(), 1 );
     }
 
     @Test
