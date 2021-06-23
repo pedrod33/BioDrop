@@ -75,9 +75,9 @@ class OrderServiceTest {
 
         Set<Order_Product> orderProductSet1 = new HashSet<>(Arrays.asList(orderProduct1, orderProduct2));
         Set<Order_Product> orderProductSet2 = new HashSet<>(Collections.singletonList(orderProduct2));
-        Order order1 = new Order(address1, orderProductSet1, goodClient1, "waiting");
-        Order order2 = new Order(address2, orderProductSet2, goodClient2, "waiting");
-        Order order3 = new Order(address3, null, goodClient3, "waiting");
+        Order order1 = new Order(address1, null, orderProductSet1, goodClient1, "waiting");
+        Order order2 = new Order(address2, null, orderProductSet2, goodClient2, "waiting");
+        Order order3 = new Order(address3, null, null, goodClient3, "waiting");
         order1.setId(1L);
         order2.setId(2L);
         order3.setId(3L);
@@ -151,9 +151,9 @@ class OrderServiceTest {
 
         Set<Order_Product> orderProductSet1 = new HashSet<>(Arrays.asList(orderProduct1, orderProduct2));
         Set<Order_Product> orderProductSet2 = new HashSet<>(Collections.singletonList(orderProduct1));
-        Order order1 = new Order(address1, orderProductSet1, goodClient1, "status1");
-        Order order2 = new Order(address2, null, goodClient2, "status2");
-        Order order3 = new Order(address3, orderProductSet2, goodClient3, "status3");
+        Order order1 = new Order(address1, null, orderProductSet1, goodClient1, "status1");
+        Order order2 = new Order(address2, null, null, goodClient2, "status2");
+        Order order3 = new Order(address3, null, orderProductSet2, goodClient3, "status3");
         order1.setId(1L);
         order2.setId(2L);
         order3.setId(3L);
@@ -185,7 +185,7 @@ class OrderServiceTest {
 
         Set<Order_Product> orderProductSet1 = new HashSet<>(Arrays.asList(orderProduct1, orderProduct2));
 
-        Order order1 = new Order(address1, orderProductSet1, goodClient1, "waiting");
+        Order order1 = new Order(address1, null, orderProductSet1, goodClient1, "waiting");
         order1.setId(1L);
 
         Order found = service.findOrderById(order1.getId());
@@ -193,8 +193,8 @@ class OrderServiceTest {
 
         assertThat(found.getId()).isEqualTo(order1.getId());
         assertThat(found.getStatus()).isEqualTo(order1.getStatus());
-        assertThat(found.getAddress().getId()).isEqualTo(order1.getAddress().getId());
-        assertThat(found.getAddress().getCity()).isEqualTo(order1.getAddress().getCity());
+        assertThat(found.getDeliverAddress().getId()).isEqualTo(order1.getDeliverAddress().getId());
+        assertThat(found.getDeliverAddress().getCity()).isEqualTo(order1.getDeliverAddress().getCity());
 
         verifyFindByIdIsCalledOnce(order1.getId());
     }
@@ -225,18 +225,18 @@ class OrderServiceTest {
         orderProduct.setId(1L);
 
         Set<Order_Product> orderProductSet = new HashSet<>(Collections.singleton(orderProduct));
-        Order order1 = new Order(address1, orderProductSet, goodClient1, "waiting");
+        Order order1 = new Order(address1, null, orderProductSet, goodClient1, "waiting");
         order1.setId(3L);
 
         goodClient1.setOrders(new HashSet<>(Collections.singleton(order1)));
 
-        Order saved = service.updateProductsOrder(4L, 3L, 10);
+        Order saved = service.updateProductsOrder(4L, null, 3L, 10);
 
 
         assertThat(saved.getId()).isEqualTo(order1.getId());
         assertThat(saved.getStatus()).isEqualTo(order1.getStatus());
-        assertThat(saved.getAddress().getId()).isEqualTo(order1.getAddress().getId());
-        assertThat(saved.getAddress().getCity()).isEqualTo(order1.getAddress().getCity());
+        assertThat(saved.getDeliverAddress().getId()).isEqualTo(order1.getDeliverAddress().getId());
+        assertThat(saved.getDeliverAddress().getCity()).isEqualTo(order1.getDeliverAddress().getCity());
 
         verifySaveIsCalledOnce(order1);
     }
@@ -258,18 +258,18 @@ class OrderServiceTest {
         orderProduct.setId(1L);
 
         Set<Order_Product> orderProductSet = new HashSet<>(Collections.singleton(orderProduct));
-        Order order1 = new Order(address1, orderProductSet, goodClient1, "waiting");
+        Order order1 = new Order(address1, null, orderProductSet, goodClient1, "waiting");
         order1.setId(3L);
 
         goodClient1.setOrders(new HashSet<>(Collections.singleton(order1)));
 
-        Order saved = service.updateProductsOrder(4L, 2L, 10);
+        Order saved = service.updateProductsOrder(4L, null, 2L, 10);
 
 
         assertThat(saved.getId()).isEqualTo(order1.getId());
         assertThat(saved.getStatus()).isEqualTo(order1.getStatus());
-        assertThat(saved.getAddress().getId()).isEqualTo(order1.getAddress().getId());
-        assertThat(saved.getAddress().getCity()).isEqualTo(order1.getAddress().getCity());
+        assertThat(saved.getDeliverAddress().getId()).isEqualTo(order1.getDeliverAddress().getId());
+        assertThat(saved.getDeliverAddress().getCity()).isEqualTo(order1.getDeliverAddress().getCity());
 
         verifySaveIsCalledOnce(order1);
     }
@@ -290,7 +290,7 @@ class OrderServiceTest {
         orderProduct2.setId(2L);
 
         Set<Order_Product> orderProductSet2 = new HashSet<>(Collections.singletonList(orderProduct2));
-        Order order2 = new Order(address2, orderProductSet2, goodClient4, "waiting");
+        Order order2 = new Order(address2, null, orderProductSet2, goodClient4, "waiting");
         order2.setId(2L);
 
         goodClient4.setOrders(new HashSet<>(Collections.singleton(order2)));
@@ -301,8 +301,8 @@ class OrderServiceTest {
 
         assertThat(saved.getId()).isEqualTo(order2.getId());
         assertThat(saved.getStatus()).isEqualTo(newStatus);
-        assertThat(saved.getAddress().getCompleteAddress()).isEqualTo(order2.getAddress().getCompleteAddress());
-        assertThat(saved.getAddress().getCity()).isEqualTo(order2.getAddress().getCity());
+        assertThat(saved.getDeliverAddress().getCompleteAddress()).isEqualTo(order2.getDeliverAddress().getCompleteAddress());
+        assertThat(saved.getDeliverAddress().getCity()).isEqualTo(order2.getDeliverAddress().getCity());
 
         verifySaveIsCalledOnce(order2);
     }
@@ -342,7 +342,7 @@ class OrderServiceTest {
         orderProduct2.setId(2L);
 
         Set<Order_Product> orderProductSet2 = new HashSet<>(Collections.singletonList(orderProduct2));
-        Order order2 = new Order(address2, orderProductSet2, goodClient4, "waiting");
+        Order order2 = new Order(address2, null, orderProductSet2, goodClient4, "waiting");
         order2.setId(2L);
 
         goodClient4.setOrders(new HashSet<>(Collections.singleton(order2)));
@@ -351,8 +351,8 @@ class OrderServiceTest {
 
 
         assertThat(saved.getId()).isEqualTo(order2.getId());
-        assertThat(saved.getAddress().getCompleteAddress()).isEqualTo(order2.getAddress().getCompleteAddress());
-        assertThat(saved.getAddress().getCity()).isEqualTo(order2.getAddress().getCity());
+        assertThat(saved.getDeliverAddress().getCompleteAddress()).isEqualTo(order2.getDeliverAddress().getCompleteAddress());
+        assertThat(saved.getDeliverAddress().getCity()).isEqualTo(order2.getDeliverAddress().getCity());
 
         verifySaveIsCalledOnce(order2);
     }

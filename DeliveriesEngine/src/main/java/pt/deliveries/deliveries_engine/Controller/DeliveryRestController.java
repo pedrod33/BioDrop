@@ -10,7 +10,7 @@ import pt.deliveries.deliveries_engine.Service.DeliveryServiceImpl;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 @RestController
 @RequestMapping("/deliveries-api/deliveries")
 public class DeliveryRestController {
@@ -43,5 +43,19 @@ public class DeliveryRestController {
     @PostMapping("/client/updateStatus")
     public ResponseEntity<Delivery> updateDeliveryByOrderId(@RequestParam long orderId, @RequestParam long courierId){
         return new ResponseEntity<>(deliveryService.updateDeliveryStatus(orderId, courierId), HttpStatus.OK);
+    }
+
+    @GetMapping("/findPendingOrders")
+    public ResponseEntity<Delivery> getPendingDeliveries(@RequestParam long courierId){
+        return new ResponseEntity<>(deliveryService.findDeliveryByCourierIdToBeAccepted(courierId), HttpStatus.OK);
+    }
+
+    @PostMapping("/accept")
+    public ResponseEntity<Delivery> accept(@RequestParam long courierId, @RequestParam long orderId){
+        return new ResponseEntity<>(deliveryService.updateDeliveryStatus(orderId, courierId), HttpStatus.OK);
+    }
+    @PostMapping("/decline")
+    public ResponseEntity<Delivery> decline(@RequestParam long courierId, @RequestParam long orderId){
+        return new ResponseEntity<>(deliveryService.decline(courierId, orderId), HttpStatus.OK);
     }
 }

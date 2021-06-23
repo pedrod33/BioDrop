@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
+import riderServices from "../services/rider.services";
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -33,6 +34,17 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp(props) {
 	const classes = useStyles();
 
+	useEffect(() => {
+		riderServices.fetchAllVehicles()
+		.then((res)=>{
+			if (res.status === 200)
+				return res.json();
+			return null;
+		})
+		.then((res) => {
+			console.log(res);
+		})
+	},[])
 	return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />

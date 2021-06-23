@@ -54,16 +54,6 @@ class Register extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	componentDidMount() {
-		fetch("https://localhost:8089/deliveries-api/vehicle/all")
-			.then((response) => response.json())
-			.then((data) =>
-				this.setState({
-					/*options: data */
-				})
-			);
-	}
-
 	handleSubmit(event) {
 		console.log(this.state);
 

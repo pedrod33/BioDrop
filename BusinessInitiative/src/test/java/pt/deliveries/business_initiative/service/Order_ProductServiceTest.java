@@ -44,7 +44,7 @@ public class Order_ProductServiceTest {
         orderProduct1.setId(1L);
 
         Set<Order_Product> orderProductSet1 = new HashSet<>(Arrays.asList(orderProduct1, orderProduct1));
-        Order order1 = new Order(address1, orderProductSet1, goodClient1, "waiting");
+        Order order1 = new Order(address1, null, orderProductSet1, goodClient1, "waiting");
         order1.setId(1L);
 
 
@@ -68,7 +68,7 @@ public class Order_ProductServiceTest {
         orderProduct.setId(1L);
 
         Set<Order_Product> orderProductSet = new HashSet<>(Arrays.asList(orderProduct, orderProduct));
-        Order order1 = new Order(address1, orderProductSet, goodClient1, "waiting");
+        Order order1 = new Order(address1, null, orderProductSet, goodClient1, "waiting");
         order1.setId(3L);
 
 

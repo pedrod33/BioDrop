@@ -12,7 +12,7 @@ import pt.deliveries.business_initiative.service.OrderServiceImpl;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 @RestController
 @RequestMapping("/businesses-api/orders")
 public class OrderRestController {
@@ -26,6 +26,12 @@ public class OrderRestController {
         return service.findAllOrders();
     }
 
+    @GetMapping("/findByStatus")
+    public List<Order> findOrdersByStatus(@RequestParam String status) {
+        return service.findAllOrdersByStatus(status);
+    }
+
+
     @GetMapping("/")
     public ResponseEntity<Order> findOrderById(@RequestParam Long orderId) {
         Order found = service.findOrderById(orderId);
@@ -35,8 +41,8 @@ public class OrderRestController {
     }
 
     @PutMapping(value = "/updateProductsOrder")
-    public ResponseEntity<Order> updateProductsOrder(@RequestParam Long clientId, @RequestParam Long productId, @RequestParam Integer amount) {
-        Order saved = service.updateProductsOrder(clientId, productId, amount);
+    public ResponseEntity<Order> updateProductsOrder(@RequestParam Long clientId, @RequestParam Long storeId, @RequestParam Long productId, @RequestParam Integer amount) {
+        Order saved = service.updateProductsOrder(clientId, storeId, productId, amount);
 
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(saved, status);
@@ -49,6 +55,13 @@ public class OrderRestController {
         return new ResponseEntity<>(saved, status);
     }
 
+    @PutMapping(value = "/updateStatus2")
+    public ResponseEntity<Order> updateStatus2(@RequestParam Long orderId, @RequestParam String orderStatus) {
+        Order saved = service.updateStatus2(orderId, orderStatus);
+        HttpStatus status = HttpStatus.OK;
+        return new ResponseEntity<>(saved, status);
+    }
+
     @PutMapping(value = "/updateOrderAddress")
     public ResponseEntity<Order> updateOrderAddress(@RequestBody AddressPOJO addressPOJO, @RequestParam Long clientId) {
         Order saved = service.updateOrderAddress(clientId, addressPOJO);
@@ -56,5 +69,4 @@ public class OrderRestController {
         HttpStatus status = HttpStatus.OK;
         return new ResponseEntity<>(saved, status);
     }
-
 }

@@ -3,6 +3,7 @@ package pt.deliveries.deliveries_engine.Controller;
 
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,7 @@ public class RatingRestControllerTest {
     }
 
     @Test
+    @Disabled
     void createRatingValidContent_ReturnsRating() throws Exception{
         CreateRatingPojo ratingPojo = new CreateRatingPojo(5, "descricao", 1L);
         when(ratingService.createRating(Mockito.any(), Mockito.anyLong())).thenReturn(rating);
@@ -68,6 +70,7 @@ public class RatingRestControllerTest {
     }
 
     @Test
+    @Disabled
     void createRatingValidContentWithoutDescription_ReturnsRating() throws Exception{
         CreateRatingPojo ratingPojo = new CreateRatingPojo(5,  1L);
         when(ratingService.createRating(Mockito.any(), Mockito.anyLong())).thenReturn(rating);

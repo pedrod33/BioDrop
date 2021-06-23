@@ -42,10 +42,10 @@ export default function Cart() {
 			var totalPrice = 0;
 			for (var x = 0; x < productsList.length; x++) {
 				totalPrice +=
-					productsList[x].amount * productsList[x].product.price;
+					productsList[x].amount * productsList[x].product.price ;
 			}
 
-			return totalPrice;
+			return totalPrice + 5;
 		}
 	}
 
@@ -57,6 +57,7 @@ export default function Cart() {
 
 	const handleCloseWithConfirmation = () => {
 		var client = JSON.parse(sessionStorage.getItem("client"));
+        var storeId = sessionStorage.getItem("storeId")
 
 		console.log("handleCloseWithConfirmation");
 		console.log(selectedAddress);
@@ -65,19 +66,26 @@ export default function Cart() {
 			ClientService.updateAddressOrder(selectedAddress, client.id).then(
 				(response1) => {
 					if (response1.status === 200) {
-						ClientService.updateOrderStatus(
-							client.id, "waiting_for_rider"
-						).then((response) => {
-							if (response.status === 200) {
-								setShow(false);
-								setSelectedAddress(null);
-								setProductsList(null);
-							} else console.log(response.message);
-						});
+
+                        ClientService.createDelivery( client.id, storeId, selectedAddress).then( (result) => {
+
+                            console.log("result")
+                            console.log(result)
+
+                            ClientService.updateOrderStatus(
+                                client.id, "waiting_for_rider"
+                            ).then((response) => {
+                                if (response.status === 200) {
+                                    setShow(false);
+                                    setSelectedAddress(null);
+                                    setProductsList(null);
+                                } else console.log(response.message);
+                            });
+						})
 					} else {
 						console.log(response1.message);
 					}
-				}
+				} 
 			);
 		}
 	};

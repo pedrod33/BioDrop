@@ -37,12 +37,12 @@ public class Delivery {
     private Long clientId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "courier_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "courierId", referencedColumnName = "id", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Courier courier;
 
     public Delivery(Courier courier, Long order_id, double latStore, double longStore, double latClient, double longClient, Long clientId) {
-        this.status = 0;
+        this.status = 4;
         this.courier = courier;
         this.orderId = order_id;
         this.latStore = latStore;
@@ -52,7 +52,7 @@ public class Delivery {
         this.clientId = clientId;
     }
 
-    public Delivery() {this.status = 0;}
+    public Delivery() {this.status = 4;}
 
     public Long getClientId() {
         return clientId;

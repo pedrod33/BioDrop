@@ -12,7 +12,7 @@ import pt.deliveries.business_initiative.service.StoreServiceImpl;
 import java.util.List;
 import java.util.Set;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:3001"})
 @RestController
 @RequestMapping("/businesses-api/stores")
 public class StoreRestController {
@@ -21,6 +21,10 @@ public class StoreRestController {
     private StoreServiceImpl service;
 
 
+    @GetMapping("/")
+    public Store findById(@RequestParam long id){
+        return service.findById(id);
+    }
     @GetMapping("/allStores")
     public List<Store> findAllStores() {
         return service.findAllStores();

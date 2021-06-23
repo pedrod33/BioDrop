@@ -32,10 +32,22 @@ class Products extends Component {
 
         var quantity = document.getElementById("qnty").value
 
-		ClientService.addOrderToCart(client.id, item.id, quantity).then(
+        if( quantity === null )
+            quantity = 1;
+
+        /* let { id } = useParams();
+        console.log("id")
+        console.log(id) */
+
+		var storeId = window.location.pathname
+		storeId = storeId.split("/")[1];
+        console.log(storeId)
+
+		ClientService.addOrderToCart(client.id, storeId, item.id, quantity).then(
 			(response) => {
 				if (response.status === 200) {
 					console.log("Produto adicionado");
+                    sessionStorage.setItem("storeId", storeId)
 				} else console.log(response.message);
 			}
 		);
