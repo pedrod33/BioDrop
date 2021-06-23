@@ -38,6 +38,19 @@ We used Sonarqube services to generate such analysis
 we developed a CI pipeline running in all branches. The CI workflow run unit tests and do Sonarcloud verify. An integration workflow is also part of our CI pipeline, all pull requests for the Main and Develop branches must run integration tests.  
 For CD we also created actions. when front-end is updated at branch main one [action](https://github.com/pedrod33/BioDrop/blob/develop/.github/workflows/deploy.frontend.yml) uses one runner to build react app, and serve website in VM using XGINX. When the backend is updated at branch main one [action](https://github.com/pedrod33/BioDrop/blob/develop/.github/workflows/main.yml) uses one runner to build and up backend docker container with updated code.
 
+
+
+
+#Improvements since presentation:
+
+- Refactored website for rider and client
+- Client can now create a order and send that order to the rider, and if the rider accepts it we can now have that information on profile-pending-orders
+
+- Rider can now see all the orders waiting for a rider to accept and by clicking in the map icon see the directions to destination and then accept that offer if he wants it.
+
+
+
+
 # INFRA
 ## Docker mysql container (deliver engine)
 * $ docker run --name deliveries-mysql -p 330X:330X -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=deliveries-mysql -e MYSQL_USER=tqs -e MYSQL_PASSWORD=password -d mysql:5.6
