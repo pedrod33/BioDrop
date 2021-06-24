@@ -49,6 +49,19 @@ For CD we also created actions. when front-end is updated at branch main one [ac
 - Rider can now see all the orders waiting for a rider to accept and by clicking in the map icon see the directions to destination and then accept that offer if he wants it.
 
 
+Here are already created accounts
+
+Rider Infos:
+email: rider1@ua.pt
+password: 1234
+
+Client Infos:
+email: cunha@ua.pt
+password: 1234
+
+
+In the rider account there is an order ready in place is just needed to login and click on the accept button, then the card with the offer will appear.
+By clicking on the icon in the card the location will appear on the map and then the rider can decide if he wants to accept it.
 
 
 # INFRA
